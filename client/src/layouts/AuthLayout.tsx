@@ -4,7 +4,7 @@ import Footer from "./components/Footer";
 
 const AuthLayout: React.FC = () => {
   return (
-    <div>
+    <div className="min-h-screen">
       <Outlet />
       <Footer />
     </div>
