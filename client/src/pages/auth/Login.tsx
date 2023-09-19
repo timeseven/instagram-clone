@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
 import FaceBookLogin from "../../components/FaceBookLogin";
+import OrSeperate from "../../components/OrSeperate";
 
 // images/logo
 import logo from "../../images/logo.png";
@@ -14,8 +15,8 @@ const Login = () => {
   return (
     <div className="w-full h-full flex flex-col justify-between pt-12">
       <div className="w-full flex p-0 max-w-4xl mt-7 mx-auto mb-0">
-        <div className="bg-mobile-app bg-center bg-no-repeat flex-1 h-[38rem] max-[900px]:hidden"></div>
-        <div className="w-full max-w-sm mt-7 max-[900px]:m-auto max-[900px]:w-[80vw]">
+        <div className="bg-mobile-app bg-center bg-no-repeat grow mt-2 h-[38rem] max-[875px]:hidden"></div>
+        <div className="w-full max-w-sm mt-7 max-[875px]:m-auto max-[875px]:w-[80vw]">
           <form className="flex flex-col py-5 px-10 text-center bg-white border border-solid border-neutral-300 rounded-sm">
             <div className="w-48 h-14 m-auto mb-5 mt-4 cursor-pointer">
               <img src={logo} alt="logo" />
@@ -39,14 +40,6 @@ const Login = () => {
               >
                 {typePass ? "Hide" : "Show"}
               </h6>
-
-              <span
-                className="relative mb-5 text-xs text-gray-500 font-bold 
-                         before:content-[''] before:absolute before:bg-gray-300 before:w-2/5 before:h-[1px] before:top-1/2 before:-translate-y-1/2 before:left-0
-                         after:content-[''] after:absolute after:bg-gray-300 after:w-2/5 after:h-[1px] after:top-1/2 after:-translate-y-1/2 after:right-0"
-              >
-                OR
-              </span>
             </div>
 
             <button
@@ -55,13 +48,21 @@ const Login = () => {
             >
               Login In
             </button>
+            <OrSeperate />
+            <div className="flex justify-center items-center m-auto cursor-pointer">
+              <AiFillFacebook className="text-lg text-[#385185] mr-2" />
+              <FaceBookLogin title="Log in with Facebook" />
+            </div>
+            <Link className="mt-3 text-xs" to="/forgotpwd">
+              Forgot password?
+            </Link>
           </form>
 
           <div className="flex flex-col justify-center items-center my-2 py-2 text-sm border border-solid border-neutral-300 rounded-sm">
             <p className="text-sm m-4">
-              Have an account?{" "}
-              <Link className="text-[#73b6fb]" to="/login">
-                Log in
+              Don't have an account?{" "}
+              <Link className="text-[#0095f6] font-semibold" to="/signup">
+                Sign Up
               </Link>
             </p>
           </div>

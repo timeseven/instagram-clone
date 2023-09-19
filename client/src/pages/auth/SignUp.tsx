@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
 import FaceBookLogin from "../../components/FaceBookLogin";
+import OrSeperate from "../../components/OrSeperate";
 
 // images/logo
 import logo from "../../images/logo.png";
@@ -27,13 +28,7 @@ const SignUp = () => {
               <AiFillFacebook className="text-xl mr-1" />
               <FaceBookLogin title="Log in with Facebook" />
             </button>
-            <span
-              className="relative mb-5 text-xs text-gray-500 font-bold 
-                         before:content-[''] before:absolute before:bg-gray-300 before:w-2/5 before:h-[1px] before:top-1/2 before:-translate-y-1/2 before:left-0
-                         after:content-[''] after:absolute after:bg-gray-300 after:w-2/5 after:h-[1px] after:top-1/2 after:-translate-y-1/2 after:right-0"
-            >
-              OR
-            </span>
+            <OrSeperate />
             <input
               className="w-full h-10 p-2 border border-solid rounded-[4px] border-neutral-300"
               type="Email"

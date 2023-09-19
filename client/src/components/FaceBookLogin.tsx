@@ -8,6 +8,7 @@ const FaceBookLogin: React.FC<FaceBookLoginProps> = ({ title }) => {
   return (
     <div>
       <OAuth2Login
+        className="text-sm font-semibold"
         buttonText={title}
         authorizationUrl="/"
         responseType="token"
