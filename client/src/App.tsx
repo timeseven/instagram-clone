@@ -5,9 +5,10 @@ import AuthLayout from "./layouts/AuthLayout";
 import SignUp from "./pages/auth/SignUp";
 import Login from "./pages/auth/Login";
 import ForgotPwd from "./pages/auth/ForgotPwd";
-import SendEmail from "./pages/auth/SendEmail";
+import EmailSent from "./pages/auth/EmailSent";
 import ResetPwd from "./pages/auth/ResetPwd";
 import RegisterFacebook from "./pages/auth/RegisterFacebook";
+import Home from "./pages/main/Home";
 
 function App() {
   return (
@@ -18,9 +19,12 @@ function App() {
             <Route path="/signup" element={<SignUp />} />
             <Route path="/login" element={<Login />} />
             <Route path="/forgotpwd" element={<ForgotPwd />} />
-            <Route path="/send-email" element={<SendEmail />} />
+            <Route path="/email-sent" element={<EmailSent />} />
             <Route path="/resetpwd" element={<ResetPwd />} />
             <Route path="/signup/:facebookid" element={<RegisterFacebook />} />
+          </Route>
+          <Route path="/" element={<MainLayout />}>
+            <Route index element={<Home />} />
           </Route>
         </Routes>
       </BrowserRouter>

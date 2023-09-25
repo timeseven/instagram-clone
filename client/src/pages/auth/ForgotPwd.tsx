@@ -11,7 +11,7 @@ const ForgotPwd: React.FC = () => {
   return (
     <Helmet title="Forgot Password • Instagram">
       <div className="fixed w-full h-[3.75rem] bg-white border border-solid border-neutral-300">
-        <div className="relative w-[60rem] m-auto h-full flex items-center">
+        <div className="relative max-w-[60rem] m-auto h-full flex items-center">
           <Link to="/" className="w-28 h-10">
             <img src={logo} alt="logo" className="w-full h-full" />
           </Link>
