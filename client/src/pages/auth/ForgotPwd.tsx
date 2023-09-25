@@ -10,15 +10,15 @@ const ForgotPwd: React.FC = () => {
   const [isActive, setIsActive] = useState<boolean>(false);
   return (
     <Helmet title="Forgot Password • Instagram">
-      <div className="fixed w-full h-[60px] bg-white border border-solid border-neutral-300">
-        <div className="relative w-[108px] ml-4 h-full flex items-center">
+      <div className="fixed w-full h-[3.75rem] bg-white border border-solid border-neutral-300">
+        <div className="relative w-[60rem] m-auto h-full flex items-center">
           <Link to="/" className="w-28 h-10">
             <img src={logo} alt="logo" className="w-full h-full" />
           </Link>
         </div>
       </div>
       <div className="pt-40 w-full flex items-center justify-center">
-        <form className="max-w-[390px] py-0 px-12 border border-solid border-neutral-300 rounded-md flex flex-col items-center justify-center">
+        <form className="max-w-[24.25rem] py-0 px-12 border border-solid border-neutral-300 rounded-md flex flex-col items-center justify-center">
           <div className="w-24 h-24 mt-6 mb-4 bg-ins-icons bg-no-repeat bg-lock"></div>
           <div className="mb-2 font-semibold">Trouble logging in?</div>
           <div className="mb-2 text-sm text-neutral-500">
@@ -45,7 +45,7 @@ const ForgotPwd: React.FC = () => {
           <Link className="text-sm font-semibold" to="/signup">
             Create new account
           </Link>
-          <div className="flex flex-col justify-center items-center h-10 w-[390px] mt-20 bg-[#fafafa] border border-solid border-neutral-300">
+          <div className="flex flex-col justify-center items-center h-10 w-[24.25rem] mt-20 bg-[#fafafa] border border-solid border-neutral-300">
             <Link className="font-semibold text-sm" to="/login">
               Back to Login
             </Link>
