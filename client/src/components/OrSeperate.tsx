@@ -2,13 +2,13 @@ import React from "react";
 
 const OrSeperate: React.FC = () => {
   return (
-    <span
-      className="relative mb-5 text-xs text-gray-500 font-bold 
-             before:content-[''] before:absolute before:bg-gray-300 before:w-2/5 before:h-[1px] before:top-1/2 before:-translate-y-1/2 before:left-0
-             after:content-[''] after:absolute after:bg-gray-300 after:w-2/5 after:h-[1px] after:top-1/2 after:-translate-y-1/2 after:right-0"
+    <div
+      className="w-full flex items-center mb-5 text-xs text-gray-500 font-bold 
+             before:content-[''] before:h-[1px] before:flex-1 before:mr-5 before:bg-gray-300
+             after:content-['']  after:h-[1px] after:flex-1 after:ml-5 after:bg-gray-300"
     >
       OR
-    </span>
+    </div>
   );
 };
 
