@@ -4,7 +4,7 @@ import Helmet from "../../components/Helmet";
 const Home: React.FC = () => {
   return (
     <Helmet title="Instagram">
-      <div className="home-wrapper">home</div>
+      <div className="home-wrapper"></div>
     </Helmet>
   );
 };
