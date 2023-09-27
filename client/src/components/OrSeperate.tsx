@@ -1,5 +1,6 @@
 import React from "react";
 
+// Or seperator
 const OrSeperate: React.FC = () => {
   return (
     <div

@@ -8,7 +8,7 @@ const Helmet: React.FC<HelmetProps> = (props) => {
     window.scrollTo(0, 0);
   }, [props.title]);
 
-  return <div className="w-full">{props.children}</div>;
+  return <div className="w-[calc(100%-17.5vw)] h-screen flex flex-col items-center grow">{props.children}</div>;
 };
 
 export default Helmet;

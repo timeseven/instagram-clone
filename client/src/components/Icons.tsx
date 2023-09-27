@@ -5,6 +5,8 @@ type Props = {
   className?: string;
 };
 
+// Instagram icons in svg
+
 export const HomeIcon: React.FC<Props> = ({ width = "1.5rem", height = "1.5rem", className }) => (
   <svg
     aria-label="Home"

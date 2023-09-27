@@ -2,6 +2,7 @@ import React from "react";
 import OAuth2Login from "react-simple-oauth2-login";
 import { FaceBookLoginProps } from "../utils/interface";
 
+// FaceBook login
 const FaceBookLogin: React.FC<FaceBookLoginProps> = ({ title }) => {
   const onSuccess = async (response: Record<string, any>) => {};
   const onFailure = (response: Error) => console.error(response);

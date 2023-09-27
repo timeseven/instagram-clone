@@ -9,6 +9,7 @@ import EmailSent from "./pages/auth/EmailSent";
 import ResetPwd from "./pages/auth/ResetPwd";
 import RegisterFacebook from "./pages/auth/RegisterFacebook";
 import Home from "./pages/main/Home";
+import Profile from "./pages/main/Profile";
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
           </Route>
           <Route path="/" element={<MainLayout />}>
             <Route index element={<Home />} />
+            <Route path="/:username" element={<Profile />} />
           </Route>
         </Routes>
       </BrowserRouter>
