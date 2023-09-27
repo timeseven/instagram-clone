@@ -86,7 +86,7 @@ const SignUp = () => {
               </span>
 
               <button
-                className="h-9 mt-4 mb-4 mx-0 bg-[#0095f6] text-sm font-semibold text-white border border-none rounded-lg "
+                className="h-9 mt-4 mb-4 mx-0 bg-[#0095f6] text-sm font-semibold text-white border border-none rounded-lg"
                 type="submit"
               >
                 Sign Up
