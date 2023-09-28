@@ -3,10 +3,10 @@ import { Link } from "react-router-dom";
 
 const Footer: React.FC = () => {
   return (
-    <footer className="w-full m-auto pt-32 pb-8 px-4 overflow-visible">
+    <footer className="w-full min-w-fit m-auto pb-8 px-4">
       <div className="flex flex-col justify-center items-center flex-wrap mt-0 font-normal text-xs ">
         <nav className="flex flex-col justify-start flex-wrap ">
-          <ul className="flex justify-center items-stretch flex-wrap ">
+          <ul className="flex justify-center items-stretch flex-wrap">
             <li className="mr-[1.6rem] text-neutral-500">
               <Link to="https://about.meta.com/">Meta</Link>
             </li>

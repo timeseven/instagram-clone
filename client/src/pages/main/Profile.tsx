@@ -7,7 +7,7 @@ const Profile: React.FC = () => {
   return (
     <Helmet title={`Profile • Instagram photos and videos`}>
       {
-        <div className="w-[935px] max-md:w-[calc(100vw-40px)] pt-10 mb-8  mx-auto">
+        <div className="w-[935px] mobile:w-[calc(100vw-40px)] pt-10 mb-8  mx-auto">
           <InfoProfile />
           <div className="flex flex-col items-center border-t border-solid border-neutral-300">
             <div className="flex mb-4">

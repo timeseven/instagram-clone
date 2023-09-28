@@ -13,21 +13,21 @@ import {
 } from "../../components/Icons";
 const NavBar: React.FC = () => {
   return (
-    <div className="w-[17.5vw] max-xl:w-[72px] max-md:w-screen flex flex-col justify-start p-3 border-r border-solid border-neutral-300 z-1 transition-all duration-300 ease-in-out">
-      <div className="h-screen max-md:h-[15px] flex flex-col">
-        <div className="h-[10vh] max-xl:w-[48px]">
+    <div className="w-[17.5vw] tablet:w-[72px] mobile:w-screen flex flex-col p-3 border-r border-solid border-neutral-300 z-1 transition-all duration-300 ease-in-out">
+      <div className="h-screen mobile:h-[15px] flex flex-col">
+        <div className="h-[10vh] tablet:w-[48px]">
           <div className="h-[73px] pt-6 pb-4 px-3">
             <Link to="/">
-              <img className="w-[6.5rem] h-[2.5rem] mb-7 max-xl:hidden" src={logo} alt="instagram logo" />
+              <img className="w-[6.5rem] h-[2.5rem] mb-7 tablet:hidden" src={logo} alt="instagram logo" />
             </Link>
           </div>
         </div>
-        <div className="flex flex-col max-md:flex-row justify-around">
+        <div className="flex flex-col mobile:flex-row justify-around">
           <div className="flex items-center p-3 mb-4">
             <NavLink to="/">
               <div className="flex items-center m-auto">
                 <HomeIcon className="w-[24px] h-[24px] flex justify-center" />
-                <span className="pl-4 text-[#262626] max-xl:hidden">Home</span>
+                <span className="pl-4 text-[#262626] tablet:hidden">Home</span>
               </div>
             </NavLink>
           </div>
@@ -35,7 +35,7 @@ const NavBar: React.FC = () => {
             <NavLink to="/">
               <div className="flex items-center m-auto">
                 <SearchIcon className="w-[24px] h-[24px] flex justify-center" />
-                <span className="pl-4 text-[#262626] max-xl:hidden">Search</span>
+                <span className="pl-4 text-[#262626] tablet:hidden">Search</span>
               </div>
             </NavLink>
           </div>
@@ -43,7 +43,7 @@ const NavBar: React.FC = () => {
             <NavLink to="/">
               <div className="flex items-center m-auto">
                 <ExploreIcon className="w-[24px] h-[24px] flex justify-center" />
-                <span className="pl-4 text-[#262626] max-xl:hidden">Explore</span>
+                <span className="pl-4 text-[#262626] tablet:hidden">Explore</span>
               </div>
             </NavLink>
           </div>
@@ -51,7 +51,7 @@ const NavBar: React.FC = () => {
             <NavLink to="/">
               <div className="flex items-center m-auto">
                 <MessagesIcon className="w-[24px] h-[24px] flex justify-center" />
-                <span className="pl-4 text-[#262626] max-xl:hidden">Message</span>
+                <span className="pl-4 text-[#262626] tablet:hidden">Message</span>
               </div>
             </NavLink>
           </div>
@@ -59,7 +59,7 @@ const NavBar: React.FC = () => {
             <NavLink to="/">
               <div className="flex items-center m-auto">
                 <LikeIcon className="w-[24px] h-[24px] flex justify-center" />
-                <span className="pl-4 text-[#262626] max-xl:hidden">Notification</span>
+                <span className="pl-4 text-[#262626] tablet:hidden">Notification</span>
               </div>
             </NavLink>
           </div>
@@ -67,7 +67,7 @@ const NavBar: React.FC = () => {
             <NavLink to="/">
               <div className="flex items-center m-auto">
                 <CreateIcon className="w-[24px] h-[24px] flex justify-center" />
-                <span className="pl-4 text-[#262626] max-xl:hidden">Create</span>
+                <span className="pl-4 text-[#262626] tablet:hidden">Create</span>
               </div>
             </NavLink>
           </div>
@@ -75,17 +75,17 @@ const NavBar: React.FC = () => {
             <NavLink to="/abcd">
               <div className="flex items-center m-auto">
                 <HomeIcon className="w-[24px] h-[24px] flex justify-center" />
-                <span className="pl-4 text-[#262626] max-xl:hidden">Profile</span>
+                <span className="pl-4 text-[#262626] tablet:hidden">Profile</span>
               </div>
             </NavLink>
           </div>
         </div>
-        <div className="w-full mb-8 ml-2 max-md:hidden">
+        <div className="mb-8 ml-2 mobile:hidden">
           <button className="flex items-center justify-center" type="button" title="more options">
             <div>
               <SettingsIcon />
             </div>
-            <div className="ml-3 max-xl:hidden">More</div>
+            <div className="ml-3 tablet:hidden">More</div>
           </button>
         </div>
       </div>

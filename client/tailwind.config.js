@@ -10,6 +10,13 @@ module.exports = {
     backgroundPosition: {
       lock: "-130px 0",
     },
+    screens: {
+      "mobile-sm": "250px",
+      mobile: "450px",
+      tablet: "767px",
+      "tablet-md": "875px",
+      desktop: "1263px",
+    },
   },
   plugins: [],
 };

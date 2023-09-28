@@ -3,7 +3,7 @@ import { Outlet } from "react-router-dom";
 import NavBar from "./components/NavBar";
 const MainLayout: React.FC = () => {
   return (
-    <div className="w-full h-full flex max-md:flex-col-reverse">
+    <div className="min-h-screen overflow-hidden flex flex-col">
       <NavBar />
       <Outlet />
     </div>
