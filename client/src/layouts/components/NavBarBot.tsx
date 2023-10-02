@@ -17,7 +17,7 @@ import avatar from "../../images/avatar-default.jpg";
 const NavBarBot: React.FC<ClassNameProps> = ({ className }) => {
   return (
     <div
-      className={`${className} w-full h-[48px] flex items-center justify-evenly border-t border-solid border-neutral-300 z-1 transition-all duration-300 ease-in-out`}
+      className={`${className} fixed bg-white z-10 bottom-0 w-full h-[48px] flex items-center justify-evenly border-t border-solid border-neutral-300 z-1 transition-all duration-300 ease-in-out`}
     >
       <div className="w-full min-w-[15rem] h-full flex items-center justify-evenly">
         <NavLink to="/">
