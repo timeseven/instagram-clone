@@ -1,3 +1,7 @@
+export interface ClassNameProps {
+  className?: string;
+}
+
 /* FaceBookLoginProps  */
 export interface FaceBookLoginProps {
   title: string;
