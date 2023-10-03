@@ -18,6 +18,7 @@ export interface IUser extends Document {
   following: Array<IUser>;
   saved: Array<IUser>;
   token: string;
+  isPasswordMatched: (enteredPassword: string) => Promise<boolean>;
 }
 
 export interface IReqAuth extends Request {

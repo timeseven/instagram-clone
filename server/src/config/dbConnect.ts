@@ -1,7 +1,5 @@
 import mongoose from "mongoose";
 
-mongoose.set("strictQuery", false);
-
 const dbConnect = (): void => {
   try {
     mongoose.connect(process.env.MONGODB_URI as string).then(() => {

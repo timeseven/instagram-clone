@@ -1,6 +1,9 @@
 import mongoose from "mongoose";
+import bcrypt from "bcrypt";
+import crypto from "crypto";
 import { IUser } from "../config/interface";
 
+// user schema
 const userSchema = new mongoose.Schema(
   {
     fullname: {
@@ -53,5 +56,21 @@ const userSchema = new mongoose.Schema(
     timestamps: true,
   }
 );
+
+// crypto password using hash
+userSchema.pre("save", async function (next) {
+  console.log("save", this.isModified("password"));
+  if (!this.isModified("password")) {
+    next();
+  }
+  const salt = await bcrypt.genSaltSync(10);
+  this.password = await bcrypt.hash(this.password, salt);
+  next();
+});
+
+// password match method
+userSchema.methods.isPasswordMatched = async function (enteredPassword: string) {
+  return await bcrypt.compare(enteredPassword, this.password);
+};
 
 export default mongoose.model<IUser>("user", userSchema);
