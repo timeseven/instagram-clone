@@ -13,10 +13,12 @@ module.exports = {
     screens: {
       "mobile-sm": "250px",
       mobile: "450px",
+      "tablet-sm": "735px",
       tablet: "767px",
       "tablet-md": "875px",
       "desktop-sm": "1160px",
       desktop: "1263px",
+      "desktop-lg": "1920px",
     },
   },
   plugins: [],

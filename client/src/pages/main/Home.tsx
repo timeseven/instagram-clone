@@ -9,7 +9,8 @@ const Home: React.FC = () => {
     <Helmet title="Instagram">
       <div
         className="w-full h-screen pt-1 mx-auto flex justify-center
-                   tablet:mt-0 tablet:pt-0 tablet:w-[calc(100vw-72px)] tablet:mr-0"
+                   tablet:mt-0 tablet:w-[calc(100vw-72px)] tablet:mr-0
+                   desktop:w-[calc(100vw-245px)] desktop-lg:w-[calc(100vw-335px)]"
       >
         <div
           className="w-full flex flex-col items-center max-w-[630px] h-[585px]
@@ -26,7 +27,7 @@ const Home: React.FC = () => {
           </div>
         </div>
         <div
-          className="w-full max-w-[319px] hidden 
+          className="w-full max-w-[319px] pt-[30px] hidden 
                      desktop-sm:inline-block"
         >
           <SuggesstionUser />

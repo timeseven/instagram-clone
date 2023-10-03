@@ -19,7 +19,7 @@ const NavBarTop: React.FC = () => {
       <div
         className="fixed bg-white w-full h-[60px] border-b border-solid border-neutral-300 z-1 transition-all duration-300 ease-in-out
                  tablet:w-[72px] tablet:h-screen tablet:border-b-0 tablet:border-r
-                 desktop:w-[245px]"
+                 desktop:w-[245px] desktop-lg:w-[335px]"
       >
         <div
           className="w-full h-full px-3 flex items-center justify-between
@@ -28,10 +28,10 @@ const NavBarTop: React.FC = () => {
         >
           <div
             className="h-full flex items-center justify-start flex-1
-                     tablet:w-[48px] tablet:h-[92px] tablet:items-center tablet:justify-center 
+                     tablet:w-[48px] tablet:h-[92px] tablet:items-center tablet:justify-center
                      desktop:w-[245px] desktop:justify-start"
           >
-            <Link to="/" className="tablet:h-[92px] tablet:flex tablet:items-end ">
+            <Link to="/" className="tablet:h-[92px] tablet:flex tablet:items-end desktop:items-center">
               <img className="w-[104px] h-[40px] tablet:hidden  desktop:inline-block" src={logo} alt="instagram logo" />
               <img
                 className="w-[24px] h-[24px] mb-7 hidden tablet:inline-block desktop:hidden"
