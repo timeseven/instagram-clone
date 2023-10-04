@@ -1,5 +1,6 @@
 import express from "express";
 import dotenv from "dotenv";
+import cookies from "cookie-parser";
 import dbConnect from "./config/dbConnect";
 import authRouter from "./routes/authRouter";
 
@@ -12,6 +13,7 @@ dbConnect();
 
 // middleware config
 app.use(express.json()); // parse incoming requests with JSON payloads
+app.use(cookies());
 
 // routes config
 app.use("/api/auth", authRouter);

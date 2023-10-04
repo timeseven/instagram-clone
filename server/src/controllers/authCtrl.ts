@@ -178,7 +178,7 @@ const handleRefreshToken = asyncHandler(async (req: IReqAuth, res: Response): Pr
         token: access_token,
       }
     );
-    res.json(access_token);
+    res.status(200).json(access_token);
   } catch (error: any) {
     res.status(400).json({ msg: error.message });
   }
@@ -215,6 +215,7 @@ const forgotPasswordToken = asyncHandler(async (req: IReqAuth, res: Response): P
 // reset password
 const resetPassword = asyncHandler(async (req: IReqAuth, res: Response): Promise<any | void> => {
   try {
+    console.log(req.body);
     const { password, token } = req.body;
     const user = await User.findOne({
       refreshToken: token,
