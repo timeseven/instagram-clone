@@ -24,3 +24,17 @@ export interface IUser extends Document {
 export interface IReqAuth extends Request {
   user?: IUser;
 }
+
+// jwt verify
+export interface IDecodedToken {
+  id?: string;
+  user?: IUser;
+  iat: number;
+  exp: number;
+}
+
+export interface ISendEmail {
+  to: string;
+  subject: string;
+  html: string;
+}
