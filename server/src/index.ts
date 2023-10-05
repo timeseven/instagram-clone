@@ -4,6 +4,7 @@ import cookies from "cookie-parser";
 import dbConnect from "./config/dbConnect";
 import authRouter from "./routes/authRouter";
 import userRouter from "./routes/userRouter";
+import postRouter from "./routes/postRouter";
 
 const app = express();
 dotenv.config(); // make .env available
@@ -19,6 +20,7 @@ app.use(cookies());
 // routes config
 app.use("/api/auth", authRouter);
 app.use("/api/user", userRouter);
+app.use("/api/post", postRouter);
 
 // listen for requests
 app.listen(PORT, () => {

@@ -1,1 +1,1 @@
-export const saveWord = ["search", "suggestions"];
+export const saveWord = ["search", "suggestions", "explore"];

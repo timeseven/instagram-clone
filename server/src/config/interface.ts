@@ -1,6 +1,7 @@
 import { Document } from "mongoose";
 import { Request } from "express";
 
+// User interface
 export interface IUser extends Document {
   fullname: string;
   username: string;
@@ -19,6 +20,25 @@ export interface IUser extends Document {
   saved: Array<IUser>;
   token: string;
   isPasswordMatched: (enteredPassword: string) => Promise<boolean>;
+}
+
+//Post interface
+export interface IPost extends Document {
+  content: string;
+  images: Array<string>;
+  likes: Array<IUser>;
+  comments: Array<IComment>;
+  user: string;
+}
+
+// Comment interface
+export interface IComment extends Document {
+  content: string;
+  tag: IUser;
+  reply: IComment;
+  likes: Array<IUser>;
+  user: IUser;
+  postId: IPost;
 }
 
 export interface IReqAuth extends Request {

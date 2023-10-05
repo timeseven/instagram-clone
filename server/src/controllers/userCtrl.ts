@@ -38,7 +38,6 @@ const getUser = asyncHandler(async (req: IReqAuth, res: Response): Promise<any |
 // get Suggestion User
 const getSuggestionUser = asyncHandler(async (req: IReqAuth, res: Response): Promise<any | void> => {
   try {
-    console.log("suggestion", req.user);
     const currentUser = await User.findById(req.user?.id);
     const following = currentUser?.following;
 
@@ -59,7 +58,6 @@ const getSuggestionUser = asyncHandler(async (req: IReqAuth, res: Response): Pro
 // followUser
 const followUser = asyncHandler(async (req: IReqAuth, res: Response): Promise<any | void> => {
   try {
-    console.log("followUser");
     // check if the current user has followed this user
     const user = await User.find({
       _id: req.params.id,
@@ -98,7 +96,6 @@ const followUser = asyncHandler(async (req: IReqAuth, res: Response): Promise<an
 // unfollowUser
 const unfollowUser = asyncHandler(async (req: IReqAuth, res: Response): Promise<any | void> => {
   try {
-    console.log("unfollowUser");
     // check if the current user has followed this user
     const user = await User.find({
       _id: req.params.id,
@@ -134,4 +131,60 @@ const unfollowUser = asyncHandler(async (req: IReqAuth, res: Response): Promise<
   }
 });
 
-export { searchUser, getUser, getSuggestionUser, followUser, unfollowUser };
+// savepost
+const savePost = asyncHandler(async (req: IReqAuth, res: Response): Promise<any | void> => {
+  try {
+    // check if the current user has saved this post
+    const user = await User.find({
+      _id: req.user?._id,
+      saved: req.params.id,
+    });
+
+    if (user.length > 0) {
+      return res.status(400).json({ msg: "You saved this post." });
+    }
+
+    // if not, save this post by adding the post id to the save of the current user
+    const save = await User.findOneAndUpdate(
+      { _id: req.user?._id },
+      {
+        $push: { saved: req.params.id },
+      },
+      { new: true }
+    );
+
+    res.status(200).json(save);
+  } catch (error: any) {
+    res.status(400).json({ msg: error.message });
+  }
+});
+
+// unsave post
+const unSavePost = asyncHandler(async (req: IReqAuth, res: Response): Promise<any | void> => {
+  try {
+    // check if the current user has not saved this post
+    const user = await User.find({
+      _id: req.user?._id,
+      saved: req.params.id,
+    });
+
+    if (user.length === 0) {
+      return res.status(400).json({ msg: "You haven't saved this post." });
+    }
+
+    // if saved, unsave this post by deleting the post id to the save of the current user
+    const unSave = await User.findOneAndUpdate(
+      { _id: req.user?._id },
+      {
+        $pull: { saved: req.params.id },
+      },
+      { new: true }
+    );
+
+    res.status(200).json(unSave);
+  } catch (error: any) {
+    res.status(400).json({ msg: error.message });
+  }
+});
+
+export { searchUser, getUser, getSuggestionUser, followUser, unfollowUser, savePost, unSavePost };
