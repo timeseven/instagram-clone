@@ -8,6 +8,7 @@ import generateRefreshToken from "../config/refreshToken";
 
 import jwt from "jsonwebtoken";
 import { sendEmail } from "../utils/sendEmail";
+import { saveWord } from "../config/saveWords";
 
 // register user
 const registerUser = asyncHandler(async (req: Request, res: Response): Promise<any | void> => {
@@ -15,10 +16,14 @@ const registerUser = asyncHandler(async (req: Request, res: Response): Promise<a
     const { fullname, username, email, password, faceBookId, avatar } = req.body;
     const newUserName = username.toLowerCase().replace(/ /g, "");
 
+    // check if the username is save words
+    if (saveWord.includes(newUserName)) {
+      return res.status(400).json({ msg: "This username is not accepted. Please create another one." });
+    }
     // check if the username exsits or not
     const user_name = await User.findOne({ username: newUserName });
     if (user_name) {
-      return res.status(400).json({ msg: "This user name already exists." });
+      return res.status(400).json({ msg: "This username already exists." });
     }
 
     // check if the email exists or not
@@ -84,7 +89,7 @@ const logIn = asyncHandler(async (req: IReqAuth, res: Response): Promise<any | v
           token: accessToken,
         },
         { new: true }
-      );
+      ).populate("followers following", "avatar username fullname followers following");
       res.cookie("refreshToken", refreshToken, {
         path: "/api/auth/refresh",
         httpOnly: true,
@@ -219,7 +224,7 @@ const resetPassword = asyncHandler(async (req: IReqAuth, res: Response): Promise
     const { password, token } = req.body;
     const user = await User.findOne({
       refreshToken: token,
-    });
+    }).populate("followers following", "avatar username fullname followers following");
 
     if (!user) {
       return res.status(400).json({ msg: "Token Expired, please try again later" });

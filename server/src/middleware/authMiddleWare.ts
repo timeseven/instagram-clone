@@ -11,6 +11,7 @@ const authMiddleware = asyncHandler(async (req: IReqAuth, res: Response, next: N
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
       return res.status(401).json({ msg: "Not authorized, No token" });
     }
+    console.log("auth1>>>>>");
     const token = authHeader.split(" ")[1];
     const decoded = <IDecodedToken>jwt.verify(token, process.env.ACCESS_TOKEN_SECRET as string);
 
@@ -18,6 +19,7 @@ const authMiddleware = asyncHandler(async (req: IReqAuth, res: Response, next: N
     if (!user) {
       return res.status(401).json({ msg: "Not authorized, User not found" });
     }
+    console.log("auth2>>>>>", user);
     req.user = user;
     next();
   } catch (error: any) {
