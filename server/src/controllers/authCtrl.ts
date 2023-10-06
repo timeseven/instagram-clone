@@ -5,10 +5,10 @@ import asyncHandler from "express-async-handler";
 import User from "../models/userModel";
 import generateAccessToken from "../config/accessToken";
 import generateRefreshToken from "../config/refreshToken";
+import { saveWord } from "../config/saveWords";
 
 import jwt from "jsonwebtoken";
 import { sendEmail } from "../utils/sendEmail";
-import { saveWord } from "../config/saveWords";
 
 // register user
 const registerUser = asyncHandler(async (req: Request, res: Response): Promise<any | void> => {

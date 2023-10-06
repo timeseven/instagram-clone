@@ -5,6 +5,7 @@ import dbConnect from "./config/dbConnect";
 import authRouter from "./routes/authRouter";
 import userRouter from "./routes/userRouter";
 import postRouter from "./routes/postRouter";
+import commentRouter from "./routes/commentRouter";
 
 const app = express();
 dotenv.config(); // make .env available
@@ -21,6 +22,7 @@ app.use(cookies());
 app.use("/api/auth", authRouter);
 app.use("/api/user", userRouter);
 app.use("/api/post", postRouter);
+app.use("/api/comment", commentRouter);
 
 // listen for requests
 app.listen(PORT, () => {
