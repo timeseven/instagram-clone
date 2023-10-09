@@ -9,53 +9,97 @@ import logo from "../../images/logo.png";
 import appStore from "../../images/app-store.png";
 import googlePlay from "../../images/google-play.png";
 import { AiFillFacebook } from "react-icons/ai";
+import { useFormik } from "formik";
+import * as yup from "yup";
+// import authService from "../../services/authServices";
+import { register } from "../../redux/features/authSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState, AppDispatch } from "../../redux/store";
 
-const SignUp = () => {
+let schema = yup.object().shape({
+  email: yup.string().email("Email should be valid").required("Email is Required"),
+  fullname: yup.string().required("Full Name is Required"),
+  username: yup.string().required("Username is Required"),
+  password: yup.string().required("Password is Required"),
+});
+
+const SignUp: React.FC = () => {
+  const dispatch: AppDispatch = useDispatch();
   const [typePass, setTypePass] = useState<boolean>(false);
+
+  const formik = useFormik({
+    initialValues: {
+      email: "",
+      fullname: "",
+      username: "",
+      password: "",
+    },
+    validateOnChange: false,
+    validateOnBlur: false,
+    validationSchema: schema,
+    onSubmit: (values) => {
+      dispatch(register(values));
+      // authService.register(values);
+      // console.log(values);
+    },
+  });
 
   return (
     <Helmet title="Sign Up • Instagram ">
       <div className="flex flex-col">
         <div className="flex justify-center">
           <div className="max-w-sm mt-3 flex flex-col justify-center">
-            <form className="flex flex-col py-5 px-10 text-center bg-white mobile:border border-solid border-neutral-300 rounded-sm">
+            <form
+              onSubmit={formik.handleSubmit}
+              className="flex flex-col py-5 px-10 text-center bg-white mobile:border border-solid border-neutral-300 rounded-sm"
+            >
               <div className="w-48 h-14 m-auto mb-5 mt-4 cursor-pointer">
                 <img src={logo} alt="logo" />
               </div>
               <div className="text-neutral-500 text-base leading-5 font-semibold">
                 Sign up to see photos and videos from your friends.
               </div>
-              <button className="flex justify-center items-center h-9 mt-4 mb-4 mx-0 bg-[#0095f6] text-sm font-semibold text-white rounded-lg border-none border">
+              <span className="flex justify-center items-center h-9 mt-4 mb-4 mx-0 bg-[#0095f6] text-sm font-semibold text-white rounded-lg border-none border">
                 <AiFillFacebook className="text-xl mr-1" />
                 <FaceBookLogin title="Log in with Facebook" />
-              </button>
+              </span>
               <OrSeperate />
               <input
                 className="h-10 p-2 border border-solid rounded-[4px] border-neutral-300"
                 type="Email"
                 placeholder="Email"
                 name="email"
+                onChange={formik.handleChange("email")}
+                value={formik.values.email}
               />
+              {formik.errors.email && <div className="text-red-500 flex">{formik.errors.email}</div>}
               <input
                 className="mt-2 h-10 p-2 border border-solid rounded-[4px] border-neutral-300"
                 type="text"
                 placeholder="Full Name"
                 name="fullname"
+                onChange={formik.handleChange("fullname")}
+                value={formik.values.fullname}
               />
-
+              {formik.errors.fullname && <div className="text-red-500 flex">{formik.errors.fullname}</div>}
               <input
                 className="mt-2 h-10 p-2 border border-solid rounded-[4px] border-neutral-300"
                 type="text"
                 placeholder="Username"
                 name="username"
+                onChange={formik.handleChange("username")}
+                value={formik.values.username}
               />
+              {formik.errors.username && <div className="text-red-500 flex">{formik.errors.username}</div>}
               <div className="relative mt-2">
                 <input
                   className="w-full h-10 p-2 border border-solid rounded-[4px] border-neutral-300"
                   placeholder="Password"
+                  type={typePass ? "text" : "password"}
                   name="password"
+                  onChange={formik.handleChange("password")}
+                  value={formik.values.password}
                 />
-
                 <h6
                   className="absolute font-semibold top-1/2 right-2 -translate-y-1/2 hover:cursor-pointer hover:opacity-50"
                   onClick={() => setTypePass(!typePass)}
@@ -63,6 +107,7 @@ const SignUp = () => {
                   {typePass ? "Hide" : "Show"}
                 </h6>
               </div>
+              {formik.errors.password && <div className="text-red-500 flex">{formik.errors.password}</div>}
               <span className="text-xs mt-5 text-gray-500">
                 People who use our service may have uploaded your contact information to Instagram.
                 <Link className="text-[#00376b00]" to="https://www.facebook.com/help/instagram/261704639352628">

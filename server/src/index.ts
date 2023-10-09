@@ -1,4 +1,5 @@
 import express from "express";
+import cors from "cors";
 import dotenv from "dotenv";
 import cookies from "cookie-parser";
 import dbConnect from "./config/dbConnect";
@@ -17,6 +18,7 @@ dbConnect();
 // middleware config
 app.use(express.json()); // parse incoming requests with JSON payloads
 app.use(cookies());
+app.use(cors({ credentials: true, origin: process.env.URL_FRONTEND }));
 
 // routes config
 app.use("/api/auth", authRouter);

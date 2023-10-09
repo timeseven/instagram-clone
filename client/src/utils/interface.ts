@@ -1,4 +1,9 @@
 /*     User     */
+export interface UserLogin {
+  email: string;
+  password: string;
+}
+
 export interface IUser {
   _id: string;
   fullname: string;
@@ -6,6 +11,23 @@ export interface IUser {
   avatar: string;
   followers: Array<string>;
   following: Array<string>;
+}
+
+export interface UserRegister {
+  email: string;
+  password: string;
+  username: string;
+  fullname: string;
+  faceBookId?: string;
+  avatar?: string;
+}
+
+export interface AuthState {
+  user: User | null;
+  isError: boolean;
+  isLoading: boolean;
+  isSuccess: boolean;
+  message: string;
 }
 
 export interface User {
