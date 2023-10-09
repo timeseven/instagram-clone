@@ -32,7 +32,7 @@ const ForgotPwd: React.FC = () => {
           />
           <button
             type="submit"
-            className="w-full h-8 mt-4 mb-4 mx-0 bg-[#0095f6] text-sm font-semibold text-white border border-none rounded-lg"
+            className="w-full h-8 mt-4 mb-4 mx-0 bg-sky-500 text-sm font-semibold text-white border border-none rounded-lg"
             // className={isActive ? "" : ""}
             disabled={isActive ? false : true}
           >

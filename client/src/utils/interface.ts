@@ -4,6 +4,15 @@ export interface UserLogin {
   password: string;
 }
 
+export interface UserRegister {
+  email: string;
+  password: string;
+  username: string;
+  fullname: string;
+  faceBookId?: string;
+  avatar?: string;
+}
+
 export interface IUser {
   _id: string;
   fullname: string;

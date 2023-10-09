@@ -12,7 +12,7 @@ const initialState: AuthState = {
 };
 
 /** Thunks */
-export const register = createAsyncThunk("auth/register", async (userData: UserRegister, { rejectWithValue }) => {
+export const register = createAsyncThunk("auth/register", async (userData: UserRegister) => {
   // Just make the async request here, and return the response.
   // This will automatically dispatch a `pending` action first,
   // and then `fulfilled` or `rejected` actions based on the promise.
@@ -28,6 +28,31 @@ export const register = createAsyncThunk("auth/register", async (userData: UserR
   }
 });
 
+export const login = createAsyncThunk("auth/login", async (userData: UserLogin) => {
+  try {
+    return await authService.login(userData);
+  } catch (error: any) {
+    if (error.response) {
+      throw new Error(error.response.data.msg);
+    } else {
+      throw error;
+    }
+  }
+});
+
+export const logout = createAsyncThunk("auth/logout", async () => {
+  try {
+    return await authService.logout();
+  } catch (error: any) {
+    if (error.response) {
+      throw new Error(error.response.data.msg);
+    } else {
+      throw error;
+    }
+  }
+});
+
+/** create Slice */
 export const authSlice = createSlice({
   name: "auth",
   initialState,
@@ -41,11 +66,9 @@ export const authSlice = createSlice({
     // register builder
     builder
       .addCase(register.pending, (state) => {
-        console.log("register pending");
         state.isLoading = true;
       })
       .addCase(register.fulfilled, (state, action: PayloadAction<User>) => {
-        console.log("register fulfilled");
         state.isError = false;
         state.isLoading = false;
         state.isSuccess = true;
@@ -53,7 +76,38 @@ export const authSlice = createSlice({
         state.message = "success";
       })
       .addCase(register.rejected, (state, action) => {
-        console.log("register rejected", action.error.message);
+        state.isError = true;
+        state.isLoading = false;
+        state.isSuccess = false;
+        state.message = action.error.message || "An error occured.";
+      })
+      .addCase(login.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(login.fulfilled, (state, action: PayloadAction<User>) => {
+        state.isError = false;
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.user = action.payload;
+        state.message = "success";
+      })
+      .addCase(login.rejected, (state, action) => {
+        state.isError = true;
+        state.isLoading = false;
+        state.isSuccess = false;
+        state.message = action.error.message || "An error occured.";
+      })
+      .addCase(logout.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(logout.fulfilled, (state) => {
+        state.isError = false;
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.user = null;
+        state.message = "success";
+      })
+      .addCase(logout.rejected, (state, action) => {
         state.isError = true;
         state.isLoading = false;
         state.isSuccess = false;

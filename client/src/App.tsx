@@ -10,6 +10,7 @@ import ResetPwd from "./pages/auth/ResetPwd";
 import RegisterFacebook from "./pages/auth/RegisterFacebook";
 import Home from "./pages/main/Home";
 import Profile from "./pages/main/Profile";
+import PrivateRouter from "./PrivateRoute";
 
 function App() {
   return (
@@ -25,7 +26,14 @@ function App() {
             <Route path="/signup/:facebookid" element={<RegisterFacebook />} />
           </Route>
           <Route path="/" element={<MainLayout />}>
-            <Route index element={<Home />} />
+            <Route
+              index
+              element={
+                <PrivateRouter>
+                  <Home />
+                </PrivateRouter>
+              }
+            />
             <Route path="/:username" element={<Profile />} />
           </Route>
         </Routes>

@@ -1,5 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link, NavLink } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../../redux/store";
+import { logout } from "../../redux/features/authSlice";
 
 import logo from "../../images/logo.png";
 import insLogo from "../../images/Instagram-logo.png";
@@ -14,6 +17,9 @@ import {
 } from "../../components/Icons";
 import avatar from "../../images/avatar-default.jpg";
 const NavBarTop: React.FC = () => {
+  const [isMenuMore, setIsMenuMore] = useState<boolean>(false);
+  const dispatch: AppDispatch = useDispatch();
+
   return (
     <div className="h-[60px] tablet:h-screen">
       <div
@@ -105,12 +111,33 @@ const NavBarTop: React.FC = () => {
             </div>
           </div>
           <div className="tablet:p-2 mb-3 hidden tablet:inline-block">
-            <button className="flex items-center justify-center" type="button" title="more options">
+            <button
+              onClick={() => setIsMenuMore(!isMenuMore)}
+              className="flex items-center justify-center"
+              type="button"
+              title="more options"
+            >
               <div>
                 <SettingsIcon />
               </div>
               <div className="ml-3 hidden desktop:inline-block">More</div>
             </button>
+            <div
+              className={`${
+                isMenuMore ? "flex" : "hidden"
+              } absolute left-0 w-full bottom-20 items-center shadow-md rounded-lg`}
+            >
+              <div className="border-t p-1 w-full">
+                <button
+                  onClick={() => dispatch(logout())}
+                  type="button"
+                  title="logout"
+                  className="w-full cursor-pointer"
+                >
+                  Logout
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </div>

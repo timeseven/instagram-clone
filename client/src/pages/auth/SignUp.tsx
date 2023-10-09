@@ -1,21 +1,22 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useFormik } from "formik";
+import * as yup from "yup";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState, AppDispatch } from "../../redux/store";
+import { register } from "../../redux/features/authSlice";
 
 import FaceBookLogin from "../../components/FaceBookLogin";
 import OrSeperate from "../../components/OrSeperate";
 import Helmet from "../../components/Helmet";
+
 // images/logo
 import logo from "../../images/logo.png";
 import appStore from "../../images/app-store.png";
 import googlePlay from "../../images/google-play.png";
 import { AiFillFacebook } from "react-icons/ai";
-import { useFormik } from "formik";
-import * as yup from "yup";
-// import authService from "../../services/authServices";
-import { register } from "../../redux/features/authSlice";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState, AppDispatch } from "../../redux/store";
 
+// set schema for validation
 let schema = yup.object().shape({
   email: yup.string().email("Email should be valid").required("Email is Required"),
   fullname: yup.string().required("Full Name is Required"),
@@ -25,7 +26,10 @@ let schema = yup.object().shape({
 
 const SignUp: React.FC = () => {
   const dispatch: AppDispatch = useDispatch();
+  const navigate = useNavigate();
+  const { user, message } = useSelector((state: RootState) => state.auth);
   const [typePass, setTypePass] = useState<boolean>(false);
+  const [isActive, setIsActive] = useState<boolean>(false);
 
   const formik = useFormik({
     initialValues: {
@@ -34,15 +38,38 @@ const SignUp: React.FC = () => {
       username: "",
       password: "",
     },
-    validateOnChange: false,
-    validateOnBlur: false,
     validationSchema: schema,
     onSubmit: (values) => {
       dispatch(register(values));
-      // authService.register(values);
-      // console.log(values);
     },
   });
+
+  useEffect(() => {
+    if (user) {
+      navigate("/");
+    }
+  }, [user, navigate]);
+
+  // jusdge button isActive
+  useEffect(() => {
+    if (
+      formik.values.password.length >= 6 &&
+      formik.values.email.length > 0 &&
+      !formik.errors.email &&
+      formik.values.fullname.length > 0 &&
+      formik.values.username.length > 0
+    ) {
+      setIsActive(true);
+    } else {
+      setIsActive(false);
+    }
+  }, [
+    formik.values.email.length,
+    formik.errors.email,
+    formik.values.fullname.length,
+    formik.values.password.length,
+    formik.values.username.length,
+  ]);
 
   return (
     <Helmet title="Sign Up • Instagram ">
@@ -59,38 +86,47 @@ const SignUp: React.FC = () => {
               <div className="text-neutral-500 text-base leading-5 font-semibold">
                 Sign up to see photos and videos from your friends.
               </div>
-              <span className="flex justify-center items-center h-9 mt-4 mb-4 mx-0 bg-[#0095f6] text-sm font-semibold text-white rounded-lg border-none border">
+              <span className="flex justify-center items-center h-9 mt-4 mb-4 mx-0 bg-sky-500 text-sm font-semibold text-white rounded-lg border-none border">
                 <AiFillFacebook className="text-xl mr-1" />
                 <FaceBookLogin title="Log in with Facebook" />
               </span>
               <OrSeperate />
               <input
                 className="h-10 p-2 border border-solid rounded-[4px] border-neutral-300"
-                type="Email"
+                type="text"
                 placeholder="Email"
                 name="email"
                 onChange={formik.handleChange("email")}
+                onBlur={formik.handleBlur("email")}
                 value={formik.values.email}
               />
-              {formik.errors.email && <div className="text-red-500 flex">{formik.errors.email}</div>}
+              {formik.errors.email && formik.touched.email ? (
+                <div className="text-red-500 flex">{formik.errors.email}</div>
+              ) : null}
               <input
                 className="mt-2 h-10 p-2 border border-solid rounded-[4px] border-neutral-300"
                 type="text"
                 placeholder="Full Name"
                 name="fullname"
                 onChange={formik.handleChange("fullname")}
+                onBlur={formik.handleBlur("fullname")}
                 value={formik.values.fullname}
               />
-              {formik.errors.fullname && <div className="text-red-500 flex">{formik.errors.fullname}</div>}
+              {formik.errors.fullname && formik.touched.fullname ? (
+                <div className="text-red-500 flex">{formik.errors.fullname}</div>
+              ) : null}
               <input
                 className="mt-2 h-10 p-2 border border-solid rounded-[4px] border-neutral-300"
                 type="text"
                 placeholder="Username"
                 name="username"
                 onChange={formik.handleChange("username")}
+                onBlur={formik.handleBlur("username")}
                 value={formik.values.username}
               />
-              {formik.errors.username && <div className="text-red-500 flex">{formik.errors.username}</div>}
+              {formik.errors.username && formik.touched.username ? (
+                <div className="text-red-500 flex">{formik.errors.username}</div>
+              ) : null}
               <div className="relative mt-2">
                 <input
                   className="w-full h-10 p-2 border border-solid rounded-[4px] border-neutral-300"
@@ -98,6 +134,7 @@ const SignUp: React.FC = () => {
                   type={typePass ? "text" : "password"}
                   name="password"
                   onChange={formik.handleChange("password")}
+                  onBlur={formik.handleBlur("password")}
                   value={formik.values.password}
                 />
                 <h6
@@ -107,7 +144,9 @@ const SignUp: React.FC = () => {
                   {typePass ? "Hide" : "Show"}
                 </h6>
               </div>
-              {formik.errors.password && <div className="text-red-500 flex">{formik.errors.password}</div>}
+              {formik.errors.password && formik.touched.password ? (
+                <div className="text-red-500 flex">{formik.errors.password}</div>
+              ) : null}
               <span className="text-xs mt-5 text-gray-500">
                 People who use our service may have uploaded your contact information to Instagram.
                 <Link className="text-[#00376b00]" to="https://www.facebook.com/help/instagram/261704639352628">
@@ -131,11 +170,15 @@ const SignUp: React.FC = () => {
               </span>
 
               <button
-                className="h-9 mt-4 mb-4 mx-0 bg-[#0095f6] text-sm font-semibold text-white border border-none rounded-lg"
+                className={`${
+                  isActive ? "bg-sky-500" : "bg-sky-300"
+                } h-9 mt-4 mb-4 mx-0 text-sm font-semibold text-white border border-none rounded-lg`}
                 type="submit"
+                disabled={!isActive}
               >
                 Sign Up
               </button>
+              {message !== "success" ? <div className="text-red-500 flex">{message}</div> : null}
             </form>
             <div className="flex flex-col justify-center items-center my-2 py-2 text-sm mobile:border border-solid border-neutral-300 rounded-sm">
               <p className="text-sm m-4">
