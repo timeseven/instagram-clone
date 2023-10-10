@@ -113,14 +113,14 @@ const Login: React.FC = () => {
                 <AiFillFacebook className="text-lg text-[#385185] mr-2" />
                 <FaceBookLogin title="Log in with Facebook" />
               </div>
-              <Link className="mt-3 text-xs" to="/forgotpwd">
+              <Link className="mt-3 text-xs" to="/forgot-password">
                 Forgot password?
               </Link>
             </form>
             <div className="flex flex-col justify-center items-center my-2 py-2 text-sm mobile:border border-solid border-neutral-300 rounded-sm">
               <p className="text-sm m-4">
                 Don't have an account?{" "}
-                <Link className="text-[#0095f6] font-semibold" to="/signup">
+                <Link className="text-[#0095f6] font-semibold" to="/register">
                   Sign Up
                 </Link>
               </p>

@@ -1,16 +1,25 @@
 /*     User     */
-export interface UserLogin {
+export interface IUserLogin {
   email: string;
   password: string;
 }
 
-export interface UserRegister {
+export interface IUserRegister {
   email: string;
   password: string;
   username: string;
   fullname: string;
   faceBookId?: string;
   avatar?: string;
+}
+
+export interface IForgotPassword {
+  email: string;
+}
+
+export interface IResetPassword {
+  password: string;
+  token: string;
 }
 
 export interface IUser {
@@ -22,7 +31,7 @@ export interface IUser {
   following: Array<string>;
 }
 
-export interface UserRegister {
+export interface IUserRegister {
   email: string;
   password: string;
   username: string;
@@ -31,7 +40,7 @@ export interface UserRegister {
   avatar?: string;
 }
 
-export interface AuthState {
+export interface IAuthState {
   user: User | null;
   isError: boolean;
   isLoading: boolean;

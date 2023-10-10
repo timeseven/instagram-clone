@@ -199,7 +199,7 @@ const forgotPasswordToken = asyncHandler(async (req: IReqAuth, res: Response): P
     }
 
     const resetUrl = `Hi ${user?.username},<br>
-    Sorry to hear you are having trouble logging into Instagram. We got a message that you forgot your password. If this was you, you can get right back into your account or reset your password now. <a href="https://localhost:4000/reset-password/${
+    Sorry to hear you are having trouble logging into Instagram. We got a message that you forgot your password. If this was you, you can get right back into your account or reset your password now. <a href="http://localhost:3000/reset-password/${
       user!.token
     }">Log in as ${user?.username}</a>`;
 
@@ -222,7 +222,7 @@ const resetPassword = asyncHandler(async (req: IReqAuth, res: Response): Promise
   try {
     const { password, token } = req.body;
     const user = await User.findOne({
-      refreshToken: token,
+      token,
     }).populate("followers following", "avatar username fullname followers following");
 
     if (!user) {

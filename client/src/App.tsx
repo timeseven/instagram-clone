@@ -18,12 +18,12 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<AuthLayout />}>
-            <Route path="/signup" element={<SignUp />} />
+            <Route path="/register" element={<SignUp />} />
             <Route path="/login" element={<Login />} />
-            <Route path="/forgotpwd" element={<ForgotPwd />} />
+            <Route path="/forgot-password" element={<ForgotPwd />} />
             <Route path="/email-sent" element={<EmailSent />} />
-            <Route path="/resetpwd" element={<ResetPwd />} />
-            <Route path="/signup/:facebookid" element={<RegisterFacebook />} />
+            <Route path="/reset-password/:token" element={<ResetPwd />} />
+            <Route path="/register/:facebookid" element={<RegisterFacebook />} />
           </Route>
           <Route path="/" element={<MainLayout />}>
             <Route

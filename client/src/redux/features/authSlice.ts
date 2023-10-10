@@ -1,9 +1,9 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import authService from "../../services/authServices";
-import { AuthState, User, UserLogin, UserRegister } from "../../utils/interface";
+import { IAuthState, User, IUserLogin, IUserRegister, IForgotPassword, IResetPassword } from "../../utils/interface";
 import { getTokenFromLocalStorage } from "../../utils/axiosConfig";
 
-const initialState: AuthState = {
+const initialState: IAuthState = {
   user: getTokenFromLocalStorage(),
   isError: false, // thunk rejected
   isLoading: false, // thunk pending
@@ -12,7 +12,7 @@ const initialState: AuthState = {
 };
 
 /** Thunks */
-export const register = createAsyncThunk("auth/register", async (userData: UserRegister) => {
+export const register = createAsyncThunk("auth/register", async (userData: IUserRegister) => {
   // Just make the async request here, and return the response.
   // This will automatically dispatch a `pending` action first,
   // and then `fulfilled` or `rejected` actions based on the promise.
@@ -28,7 +28,7 @@ export const register = createAsyncThunk("auth/register", async (userData: UserR
   }
 });
 
-export const login = createAsyncThunk("auth/login", async (userData: UserLogin) => {
+export const login = createAsyncThunk("auth/login", async (userData: IUserLogin) => {
   try {
     return await authService.login(userData);
   } catch (error: any) {
@@ -52,6 +52,35 @@ export const logout = createAsyncThunk("auth/logout", async () => {
   }
 });
 
+export const forgotPassword = createAsyncThunk("auth/forgot-password", async (data: IForgotPassword) => {
+  try {
+    return await authService.forgotPassword(data);
+  } catch (error: any) {
+    if (error.response) {
+      throw new Error(error.response.data.msg);
+    } else {
+      throw error;
+    }
+  }
+});
+
+// clear user state when forgot password email sent by adding null payload
+export const setNullUser = createAsyncThunk("auth/set-null", async () => {
+  return null;
+});
+
+export const resetPassword = createAsyncThunk("auth/reset-password", async (data: IResetPassword) => {
+  try {
+    return await authService.resetPassword(data);
+  } catch (error: any) {
+    if (error.response) {
+      throw new Error(error.response.data.msg);
+    } else {
+      throw error;
+    }
+  }
+});
+
 /** create Slice */
 export const authSlice = createSlice({
   name: "auth",
@@ -64,7 +93,7 @@ export const authSlice = createSlice({
     // Use `extraReducers` to handle actions that were generated
     // _outside_ of the slice, such as thunks or in other slices
     // register builder
-    builder
+    builder // register
       .addCase(register.pending, (state) => {
         state.isLoading = true;
       })
@@ -80,7 +109,7 @@ export const authSlice = createSlice({
         state.isLoading = false;
         state.isSuccess = false;
         state.message = action.error.message || "An error occured.";
-      })
+      }) // login
       .addCase(login.pending, (state) => {
         state.isLoading = true;
       })
@@ -96,7 +125,7 @@ export const authSlice = createSlice({
         state.isLoading = false;
         state.isSuccess = false;
         state.message = action.error.message || "An error occured.";
-      })
+      }) // logout
       .addCase(logout.pending, (state) => {
         state.isLoading = true;
       })
@@ -112,6 +141,54 @@ export const authSlice = createSlice({
         state.isLoading = false;
         state.isSuccess = false;
         state.message = action.error.message || "An error occured.";
+      }) // forgot password
+      .addCase(forgotPassword.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(forgotPassword.fulfilled, (state, action: PayloadAction<User>) => {
+        state.isError = false;
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.user = action.payload;
+        state.message = "success";
+      })
+      .addCase(forgotPassword.rejected, (state, action) => {
+        state.isError = true;
+        state.isLoading = false;
+        state.isSuccess = false;
+        state.message = action.error.message || "An error occured.";
+      }) // set null user
+      .addCase(setNullUser.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(setNullUser.fulfilled, (state, action: PayloadAction<null>) => {
+        state.isError = false;
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.user = action.payload;
+        state.message = "success";
+      })
+      .addCase(setNullUser.rejected, (state, action) => {
+        state.isError = true;
+        state.isLoading = false;
+        state.isSuccess = false;
+        state.message = action.error.message ?? "An error occurred.";
+      }) // reset password
+      .addCase(resetPassword.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(resetPassword.fulfilled, (state, action: PayloadAction<User>) => {
+        state.isError = false;
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.user = action.payload;
+        state.message = "success";
+      })
+      .addCase(resetPassword.rejected, (state, action) => {
+        state.isError = true;
+        state.isLoading = false;
+        state.isSuccess = false;
+        state.message = action.error.message || "An error occurred.";
       });
   },
 });
