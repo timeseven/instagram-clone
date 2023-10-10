@@ -98,3 +98,9 @@ export interface IPost {
   _id: string;
   createdAt: string;
 }
+
+/* GlobalState  */
+
+export interface IGlobalState {
+  isCreatePostGlobal: boolean;
+}

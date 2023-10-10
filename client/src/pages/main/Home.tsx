@@ -8,12 +8,12 @@ const Home: React.FC = () => {
   return (
     <Helmet title="Instagram">
       <div
-        className="w-full h-screen pt-1 mx-auto flex justify-center
-                   tablet:mt-0 tablet:w-[calc(100vw-72px)] tablet:mr-0
+        className="w-full h-[calc(100vh-108px)] top-[60px] pt-1 mx-auto flex justify-center 
+                   tablet:mt-0 tablet:w-[calc(100vw-72px)] tablet:h-screen tablet:mr-0
                    desktop:w-[calc(100vw-245px)] desktop-lg:w-[calc(100vw-335px)]"
       >
         <div
-          className="w-full flex flex-col items-center max-w-[630px] h-[585px]
+          className="w-full flex flex-col items-center max-w-[630px]
                         desktop-sm:mr-16"
         >
           <div
@@ -22,7 +22,7 @@ const Home: React.FC = () => {
           >
             <StoryList />
           </div>
-          <div className="w-full mt-2 h-fit">
+          <div className="w-full mt-2">
             <PostList />
           </div>
         </div>

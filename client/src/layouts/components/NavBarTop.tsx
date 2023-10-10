@@ -3,6 +3,7 @@ import { Link, NavLink } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../redux/store";
 import { logout } from "../../redux/features/authSlice";
+import { setIsCreatePostGlobal } from "../../redux/features/globalStateSlice";
 
 import logo from "../../images/logo.png";
 import insLogo from "../../images/Instagram-logo.png";
@@ -23,7 +24,7 @@ const NavBarTop: React.FC = () => {
   return (
     <div className="h-[60px] tablet:h-screen">
       <div
-        className="fixed bg-white w-full h-[60px] border-b border-solid border-neutral-300 z-1 transition-all duration-300 ease-in-out
+        className="fixed bg-white w-full h-[60px] border-b border-solid border-neutral-300 z-20 transition-all duration-300 ease-in-out
                  tablet:w-[72px] tablet:h-screen tablet:border-b-0 tablet:border-r
                  desktop:w-[245px] desktop-lg:w-[335px]"
       >
@@ -92,12 +93,12 @@ const NavBarTop: React.FC = () => {
               </NavLink>
             </div>
             <div className="p-2 tablet:mb-4">
-              <NavLink to="/">
+              <button onClick={() => dispatch(setIsCreatePostGlobal())}>
                 <div className="flex items-center m-auto">
                   <CreateIcon className="w-[24px] h-[24px] flex justify-center" />
                   <span className="pl-4 text-[#262626] hidden desktop:inline-block">Create</span>
                 </div>
-              </NavLink>
+              </button>
             </div>
             <div className="tablet:p-2 mb-4 hidden tablet:inline-block">
               <NavLink to="/abcd">

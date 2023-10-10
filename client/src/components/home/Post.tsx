@@ -26,7 +26,7 @@ const Post: React.FC<PostProps> = ({ post }) => {
   const [savedPost, setSavedPost] = useState<boolean>(false);
   const [emoji, setEmoji] = useState<boolean>(false);
   return (
-    <div className="mt-2">
+    <div className="h-fit last:pb-16 mt-2 pb-2 border-b">
       <div className="relative flex items-center">
         <Link to={`/`} className="flex items-center">
           <div className="mr-4">
@@ -99,7 +99,7 @@ const Post: React.FC<PostProps> = ({ post }) => {
       )}
 
       <form className="w-full relative flex ml-3 mt-2">
-        <div className="absolute">
+        <div className="absolute z-10">
           <span onClick={() => setEmoji(!emoji)}>
             <EmojiIcon />
             {emoji ? (
@@ -109,7 +109,7 @@ const Post: React.FC<PostProps> = ({ post }) => {
             ) : null}
           </span>
         </div>
-        <textarea className="w-full max-w-[420px] min-w-fit ml-6 text-sm" placeholder="Add a comment..." />
+        <textarea className="w-full mx-6 text-sm" placeholder="Add a comment..." />
       </form>
     </div>
   );

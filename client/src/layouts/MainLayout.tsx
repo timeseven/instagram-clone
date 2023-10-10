@@ -2,6 +2,7 @@ import React from "react";
 import { Outlet } from "react-router-dom";
 import NavBarTop from "./components/NavBarTop";
 import NavBarBot from "./components/NavBarBot";
+import CreatePost from "../components/post/CreatePost";
 const MainLayout: React.FC = () => {
   return (
     <div
@@ -10,6 +11,7 @@ const MainLayout: React.FC = () => {
     >
       <NavBarTop />
       <Outlet />
+      <CreatePost />
       <NavBarBot className="tablet:hidden" />
     </div>
   );

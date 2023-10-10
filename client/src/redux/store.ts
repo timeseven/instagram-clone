@@ -2,6 +2,7 @@ import { combineReducers, configureStore } from "@reduxjs/toolkit";
 // import { persistStore, persistReducer } from "redux-persist";
 // import storage from "redux-persist/lib/storage";
 import authReducer from "./features/authSlice";
+import globalStateSlice from "./features/globalStateSlice";
 
 // const persistConfig = {
 //   key: "root",
@@ -10,6 +11,7 @@ import authReducer from "./features/authSlice";
 
 const reducer = combineReducers({
   auth: authReducer,
+  globalState: globalStateSlice,
 });
 
 export const store = configureStore({
