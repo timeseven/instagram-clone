@@ -59,7 +59,6 @@ const userSchema = new mongoose.Schema(
 
 // crypto password using hash
 userSchema.pre("save", async function (next) {
-  console.log("save", this.isModified("password"));
   if (!this.isModified("password")) {
     next();
   }

@@ -3,6 +3,7 @@ import { combineReducers, configureStore } from "@reduxjs/toolkit";
 // import storage from "redux-persist/lib/storage";
 import authReducer from "./features/authSlice";
 import globalStateSlice from "./features/globalStateSlice";
+import uploadImgSlice from "./features/uploadImgSlice";
 
 // const persistConfig = {
 //   key: "root",
@@ -11,6 +12,7 @@ import globalStateSlice from "./features/globalStateSlice";
 
 const reducer = combineReducers({
   auth: authReducer,
+  upload: uploadImgSlice,
   globalState: globalStateSlice,
 });
 

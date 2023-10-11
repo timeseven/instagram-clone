@@ -7,6 +7,7 @@ import authRouter from "./routes/authRouter";
 import userRouter from "./routes/userRouter";
 import postRouter from "./routes/postRouter";
 import commentRouter from "./routes/commentRouter";
+import uploadImgRouter from "./routes/uploadImgRouter";
 
 const app = express();
 dotenv.config(); // make .env available
@@ -25,6 +26,7 @@ app.use("/api/auth", authRouter);
 app.use("/api/user", userRouter);
 app.use("/api/post", postRouter);
 app.use("/api/comment", commentRouter);
+app.use("/api/upload", uploadImgRouter);
 
 // listen for requests
 app.listen(PORT, () => {

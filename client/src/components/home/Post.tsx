@@ -102,11 +102,7 @@ const Post: React.FC<PostProps> = ({ post }) => {
         <div className="absolute z-10">
           <span onClick={() => setEmoji(!emoji)}>
             <EmojiIcon />
-            {emoji ? (
-              <div className="h-[500px]">
-                <EmojiPicker />
-              </div>
-            ) : null}
+            {emoji ? <EmojiPicker height={500} /> : null}
           </span>
         </div>
         <textarea className="w-full mx-6 text-sm" placeholder="Add a comment..." />

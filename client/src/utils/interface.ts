@@ -99,6 +99,19 @@ export interface IPost {
   createdAt: string;
 }
 
+/* Upload Img */
+export interface uploadImg {
+  url: string;
+}
+
+export interface uploadImgState {
+  imageList: uploadImg[];
+  isError: boolean;
+  isLoading: boolean;
+  isSuccess: boolean;
+  message: string;
+}
+
 /* GlobalState  */
 
 export interface IGlobalState {
