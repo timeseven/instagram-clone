@@ -7,7 +7,7 @@ import fs from "fs";
 //The disk storage engine gives you full control on storing files to disk.
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, path.join(__dirname, "../assets/images"));
+    cb(null, path.join(__dirname, "../assets"));
   },
   filename: function (req, file, cb) {
     const uniquesuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
@@ -36,7 +36,6 @@ export const uploadPhoto = multer({
 
 // resize image middleware
 export const imgResize = async (req: Request, res: Response, next: NextFunction) => {
-  console.log("resize...");
   const files = req.files as Express.Multer.File[];
 
   if (!files) return next();
@@ -44,16 +43,13 @@ export const imgResize = async (req: Request, res: Response, next: NextFunction)
   // if files exists, use Promise.all to check if the async resize of all files are successful.
   await Promise.all(
     files.map(async (file) => {
-      console.log(file.path, file.filename);
       await sharp(file.path)
         .resize(300, 300)
         .toFormat("jpeg")
         .jpeg({ quality: 90 })
-        .toFile(`src/assets/resize/${file.filename}`);
-      fs.unlinkSync(`src/assets/resize/${file.filename}`);
+        .toFile(`src/assets/images/${file.filename}`);
+      fs.unlinkSync(`src/assets/${file.filename}`); // delete original images
     })
   );
   next();
 };
-
-// transfer

@@ -71,7 +71,6 @@ const CreatePost: React.FC = () => {
     if (imageList[0] !== undefined && message === "upload/upload-images-post success") {
       console.log(imageList);
       const urls = imageList.map((image) => image.url);
-      console.log("urls", urls);
       setImages(urls);
     }
   }, [imageList, message]);
@@ -85,7 +84,7 @@ const CreatePost: React.FC = () => {
           <form
             onSubmit={formik.handleSubmit}
             encType="multipart/form-data"
-            className="flex flex-col w-full h-screen m-auto max-w-[90vw] max-h-[70vh] bg-white rounded-md tablet:max-w-[60vw]"
+            className="flex flex-col w-full h-screen m-auto max-w-[90vw] max-h-[70vh] bg-white rounded-md tablet-md:max-w-[60vw]"
           >
             <div className="flex items-center justify-center px-4 py-2 border rounded-t-md">
               <span className="w-full flex items-center justify-center font-semibold">Create new post</span>
@@ -99,20 +98,20 @@ const CreatePost: React.FC = () => {
                 Share
               </button>
             </div>
-            <div className="w-full h-full flex flex-col justify-center tablet:flex-row">
-              <div className="w-full h-2/3 items-center justify-center grow">
+            <div className="w-full h-full flex flex-col justify-center tablet-md:flex-row">
+              <div className="w-full flex h-2/3 items-center justify-center grow tablet-md:w-[40vw]">
                 {images.length > 0 && stream === false ? (
                   <Swiper
                     navigation={true}
                     modules={[Navigation]}
-                    className="flex items-center justify-center border-r"
+                    className="w-full h-full flex items-center justify-center"
                   >
                     {images.map((image, index) => (
                       <SwiperSlide key={index}>
-                        <span>
-                          <button type="button" className=" bg-white" aria-label="Close"></button>
-                        </span>
-                        <img src={image} alt={image} />
+                        <button title="close" className="absolute top-4 right-4">
+                          <AiOutlineClose className="w-6 h-6 fill-white" />
+                        </button>
+                        <img src={image} alt={image} className="w-full h-full" />
                       </SwiperSlide>
                     ))}
                   </Swiper>
@@ -149,10 +148,10 @@ const CreatePost: React.FC = () => {
                   </div>
                 )}
               </div>
-              <div className="flex flex-col w-full h-1/3 justify-center grow px-3 py-3 bg-white tablet:w-[30vw] tablet:justify-start">
+              <div className="flex flex-col w-full h-1/3 justify-center grow px-3 py-3 bg-white tablet-md:w-[20vw] tablet-md:justify-start">
                 <div className="flex">
                   <div className="flex items-center justify-center cursor-pointer">
-                    <img src={user?.avatar} alt={user?.username} />
+                    <img src={user?.avatar} alt={user?.username} width={20} height={20} />
                   </div>
                   <span className="ml-3 font-medium">{user?.username}</span>
                 </div>
