@@ -4,6 +4,7 @@ import { uploadImg, uploadImgState } from "../../utils/interface";
 
 const initialState: uploadImgState = {
   imageList: [],
+  imgObj: {},
   isError: false,
   isLoading: false,
   isSuccess: false,
@@ -16,7 +17,18 @@ export const uploadImgPost = createAsyncThunk("upload/upload-images-post", async
     for (let i = 0; i < data.length; i++) {
       formData.append("images", data[i]);
     }
+    console.log("formData", formData, data);
+
     return await uploadImgService.uploadImgPost(formData);
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error);
+  }
+});
+
+export const getImgPost = createAsyncThunk("upload/get-images-post", async (data: string[], thunkAPI) => {
+  try {
+    console.log("getImgPost redux", data);
+    return await uploadImgService.getImgPost(data);
   } catch (error) {
     return thunkAPI.rejectWithValue(error);
   }
@@ -40,6 +52,24 @@ export const uploadImgSlice = createSlice({
         state.message = "upload/upload-images-post success";
       })
       .addCase(uploadImgPost.rejected, (state, action) => {
+        state.isError = true;
+        state.isLoading = false;
+        state.isSuccess = false;
+        state.message = action.error.message ?? "An error occurred.";
+      })
+      .addCase(getImgPost.pending, (state) => {
+        state.isLoading = true;
+        state.message = "upload/transfer-images-post pedding";
+      })
+      .addCase(getImgPost.fulfilled, (state, action: PayloadAction<Array<uploadImg>>) => {
+        state.isError = false;
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.imgObj = action.payload;
+        console.log("transfer, action payload");
+        state.message = "upload/transfer-images-post success";
+      })
+      .addCase(getImgPost.rejected, (state, action) => {
         state.isError = true;
         state.isLoading = false;
         state.isSuccess = false;

@@ -7,8 +7,15 @@ const uploadImgPost = async (data: FormData) => {
   return response.data;
 };
 
+const getImgPost = async (data: string[]) => {
+  console.log("transfer", data);
+  const response = await fetch.post("/upload/transfer/post", { images: data }, config());
+  return response.data;
+};
+
 const uploadImgServices = {
   uploadImgPost,
+  getImgPost,
 };
 
 export default uploadImgServices;

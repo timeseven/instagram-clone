@@ -106,10 +106,39 @@ export interface uploadImg {
 
 export interface uploadImgState {
   imageList: uploadImg[];
+  imgObj: Object;
   isError: boolean;
   isLoading: boolean;
   isSuccess: boolean;
   message: string;
+}
+export interface ICreatePost {
+  content: string;
+  images: string[];
+}
+
+export interface postUpdate {
+  content: string;
+  id: string;
+}
+
+export interface postState {
+  data: IPost[];
+  isError: boolean;
+  isLoading: boolean;
+  isSuccess: boolean;
+  message: string;
+}
+
+export interface IComment {
+  _id: string;
+  postId: string;
+  content: string;
+  tag: string[];
+  reply: string;
+  likes: string[];
+  user: User;
+  createdAt: string;
 }
 
 /* GlobalState  */

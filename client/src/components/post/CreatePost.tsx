@@ -11,6 +11,7 @@ import { AiOutlineCamera, AiOutlineClose } from "react-icons/ai";
 import { EmojiIcon, UploadImg } from "../Icons";
 import Load from "../../images/loading.gif";
 import { uploadImgPost } from "../../redux/features/uploadImgSlice";
+import { createPost } from "../../redux/features/postSlice";
 let schema = yup.object().shape({
   content: yup.string().required("Content is Required"),
 });
@@ -27,7 +28,7 @@ const CreatePost: React.FC = () => {
   const refCanvas = useRef<HTMLCanvasElement>(null);
 
   const [images, setImages] = useState<string[]>([]);
-  const [stream, setStream] = useState<boolean>(false);
+  const [imageCloud, setImageCloud] = useState<File[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [emoji, setEmoji] = useState<boolean>(false);
 
@@ -36,29 +37,46 @@ const CreatePost: React.FC = () => {
       content: "",
     },
     validationSchema: schema,
-    onSubmit: (values) => {},
+    onSubmit: (values) => {
+      // save images to aws first
+      dispatch(uploadImgPost(imageCloud)).then((response) => {
+        if (response.payload.length > 0) {
+          const images = response.payload;
+          setLoading(false);
+          // then create post
+          dispatch(createPost({ ...values, images })).then((response) => {
+            const newPost = response.payload;
+            console.log("newPost", newPost);
+            setImages([]);
+            formik.resetForm();
+            dispatch(setIsCreatePostGlobal());
+          });
+        }
+      });
+    },
   });
 
   const handleCloseModal = () => {
+    setImages([]);
+    setImageCloud([]);
     dispatch(setIsCreatePostGlobal());
   };
 
   // select from computer
   const handleClick = () => {
-    console.log("select from computer", ref.current);
     ref.current?.click();
   };
 
+  // show upload image in fronend using URL.createObjectURL
   const uploadImages = (e: React.ChangeEvent<HTMLInputElement>) => {
     const fileList: FileList = e.target.files!;
-    console.log("uploadImages", fileList);
     const filesArray: File[] = Array.from(fileList);
-    console.log("uploadImages", filesArray);
-    dispatch(uploadImgPost(filesArray)).then((response) => {
-      if (response.payload) {
-        setLoading(false);
-      }
+    let images: string[] = [];
+    filesArray.forEach((item) => {
+      images.push(URL.createObjectURL(item));
     });
+    setImages(images);
+    setImageCloud(filesArray); // used to save images to aws cloud
   };
 
   useEffect(() => {
@@ -71,6 +89,7 @@ const CreatePost: React.FC = () => {
     if (imageList[0] !== undefined && message === "upload/upload-images-post success") {
       console.log(imageList);
       const urls = imageList.map((image) => image.url);
+      setImageCloud([]);
       setImages(urls);
     }
   }, [imageList, message]);
@@ -98,9 +117,9 @@ const CreatePost: React.FC = () => {
                 Share
               </button>
             </div>
-            <div className="w-full h-full flex flex-col justify-center tablet-md:flex-row">
-              <div className="w-full flex h-2/3 items-center justify-center grow tablet-md:w-[40vw]">
-                {images.length > 0 && stream === false ? (
+            <div className="w-full h-full max-h-[calc(70vh-42px)] flex flex-col justify-center tablet-md:flex-row">
+              <div className="w-full flex h-2/3 items-center justify-center tablet-md:h-full tablet-md:w-[40vw]">
+                {images.length > 0 ? (
                   <Swiper
                     navigation={true}
                     modules={[Navigation]}
@@ -111,29 +130,22 @@ const CreatePost: React.FC = () => {
                         <button title="close" className="absolute top-4 right-4">
                           <AiOutlineClose className="w-6 h-6 fill-white" />
                         </button>
-                        <img src={image} alt={image} className="w-full h-full" />
+                        <img src={image} alt={image} className="h-full mx-auto" />
                       </SwiperSlide>
                     ))}
                   </Swiper>
                 ) : (
                   <div className="w-full h-full flex flex-col items-center justify-center border-r">
-                    <UploadImg className="grow" />
-                    {stream && (
-                      <div className="relative">
-                        <span className="absolute top-2 right-2">
-                          <button type="button" className="bg-white" aria-label="Close"></button>
-                        </span>
-                        <video autoPlay muted ref={videoRef} width="100%" height="100%" />
-                        <canvas ref={refCanvas} className="hidden" />
-                      </div>
-                    )}
-                    <button
-                      type="button"
-                      onClick={handleClick}
-                      className="h-9 p-1 m-auto bg-sky-500 text-sm font-semibold text-white border rounded-md"
-                    >
-                      Select from computer
-                    </button>
+                    <UploadImg className="grow tablet:h-2/3" />
+                    <div className="tablet:h-1/3">
+                      <button
+                        type="button"
+                        onClick={handleClick}
+                        className="h-9 p-1 m-auto bg-sky-500 text-sm font-semibold text-white border rounded-md "
+                      >
+                        Select from computer
+                      </button>
+                    </div>
                     <input
                       className="hidden"
                       type="file"
@@ -148,7 +160,7 @@ const CreatePost: React.FC = () => {
                   </div>
                 )}
               </div>
-              <div className="flex flex-col w-full h-1/3 justify-center grow px-3 py-3 bg-white tablet-md:w-[20vw] tablet-md:justify-start">
+              <div className="flex flex-col w-full h-1/3 justify-center px-3 py-3 bg-white tablet-md:h-full tablet-md:w-[20vw] tablet-md:justify-start">
                 <div className="flex">
                   <div className="flex items-center justify-center cursor-pointer">
                     <img src={user?.avatar} alt={user?.username} width={20} height={20} />

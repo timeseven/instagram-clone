@@ -1,10 +1,10 @@
 import { S3Client, PutObjectCommand, GetObjectCommand } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import sharp from "sharp";
-import { AWS_ACCESS_KEY_ID, AWS_S3_BUCKET_NAME, AWS_SECRET_ACCESS_KEY } from "../variables";
+import { AWS_ACCESS_KEY_ID, AWS_S3_BUCKET_NAME, AWS_SECRET_ACCESS_KEY, AWS_REGION } from "../variables";
 
 const client = new S3Client({
-  region: "ap-southeast-2",
+  region: AWS_REGION,
   credentials: {
     accessKeyId: AWS_ACCESS_KEY_ID,
     secretAccessKey: AWS_SECRET_ACCESS_KEY,
@@ -19,18 +19,25 @@ export const awsUploadImgPost = async (fileUpload: any) => {
     Body: fileBuffer,
   });
   try {
+    await sharp.cache(false);
     const response = await client.send(command);
-    if (response) {
-      const url = await getSignedUrl(
-        client,
-        new GetObjectCommand({
-          Bucket: AWS_S3_BUCKET_NAME,
-          Key: fileUpload.filename,
-        })
-      );
-      return url || "";
+    if (response.$metadata.httpStatusCode === 200) {
+      return fileUpload.filename;
     }
   } catch (err) {
     console.error(err);
   }
 };
+
+export const awsGetImgPost = async (filename: string) => {
+  const command = new GetObjectCommand({
+    Bucket: AWS_S3_BUCKET_NAME,
+    Key: filename,
+  });
+  try {
+    const url = await getSignedUrl(client, command);
+    return url;
+  } catch (err) {}
+};
+
+export const awsDeleteImgPost = async (publicId: string) => {};

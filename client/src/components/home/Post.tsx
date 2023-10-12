@@ -1,5 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../../redux/store";
 import {
   CommentIcon,
   EmojiIcon,
@@ -21,12 +23,13 @@ import "swiper/css";
 import "swiper/css/navigation";
 
 const Post: React.FC<PostProps> = ({ post }) => {
+  const { message, imgObj } = useSelector((state: RootState) => state.upload);
   const [like, setLike] = useState<boolean>(false);
   const [likeCmt, setLikeCmt] = useState<boolean>(false);
   const [savedPost, setSavedPost] = useState<boolean>(false);
   const [emoji, setEmoji] = useState<boolean>(false);
   return (
-    <div className="h-fit last:pb-16 mt-2 pb-2 border-b">
+    <div className=" last:pb-16 mt-2 pb-2 border-b">
       <div className="relative flex items-center">
         <Link to={`/`} className="flex items-center">
           <div className="mr-4">
@@ -48,7 +51,13 @@ const Post: React.FC<PostProps> = ({ post }) => {
         <Swiper navigation={true} modules={[Navigation]} className="flex items-center justify-center mySwiper">
           {post.images.map((image, index) => (
             <SwiperSlide key={index}>
-              <img className="w-full rounded-sm" src={image} alt={image} />
+              <img
+                className="rounded-sm"
+                src={`${imgObj[image as keyof typeof imgObj]}`}
+                width={500}
+                height={500}
+                alt={image}
+              />
             </SwiperSlide>
           ))}
         </Swiper>

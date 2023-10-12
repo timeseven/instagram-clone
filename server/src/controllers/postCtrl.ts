@@ -7,6 +7,7 @@ import { IReqAuth } from "../config/interface";
 // create Post
 const createPost = asyncHandler(async (req: IReqAuth, res: Response): Promise<any | void> => {
   try {
+    console.log("start creating post");
     const { content, images } = req.body;
 
     // check if the images are uploaded
