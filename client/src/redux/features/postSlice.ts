@@ -18,13 +18,32 @@ export const createPost = createAsyncThunk("post/create", async (data: ICreatePo
     return thunkAPI.rejectWithValue(error);
   }
 });
+
 export const getPost = createAsyncThunk("post/get-current-post", async (_, thunkAPI) => {
   try {
+    console.log("post/get-current-post");
     return await postService.getPost();
   } catch (error) {
     return thunkAPI.rejectWithValue(error);
   }
 });
+
+export const deletePost = createAsyncThunk("post/delete-a-post", async (id: string, thunkAPI) => {
+  try {
+    return await postService.deletePost(id);
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error);
+  }
+});
+
+export const updatePost = createAsyncThunk("post/update-a-post", async (data: postUpdate, thunkAPI) => {
+  try {
+    return await postService.updatePost(data);
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error);
+  }
+});
+
 export const getUserPost = createAsyncThunk("post/get-user-post", async (username: string, thunkAPI) => {
   try {
     return await postService.getUserPost(username);
@@ -51,22 +70,6 @@ export const likePost = createAsyncThunk("post/like-a-post", async (id: string, 
 export const unLikePost = createAsyncThunk("post/unlike-a-post", async (id: string, thunkAPI) => {
   try {
     return await postService.unLikePost(id);
-  } catch (error) {
-    return thunkAPI.rejectWithValue(error);
-  }
-});
-
-export const updatePost = createAsyncThunk("post/update-a-post", async (data: postUpdate, thunkAPI) => {
-  try {
-    return await postService.updatePost(data);
-  } catch (error) {
-    return thunkAPI.rejectWithValue(error);
-  }
-});
-
-export const deletePost = createAsyncThunk("post/delete-a-post", async (id: string, thunkAPI) => {
-  try {
-    return await postService.deletePost(id);
   } catch (error) {
     return thunkAPI.rejectWithValue(error);
   }
@@ -107,7 +110,7 @@ export const postSlice = createSlice({
         state.isLoading = false;
         state.isSuccess = true;
         state.data!.unshift(action.payload);
-        state.message = "success";
+        state.message = "post/create-current-post success";
       })
       .addCase(createPost.rejected, (state, action) => {
         state.isError = true;
@@ -123,7 +126,6 @@ export const postSlice = createSlice({
         state.isLoading = false;
         state.isSuccess = true;
         state.data = action.payload;
-        console.log("ffffff");
         state.message = "post/get-current-post success";
       })
       .addCase(getPost.rejected, (state, action) => {

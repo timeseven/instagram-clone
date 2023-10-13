@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../redux/store";
 import {
   CommentIcon,
@@ -21,13 +21,23 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
+import { setIsDeletePostGlobal, setPostModalId } from "../../redux/features/globalStateSlice";
 
 const Post: React.FC<PostProps> = ({ post }) => {
+  const dispatch: AppDispatch = useDispatch();
+
   const { message, imgObj } = useSelector((state: RootState) => state.upload);
+
+  const [postId, setPostId] = useState<string>(post._id);
   const [like, setLike] = useState<boolean>(false);
   const [likeCmt, setLikeCmt] = useState<boolean>(false);
   const [savedPost, setSavedPost] = useState<boolean>(false);
   const [emoji, setEmoji] = useState<boolean>(false);
+
+  const handlePost = () => {
+    dispatch(setPostModalId(post._id));
+    dispatch(setIsDeletePostGlobal());
+  };
   return (
     <div className=" last:pb-16 mt-2 pb-2 border-b">
       <div className="relative flex items-center">
@@ -41,8 +51,8 @@ const Post: React.FC<PostProps> = ({ post }) => {
           <div className="text-neutral-500 mr-1">•</div>
           <div className="text-neutral-500">14 hours ago</div>
         </div>
-        <div className="absolute right-0">
-          <span data-bs-toggle="dropdown" aria-expanded="false">
+        <div onClick={() => handlePost()} className="absolute right-0 cursor-pointer">
+          <span>
             <UpdateIcon />
           </span>
         </div>

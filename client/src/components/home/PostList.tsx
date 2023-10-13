@@ -15,18 +15,16 @@ const PostList = (props: Props) => {
   const dispatch: AppDispatch = useDispatch();
 
   useEffect(() => {
-    console.log("3333");
+    console.log("here", message);
     dispatch(getPost()).then((response: any) => {
       let imagesData: string[] = [];
       response.payload.forEach((item: any) => {
         imagesData.push(...item.images);
       });
-      console.log("imagesData", imagesData);
-      dispatch(getImgPost(imagesData)).then((response: any) => {
-        console.log("getImgPost", response.payload);
-      });
+      dispatch(getImgPost(imagesData));
     });
-  }, [user, dispatch, message]);
+  }, [user, dispatch]);
+
   return (
     <div className="max-w-[470px] flex flex-col mx-auto">
       {isLoading ? (

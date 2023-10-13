@@ -26,8 +26,8 @@ const uploadImagesPost = asyncHandler(async (req: Request, res: Response): Promi
 });
 
 const getImagesPost = asyncHandler(async (req: Request, res: Response): Promise<void> => {
+  const { images } = req.body;
   try {
-    const { images } = req.body;
     const urls: any = {};
     for (const image of images) {
       const cloudUrl = await awsGetImgPost(image);
@@ -40,11 +40,14 @@ const getImagesPost = asyncHandler(async (req: Request, res: Response): Promise<
 });
 
 const deleteImagesPost = asyncHandler(async (req: Request, res: Response): Promise<void> => {
-  const { id } = req.params;
+  const { images } = req.body;
   try {
-    const deleted = awsDeleteImgPost(id);
-
-    res.json({ public_id: id });
+    const urls: string[] = [];
+    for (const image of images) {
+      const deleteName = await awsDeleteImgPost(image);
+      urls.push(deleteName!);
+    }
+    res.status(200).json(urls);
   } catch (error: any) {
     throw new Error(error);
   }

@@ -100,12 +100,8 @@ export interface IPost {
 }
 
 /* Upload Img */
-export interface uploadImg {
-  url: string;
-}
-
 export interface uploadImgState {
-  imageList: uploadImg[];
+  imageList: string[];
   imgObj: Object;
   isError: boolean;
   isLoading: boolean;
@@ -145,4 +141,7 @@ export interface IComment {
 
 export interface IGlobalState {
   isCreatePostGlobal: boolean;
+  isDeletePostGlobal: boolean;
+
+  postModalId: string | null; // Add postId to the GlobalState interface
 }

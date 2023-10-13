@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import uploadImgService from "../../services/uploadImgServices";
-import { uploadImg, uploadImgState } from "../../utils/interface";
+import { uploadImgState } from "../../utils/interface";
 
 const initialState: uploadImgState = {
   imageList: [],
@@ -11,6 +11,7 @@ const initialState: uploadImgState = {
   message: "",
 };
 
+// upload post images to cloud(aws s3)
 export const uploadImgPost = createAsyncThunk("upload/upload-images-post", async (data: File[], thunkAPI) => {
   try {
     const formData = new FormData();
@@ -25,10 +26,20 @@ export const uploadImgPost = createAsyncThunk("upload/upload-images-post", async
   }
 });
 
+// get valid url of post images from cloud(aws s3)
 export const getImgPost = createAsyncThunk("upload/get-images-post", async (data: string[], thunkAPI) => {
   try {
-    console.log("getImgPost redux", data);
     return await uploadImgService.getImgPost(data);
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error);
+  }
+});
+
+// delete post images from cloud(aws s3)
+export const deleteImgPost = createAsyncThunk("upload/delete-images-post", async (data: string[], thunkAPI) => {
+  try {
+    console.log("redux deleteImgpost", data);
+    return await uploadImgService.deleteImgPost(data);
   } catch (error) {
     return thunkAPI.rejectWithValue(error);
   }
@@ -44,7 +55,7 @@ export const uploadImgSlice = createSlice({
         state.isLoading = true;
         state.message = "upload/upload-images-post pedding";
       })
-      .addCase(uploadImgPost.fulfilled, (state, action: PayloadAction<Array<uploadImg>>) => {
+      .addCase(uploadImgPost.fulfilled, (state, action: PayloadAction<Array<string>>) => {
         state.isError = false;
         state.isLoading = false;
         state.isSuccess = true;
@@ -61,15 +72,34 @@ export const uploadImgSlice = createSlice({
         state.isLoading = true;
         state.message = "upload/transfer-images-post pedding";
       })
-      .addCase(getImgPost.fulfilled, (state, action: PayloadAction<Array<uploadImg>>) => {
+      .addCase(getImgPost.fulfilled, (state, action: PayloadAction<Array<Object>>) => {
         state.isError = false;
         state.isLoading = false;
         state.isSuccess = true;
-        state.imgObj = action.payload;
-        console.log("transfer, action payload");
+        state.imgObj = Object.assign(state.imgObj, action.payload);
         state.message = "upload/transfer-images-post success";
       })
       .addCase(getImgPost.rejected, (state, action) => {
+        state.isError = true;
+        state.isLoading = false;
+        state.isSuccess = false;
+        state.message = action.error.message ?? "An error occurred.";
+      })
+      .addCase(deleteImgPost.pending, (state) => {
+        state.isLoading = true;
+        state.message = "upload/delete-images-post pedding";
+      })
+      .addCase(deleteImgPost.fulfilled, (state, action: PayloadAction<Array<string>>) => {
+        console.log("deleteImgPost payload", action);
+        state.isError = false;
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.imgObj = Object.fromEntries(
+          Object.entries(state.imgObj).filter((item) => !action.payload.includes(item[0]))
+        ); // delete valid url from imgObj
+        state.message = "upload/delete-images-post success";
+      })
+      .addCase(deleteImgPost.rejected, (state, action) => {
         state.isError = true;
         state.isLoading = false;
         state.isSuccess = false;

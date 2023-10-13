@@ -7,7 +7,6 @@ import { IReqAuth } from "../config/interface";
 // create Post
 const createPost = asyncHandler(async (req: IReqAuth, res: Response): Promise<any | void> => {
   try {
-    console.log("start creating post");
     const { content, images } = req.body;
 
     // check if the images are uploaded
@@ -61,7 +60,6 @@ const getOnePost = asyncHandler(async (req: IReqAuth, res: Response): Promise<vo
     const post = await Post.find({
       _id: req.params?.id,
     }).populate("user", "avatar username fullname followers");
-
     res.status(200).json(post);
   } catch (error: any) {
     res.status(400).json({ msg: error.message });

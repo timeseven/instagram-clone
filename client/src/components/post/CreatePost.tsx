@@ -10,7 +10,7 @@ import EmojiPicker, { EmojiClickData } from "emoji-picker-react";
 import { AiOutlineCamera, AiOutlineClose } from "react-icons/ai";
 import { EmojiIcon, UploadImg } from "../Icons";
 import Load from "../../images/loading.gif";
-import { uploadImgPost } from "../../redux/features/uploadImgSlice";
+import { getImgPost, uploadImgPost } from "../../redux/features/uploadImgSlice";
 import { createPost } from "../../redux/features/postSlice";
 let schema = yup.object().shape({
   content: yup.string().required("Content is Required"),
@@ -87,8 +87,8 @@ const CreatePost: React.FC = () => {
 
   useEffect(() => {
     if (imageList[0] !== undefined && message === "upload/upload-images-post success") {
-      console.log(imageList);
-      const urls = imageList.map((image) => image.url);
+      dispatch(getImgPost(imageList)); // add valid image url to imgObj
+      const urls = imageList.map((image) => image);
       setImageCloud([]);
       setImages(urls);
     }

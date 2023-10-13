@@ -6,6 +6,6 @@ const router: Router = Router();
 
 router.post("/post", uploadPhoto.array("images", 10), uploadImagesPost);
 router.post("/transfer/post", authMiddleware, getImagesPost);
-router.delete("/delete-img/post/:id", authMiddleware, deleteImagesPost);
+router.post("/delete/post/", authMiddleware, deleteImagesPost);
 
 export default router;

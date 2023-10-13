@@ -1,4 +1,4 @@
-import { S3Client, PutObjectCommand, GetObjectCommand } from "@aws-sdk/client-s3";
+import { S3Client, PutObjectCommand, GetObjectCommand, DeleteObjectCommand } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import sharp from "sharp";
 import { AWS_ACCESS_KEY_ID, AWS_S3_BUCKET_NAME, AWS_SECRET_ACCESS_KEY, AWS_REGION } from "../variables";
@@ -22,6 +22,7 @@ export const awsUploadImgPost = async (fileUpload: any) => {
     await sharp.cache(false);
     const response = await client.send(command);
     if (response.$metadata.httpStatusCode === 200) {
+      console.log(response);
       return fileUpload.filename;
     }
   } catch (err) {
@@ -37,7 +38,21 @@ export const awsGetImgPost = async (filename: string) => {
   try {
     const url = await getSignedUrl(client, command);
     return url;
-  } catch (err) {}
+  } catch (err) {
+    console.log(err);
+  }
 };
 
-export const awsDeleteImgPost = async (publicId: string) => {};
+export const awsDeleteImgPost = async (filename: string) => {
+  console.log(filename);
+  const command = new DeleteObjectCommand({
+    Bucket: AWS_S3_BUCKET_NAME,
+    Key: filename,
+  });
+  try {
+    const response = await client.send(command);
+    console.log("delete", response);
+  } catch (err) {
+    console.log(err);
+  }
+};
