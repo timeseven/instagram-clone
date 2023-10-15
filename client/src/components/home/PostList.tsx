@@ -5,6 +5,7 @@ import PostListSkeleton from "../skeleton/PostListSkeleton";
 import Post from "./Post";
 import { getPost } from "../../redux/features/postSlice";
 import { getImgPost } from "../../redux/features/uploadImgSlice";
+import { getComments } from "../../redux/features/commentSlice";
 
 type Props = {};
 
@@ -23,6 +24,7 @@ const PostList = (props: Props) => {
       });
       dispatch(getImgPost(imagesData));
     });
+    dispatch(getComments());
   }, [user, dispatch]);
 
   return (

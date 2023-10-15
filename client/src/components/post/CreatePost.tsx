@@ -79,6 +79,11 @@ const CreatePost: React.FC = () => {
     setImageCloud(filesArray); // used to save images to aws cloud
   };
 
+  // add emoji
+  const handleEmojiClick = (emojiData: EmojiClickData, event: MouseEvent) => {
+    formik.setFieldValue("content", formik.values.content + emojiData.emoji);
+  };
+
   useEffect(() => {
     if (message === "upload/upload-images-post pedding") {
       setLoading(true);
@@ -180,7 +185,7 @@ const CreatePost: React.FC = () => {
                   <div className="absolute z-10">
                     <span onClick={() => setEmoji(!emoji)}>
                       <EmojiIcon />
-                      {emoji ? <EmojiPicker width={300} height={500} /> : null}
+                      {emoji ? <EmojiPicker width={300} height={500} onEmojiClick={handleEmojiClick} /> : null}
                     </span>
                   </div>
                   <span className="absolute right-0">{formik.values.content.length}/2200</span>

@@ -126,6 +126,8 @@ export interface postState {
   message: string;
 }
 
+/** Comment */
+
 export interface IComment {
   _id: string;
   postId: string;
@@ -135,6 +137,21 @@ export interface IComment {
   likes: string[];
   user: User;
   createdAt: string;
+}
+
+export interface Comment {
+  content: string;
+  tag?: string[];
+  reply?: string;
+  postId: string;
+}
+
+export interface ICommentState {
+  data: IComment[];
+  isError: boolean;
+  isLoading: boolean;
+  isSuccess: boolean;
+  message: string;
 }
 
 /* GlobalState  */

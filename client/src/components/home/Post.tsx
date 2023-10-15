@@ -1,7 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, KeyboardEvent } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../redux/store";
+import { useFormik } from "formik";
+import * as yup from "yup";
+import { setIsDeletePostGlobal, setPostModalId } from "../../redux/features/globalStateSlice";
+import { createComment } from "../../redux/features/commentSlice";
+import { likePost, unLikePost } from "../../redux/features/postSlice";
+import { PostProps } from "../../utils/interface";
 import {
   CommentIcon,
   EmojiIcon,
@@ -15,18 +21,25 @@ import {
   UpdateIcon,
 } from "../Icons";
 import EmojiPicker, { EmojiClickData } from "emoji-picker-react";
-import { PostProps } from "../../utils/interface";
 
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
-import { setIsDeletePostGlobal, setPostModalId } from "../../redux/features/globalStateSlice";
+
+let schema = yup.object().shape({
+  content: yup.string().required("Content is Required"),
+});
 
 const Post: React.FC<PostProps> = ({ post }) => {
   const dispatch: AppDispatch = useDispatch();
 
   const { message, imgObj } = useSelector((state: RootState) => state.upload);
+  const { data } = useSelector((state: RootState) => state.comment);
+  const { user } = useSelector((state: RootState) => state.auth);
+
+  const filteredComments = data.filter((value) => value.postId === post._id);
+  const lastComment = filteredComments.filter((value) => !value.reply).pop();
 
   const [postId, setPostId] = useState<string>(post._id);
   const [like, setLike] = useState<boolean>(false);
@@ -34,10 +47,56 @@ const Post: React.FC<PostProps> = ({ post }) => {
   const [savedPost, setSavedPost] = useState<boolean>(false);
   const [emoji, setEmoji] = useState<boolean>(false);
 
+  /**handle Post */
   const handlePost = () => {
     dispatch(setPostModalId(post._id));
     dispatch(setIsDeletePostGlobal());
   };
+
+  /**handle Like Post */
+  const handleLike = () => {
+    if (like === false) {
+      dispatch(likePost(post._id));
+    } else {
+      dispatch(unLikePost(post._id));
+    }
+    setLike(!like);
+  };
+
+  /** handle Comment Start */
+  const formik = useFormik({
+    initialValues: {
+      content: "",
+    },
+    validationSchema: schema,
+    onSubmit: async (values) => {
+      console.log("add comment");
+      await dispatch(createComment({ ...values, postId })).then((response) => {});
+    },
+  });
+
+  // handle comment keydown
+  const handleKeyDown = (event: KeyboardEvent<HTMLFormElement>) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      formik.handleSubmit();
+    }
+  };
+
+  const handleEmojiClick = (emojiData: EmojiClickData, event: MouseEvent) => {
+    formik.setFieldValue("content", formik.values.content + emojiData.emoji);
+  };
+
+  /**useEffect */
+  // show post likes
+  useEffect(() => {
+    if (post.likes.find((_id) => _id === user?._id)) {
+      setLike(true);
+    }
+
+    return () => setLike(false);
+  }, [dispatch, user?._id, post.likes]);
+
   return (
     <div className=" last:pb-16 mt-2 pb-2 border-b">
       <div className="relative flex items-center">
@@ -73,7 +132,7 @@ const Post: React.FC<PostProps> = ({ post }) => {
         </Swiper>
       </div>
       <div className="flex">
-        <span>{like ? <UnlikeIcon className="mx-3" /> : <LikeIcon className="mx-3" />}</span>
+        <span onClick={handleLike}>{like ? <UnlikeIcon className="mx-3" /> : <LikeIcon className="mx-3" />}</span>
         <div>
           <CommentIcon className="mr-3" />
         </div>
@@ -90,7 +149,7 @@ const Post: React.FC<PostProps> = ({ post }) => {
           )}
         </div>
       </div>
-      <div className="mt-2 ml-3">{post.likes.length}likes</div>
+      <div className="mt-2 ml-3">{post.likes.length} likes</div>
 
       <div className="mt-2 ml-3">
         <Link to={`/`} className="">
@@ -98,18 +157,18 @@ const Post: React.FC<PostProps> = ({ post }) => {
         </Link>{" "}
         {post.content}
       </div>
-      {true && (
+      {lastComment && (
         <div className="mt-2 ml-3">
-          {true ? (
+          {filteredComments.length > 0 ? (
             <div className="mb-1">
-              View all <span>222</span> comments
+              View all <span>{filteredComments.length}</span> comments
             </div>
           ) : null}
           <div className="mt-2 flex items-center">
             <Link to={`/`} className="mr-2">
-              last comment user even
+              {lastComment.user.username}
             </Link>
-            <span>last comment content</span>
+            <span>{lastComment.content}</span>
             <span className="ml-2">
               {likeCmt ? <UnlikeCommentIcon className="" /> : <LikeCommentIcon className="" />}
             </span>
@@ -117,14 +176,20 @@ const Post: React.FC<PostProps> = ({ post }) => {
         </div>
       )}
 
-      <form className="w-full relative flex ml-3 mt-2">
+      <form onKeyDown={handleKeyDown} className="w-full relative flex ml-3 mt-2">
         <div className="absolute z-10">
           <span onClick={() => setEmoji(!emoji)}>
             <EmojiIcon />
-            {emoji ? <EmojiPicker height={500} /> : null}
+            {emoji ? <EmojiPicker height={500} onEmojiClick={handleEmojiClick} /> : null}
           </span>
         </div>
-        <textarea className="w-full mx-6 text-sm" placeholder="Add a comment..." />
+        <textarea
+          className="w-full mx-6 text-sm"
+          placeholder="Add a comment..."
+          name="content"
+          value={formik.values.content}
+          onChange={formik.handleChange("content")}
+        />
       </form>
     </div>
   );
