@@ -3,7 +3,7 @@ import commentService from "../../services/commentServices";
 import { Comment, IComment, ICommentState } from "../../utils/interface";
 
 const initialState: ICommentState = {
-  data: [],
+  cData: [],
   isError: false,
   isLoading: false,
   isSuccess: false,
@@ -39,7 +39,7 @@ export const commentSlice = createSlice({
         state.isError = false;
         state.isLoading = false;
         state.isSuccess = true;
-        state.data!.push(action.payload);
+        state.cData!.push(action.payload);
         state.message = "success";
       })
       .addCase(createComment.rejected, (state, action) => {
@@ -56,7 +56,7 @@ export const commentSlice = createSlice({
         state.isError = false;
         state.isLoading = false;
         state.isSuccess = true;
-        state.data = action.payload;
+        state.cData = action.payload;
         state.message = "success";
       })
       .addCase(getComments.rejected, (state, action) => {

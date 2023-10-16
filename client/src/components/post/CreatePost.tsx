@@ -19,7 +19,7 @@ let schema = yup.object().shape({
 const CreatePost: React.FC = () => {
   const { isCreatePostGlobal } = useSelector((state: RootState) => state.globalState);
   const { user } = useSelector((state: RootState) => state.auth);
-  const { message, imageList } = useSelector((state: RootState) => state.upload);
+  const { message, iData } = useSelector((state: RootState) => state.upload);
 
   const dispatch: AppDispatch = useDispatch();
 
@@ -91,13 +91,13 @@ const CreatePost: React.FC = () => {
   }, [message]);
 
   useEffect(() => {
-    if (imageList[0] !== undefined && message === "upload/upload-images-post success") {
-      dispatch(getImgPost(imageList)); // add valid image url to imgObj
-      const urls = imageList.map((image) => image);
+    if (iData[0] !== undefined && message === "upload/upload-images-post success") {
+      dispatch(getImgPost(iData)); // add valid image url to imgObj
+      const urls = iData.map((image) => image);
       setImageCloud([]);
       setImages(urls);
     }
-  }, [imageList, message]);
+  }, [iData, message]);
   return (
     <>
       {isCreatePostGlobal && (
@@ -108,7 +108,7 @@ const CreatePost: React.FC = () => {
           <form
             onSubmit={formik.handleSubmit}
             encType="multipart/form-data"
-            className="flex flex-col w-full h-screen m-auto max-w-[90vw] max-h-[70vh] bg-white rounded-md tablet-md:max-w-[60vw]"
+            className="flex flex-col w-full h-screen m-auto max-w-[90vw] max-h-[70vh] bg-white rounded-md tablet-lg:max-w-[60vw]"
           >
             <div className="flex items-center justify-center px-4 py-2 border rounded-t-md">
               <span className="w-full flex items-center justify-center font-semibold">Create new post</span>
@@ -122,8 +122,8 @@ const CreatePost: React.FC = () => {
                 Share
               </button>
             </div>
-            <div className="w-full h-full max-h-[calc(70vh-42px)] flex flex-col justify-center tablet-md:flex-row">
-              <div className="w-full flex h-2/3 items-center justify-center tablet-md:h-full tablet-md:w-[40vw]">
+            <div className="w-full h-full max-h-[calc(70vh-42px)] flex flex-col justify-center tablet-lg:flex-row">
+              <div className="w-full flex h-2/3 items-center justify-center tablet-lg:h-full tablet-lg:w-[40vw]">
                 {images.length > 0 ? (
                   <Swiper
                     navigation={true}
@@ -165,7 +165,7 @@ const CreatePost: React.FC = () => {
                   </div>
                 )}
               </div>
-              <div className="flex flex-col w-full h-1/3 justify-center px-3 py-3 bg-white tablet-md:h-full tablet-md:w-[20vw] tablet-md:justify-start">
+              <div className="flex flex-col w-full h-1/3 justify-center px-3 py-3 bg-white tablet-lg:h-full tablet-lg:w-[20vw] tablet-lg:justify-start">
                 <div className="flex">
                   <div className="flex items-center justify-center cursor-pointer">
                     <img src={user?.avatar} alt={user?.username} width={20} height={20} />

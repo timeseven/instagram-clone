@@ -35,10 +35,10 @@ const Post: React.FC<PostProps> = ({ post }) => {
   const dispatch: AppDispatch = useDispatch();
 
   const { message, imgObj } = useSelector((state: RootState) => state.upload);
-  const { data } = useSelector((state: RootState) => state.comment);
+  const { cData } = useSelector((state: RootState) => state.comment);
   const { user } = useSelector((state: RootState) => state.auth);
 
-  const filteredComments = data.filter((value) => value.postId === post._id);
+  const filteredComments = cData.filter((value) => value.postId === post._id);
   const lastComment = filteredComments.filter((value) => !value.reply).pop();
 
   const [postId, setPostId] = useState<string>(post._id);
@@ -71,7 +71,9 @@ const Post: React.FC<PostProps> = ({ post }) => {
     validationSchema: schema,
     onSubmit: async (values) => {
       console.log("add comment");
-      await dispatch(createComment({ ...values, postId })).then((response) => {});
+      await dispatch(createComment({ ...values, postId })).then((response) => {
+        formik.resetForm();
+      });
     },
   });
 
@@ -131,13 +133,17 @@ const Post: React.FC<PostProps> = ({ post }) => {
           ))}
         </Swiper>
       </div>
-      <div className="flex">
-        <span onClick={handleLike}>{like ? <UnlikeIcon className="mx-3" /> : <LikeIcon className="mx-3" />}</span>
-        <div>
-          <CommentIcon className="mr-3" />
-        </div>
-        <ShareIcon className="mr-3" />
-        <div>
+      <div className="flex mt-1">
+        <span className="mx-1" onClick={handleLike}>
+          {like ? <UnlikeIcon /> : <LikeIcon />}
+        </span>
+        <Link to={`/${post._id}/comments`}>
+          <CommentIcon />
+        </Link>
+        <span className="mx-1">
+          <ShareIcon />
+        </span>
+        <span className="mx-1">
           {savedPost ? (
             <div>
               <SaveActiveIcon />
@@ -147,7 +153,7 @@ const Post: React.FC<PostProps> = ({ post }) => {
               <SaveIcon />
             </div>
           )}
-        </div>
+        </span>
       </div>
       <div className="mt-2 ml-3">{post.likes.length} likes</div>
 

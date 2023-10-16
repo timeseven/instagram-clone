@@ -17,7 +17,6 @@ const globalStateSlice = createSlice({
       state.isCreatePostGlobal = !state.isCreatePostGlobal;
     },
     setIsDeletePostGlobal(state) {
-      console.log(state.isDeletePostGlobal);
       state.isDeletePostGlobal = !state.isDeletePostGlobal;
     },
     // Define the setPostId action

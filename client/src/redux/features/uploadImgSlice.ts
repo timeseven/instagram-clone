@@ -3,7 +3,7 @@ import uploadImgService from "../../services/uploadImgServices";
 import { uploadImgState } from "../../utils/interface";
 
 const initialState: uploadImgState = {
-  imageList: [],
+  iData: [],
   imgObj: {},
   isError: false,
   isLoading: false,
@@ -59,7 +59,7 @@ export const uploadImgSlice = createSlice({
         state.isError = false;
         state.isLoading = false;
         state.isSuccess = true;
-        state.imageList = action.payload;
+        state.iData = action.payload;
         state.message = "upload/upload-images-post success";
       })
       .addCase(uploadImgPost.rejected, (state, action) => {

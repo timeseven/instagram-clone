@@ -4,7 +4,7 @@ import postService from "../../services/postServices";
 import { IComment, IPost, postState, ICreatePost, postUpdate } from "../../utils/interface";
 
 const initialState: postState = {
-  data: [],
+  pData: [],
   isError: false,
   isLoading: false,
   isSuccess: false,
@@ -109,7 +109,7 @@ export const postSlice = createSlice({
         state.isError = false;
         state.isLoading = false;
         state.isSuccess = true;
-        state.data!.unshift(action.payload);
+        state.pData!.unshift(action.payload);
         state.message = "post/create-current-post success";
       })
       .addCase(createPost.rejected, (state, action) => {
@@ -125,7 +125,7 @@ export const postSlice = createSlice({
         state.isError = false;
         state.isLoading = false;
         state.isSuccess = true;
-        state.data = action.payload;
+        state.pData = action.payload;
         state.message = "post/get-current-post success";
       })
       .addCase(getPost.rejected, (state, action) => {
@@ -141,7 +141,7 @@ export const postSlice = createSlice({
         state.isError = false;
         state.isLoading = false;
         state.isSuccess = true;
-        state.data = action.payload;
+        state.pData = action.payload;
         state.message = "post/get-user-post success";
       })
       .addCase(getUserPost.rejected, (state, action) => {
@@ -157,7 +157,7 @@ export const postSlice = createSlice({
         state.isError = false;
         state.isLoading = false;
         state.isSuccess = true;
-        state.data = state.data!.map((item) => {
+        state.pData = state.pData!.map((item) => {
           if (item._id === action.payload._id) {
             return { ...item, comments: action.payload.comments };
           } else {
@@ -179,7 +179,7 @@ export const postSlice = createSlice({
         state.isError = false;
         state.isLoading = false;
         state.isSuccess = true;
-        state.data = state.data!.map((item) => {
+        state.pData = state.pData!.map((item) => {
           if (item._id === action.payload._id) {
             return { ...item, likes: action.payload.likes };
           } else {
@@ -202,7 +202,7 @@ export const postSlice = createSlice({
         state.isError = false;
         state.isLoading = false;
         state.isSuccess = true;
-        state.data = state.data!.map((item) => {
+        state.pData = state.pData!.map((item) => {
           if (item._id === action.payload._id) {
             return { ...item, likes: action.payload.likes };
           } else {
@@ -224,7 +224,7 @@ export const postSlice = createSlice({
         state.isError = false;
         state.isLoading = false;
         state.isSuccess = true;
-        state.data = state.data!.map((item) => {
+        state.pData = state.pData!.map((item) => {
           if (item._id === action.payload._id) {
             return action.payload;
           } else {
@@ -247,7 +247,7 @@ export const postSlice = createSlice({
         state.isError = false;
         state.isLoading = false;
         state.isSuccess = true;
-        state.data = state.data.filter((item) => item._id !== action.payload._id);
+        state.pData = state.pData.filter((item) => item._id !== action.payload._id);
 
         state.message = "success";
       })
@@ -264,7 +264,7 @@ export const postSlice = createSlice({
         state.isError = false;
         state.isLoading = false;
         state.isSuccess = true;
-        state.data = action.payload;
+        state.pData = action.payload;
         state.message = "post/get-explore-post success";
       })
       .addCase(getExplorePosts.rejected, (state, action) => {
@@ -280,7 +280,7 @@ export const postSlice = createSlice({
         state.isError = false;
         state.isLoading = false;
         state.isSuccess = true;
-        state.data = action.payload;
+        state.pData = action.payload;
         state.message = "post/get-saved-posts success";
       })
       .addCase(getSavePost.rejected, (state, action) => {
@@ -296,7 +296,7 @@ export const postSlice = createSlice({
         state.isError = false;
         state.isLoading = false;
         state.isSuccess = true;
-        state.data = state.data!.map((item) => {
+        state.pData = state.pData!.map((item) => {
           if (item._id === action.payload._id) {
             return action.payload;
           } else {
@@ -319,7 +319,7 @@ export const postSlice = createSlice({
         state.isError = false;
         state.isLoading = false;
         state.isSuccess = true;
-        state.data!.map((item) => {
+        state.pData!.map((item) => {
           if (item._id === action.payload.postId) {
             return item.comments.push(action.payload._id);
           } else {

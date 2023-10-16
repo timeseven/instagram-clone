@@ -101,7 +101,7 @@ export interface IPost {
 
 /* Upload Img */
 export interface uploadImgState {
-  imageList: string[];
+  iData: string[];
   imgObj: Object;
   isError: boolean;
   isLoading: boolean;
@@ -119,7 +119,7 @@ export interface postUpdate {
 }
 
 export interface postState {
-  data: IPost[];
+  pData: IPost[];
   isError: boolean;
   isLoading: boolean;
   isSuccess: boolean;
@@ -147,7 +147,21 @@ export interface Comment {
 }
 
 export interface ICommentState {
-  data: IComment[];
+  cData: IComment[];
+  isError: boolean;
+  isLoading: boolean;
+  isSuccess: boolean;
+  message: string;
+}
+
+/* CommentProps  */
+export interface CommentProps {
+  cmt: IComment;
+}
+
+/* suggestionUserState */
+export interface suggestionUserState {
+  sUser: User[] | null;
   isError: boolean;
   isLoading: boolean;
   isSuccess: boolean;

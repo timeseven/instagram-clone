@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import authService from "../../services/authServices";
+import userService from "../../services/userServices";
 import { IAuthState, User, IUserLogin, IUserRegister, IForgotPassword, IResetPassword } from "../../utils/interface";
 import { getTokenFromLocalStorage } from "../../utils/axiosConfig";
 
@@ -78,6 +79,21 @@ export const resetPassword = createAsyncThunk("auth/reset-password", async (data
     } else {
       throw error;
     }
+  }
+});
+
+export const follow = createAsyncThunk("auth/follow", async (id: string, thunkAPI) => {
+  try {
+    return await userService.followUser(id);
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error);
+  }
+});
+export const unFollow = createAsyncThunk("auth/unfollow", async (id: string, thunkAPI) => {
+  try {
+    return await userService.unFollowUser(id);
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error);
   }
 });
 
@@ -189,6 +205,38 @@ export const authSlice = createSlice({
         state.isLoading = false;
         state.isSuccess = false;
         state.message = action.error.message || "An error occurred.";
+      })
+      .addCase(follow.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(follow.fulfilled, (state, action: PayloadAction<User>) => {
+        state.isError = false;
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.user! = action.payload;
+        state.message = "success";
+      })
+      .addCase(follow.rejected, (state, action) => {
+        state.isError = true;
+        state.isLoading = false;
+        state.isSuccess = false;
+        state.message = action.error.message ?? "An error occurred.";
+      })
+      .addCase(unFollow.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(unFollow.fulfilled, (state, action: PayloadAction<User>) => {
+        state.isError = false;
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.user! = action.payload;
+        state.message = "success";
+      })
+      .addCase(unFollow.rejected, (state, action) => {
+        state.isError = true;
+        state.isLoading = false;
+        state.isSuccess = false;
+        state.message = action.error.message ?? "An error occurred.";
       });
   },
 });

@@ -6,6 +6,7 @@ import postReducer from "./features/postSlice";
 import commentReducer from "./features/commentSlice";
 import globalStateSlice from "./features/globalStateSlice";
 import uploadImgSlice from "./features/uploadImgSlice";
+import suggestionUserReducer from "./features/suggestionUserSlice";
 
 // const persistConfig = {
 //   key: "root",
@@ -17,6 +18,7 @@ const reducer = combineReducers({
   upload: uploadImgSlice,
   post: postReducer,
   comment: commentReducer,
+  suggestionUser: suggestionUserReducer,
   globalState: globalStateSlice,
 });
 

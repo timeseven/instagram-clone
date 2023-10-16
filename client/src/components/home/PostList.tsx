@@ -10,9 +10,9 @@ import { getComments } from "../../redux/features/commentSlice";
 type Props = {};
 
 const PostList = (props: Props) => {
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const { user } = useSelector((state: RootState) => state.auth);
-  const { message, data } = useSelector((state: RootState) => state.post);
+  const { message, pData } = useSelector((state: RootState) => state.post);
   const dispatch: AppDispatch = useDispatch();
 
   useEffect(() => {
@@ -27,12 +27,18 @@ const PostList = (props: Props) => {
     dispatch(getComments());
   }, [user, dispatch]);
 
+  useEffect(() => {
+    if (message === "post/get-current-post success") {
+      setIsLoading(false);
+    }
+  }, [message]);
+
   return (
     <div className="max-w-[470px] flex flex-col mx-auto">
       {isLoading ? (
         <PostListSkeleton />
-      ) : data.length > 0 ? (
-        data!.map((value) => <Post post={value} key={value._id} />)
+      ) : pData.length > 0 ? (
+        pData!.map((value) => <Post post={value} key={value._id} />)
       ) : (
         <div className="mt-10 mx-auto">no post</div>
       )}

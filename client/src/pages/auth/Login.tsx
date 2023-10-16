@@ -57,7 +57,7 @@ const Login: React.FC = () => {
     <Helmet title="Login • Instagram">
       <div className="flex flex-col grow">
         <div className="flex grow justify-center">
-          <div className="h-[600px] basis-[420px] mb-3 mr-8 bg-mobile-app bg-center bg-no-repeat self-center hidden tablet-md:inline-block"></div>
+          <div className="h-[600px] basis-[420px] mb-3 mr-8 bg-mobile-app bg-center bg-no-repeat self-center hidden tablet-lg:inline-block"></div>
           <div className="max-w-sm min-w-fit mt-7 flex flex-col grow justify-center">
             <form
               onSubmit={formik.handleSubmit}
