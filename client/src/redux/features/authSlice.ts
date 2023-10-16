@@ -104,6 +104,13 @@ export const authSlice = createSlice({
   reducers: {
     // any additional "normal" case reducers here.
     // these will generate new action creators
+    resetUser(state) {
+      state.user = initialState.user;
+      state.isError = initialState.isError;
+      state.isLoading = initialState.isLoading;
+      state.isSuccess = initialState.isSuccess;
+      state.message = initialState.message;
+    },
   },
   extraReducers: (builder) => {
     // Use `extraReducers` to handle actions that were generated
@@ -240,5 +247,7 @@ export const authSlice = createSlice({
       });
   },
 });
+
+export const { resetUser } = authSlice.actions;
 
 export default authSlice.reducer;

@@ -4,7 +4,7 @@ import { useFormik } from "formik";
 import * as yup from "yup";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState, AppDispatch } from "../../redux/store";
-import { login } from "../../redux/features/authSlice";
+import { login, resetUser } from "../../redux/features/authSlice";
 
 import FaceBookLogin from "../../components/FaceBookLogin";
 import OrSeperate from "../../components/OrSeperate";
@@ -42,6 +42,8 @@ const Login: React.FC = () => {
   useEffect(() => {
     if (user) {
       navigate("/");
+    } else {
+      dispatch(resetUser());
     }
   }, [user, navigate]);
 

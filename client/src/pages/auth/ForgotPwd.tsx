@@ -4,7 +4,7 @@ import { useFormik } from "formik";
 import * as yup from "yup";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState, AppDispatch } from "../../redux/store";
-import { forgotPassword } from "../../redux/features/authSlice";
+import { forgotPassword, resetUser } from "../../redux/features/authSlice";
 
 import Helmet from "../../components/Helmet";
 import OrSeperate from "../../components/OrSeperate";
@@ -33,11 +33,11 @@ const ForgotPwd: React.FC = () => {
   });
 
   useEffect(() => {
-    console.log("user", user);
     if (user) {
       navigate("/email-sent");
     } else {
       navigate("");
+      dispatch(resetUser());
     }
   }, [user, navigate]);
   useEffect(() => {
