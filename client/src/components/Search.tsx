@@ -58,9 +58,9 @@ const Search: React.FC = () => {
                     transition-[height] duration-300 tablet:transition-[width,left] tablet:duration-300
                     ${
                       isSearchGlobal
-                        ? "w-[375px] h-[60vh] tablet:left-[72px] shadow-[0_0_6px_4px_rgba(0,0,0,0.1)] tablet:shadow-[2px_0_4px_2px_rgba(0,0,0,0.1)] "
-                        : "w-0 h-0 tablet:left-[245px]"
-                    } tablet:h-screen tablet:top-0 tablet:rounded-none tablet:rounded-r-2xl`}
+                        ? "w-[375px] h-[60vh] desktop:left-[72px] desktop-lg:left-[72px] shadow-[0_0_6px_4px_rgba(0,0,0,0.1)] tablet:shadow-[2px_0_4px_2px_rgba(0,0,0,0.1)] "
+                        : "w-0 h-0 desktop:left-[245px] desktop-lg:left-[335px]"
+                    } tablet:h-screen tablet:left-[72px] tablet:top-0 tablet:rounded-none tablet:rounded-r-2xl`}
       >
         {isSearchGlobal && (
           <div className="flex flex-col h-full">
