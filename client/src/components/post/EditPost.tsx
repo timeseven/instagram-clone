@@ -33,8 +33,8 @@ const EditPost: React.FC = () => {
       content: "",
     },
     validationSchema: schema,
-    onSubmit: (values) => {
-      dispatch(updatePost({ ...values, postId })).then(() => {
+    onSubmit: async (values) => {
+      await dispatch(updatePost({ ...values, postId })).then(() => {
         handleCloseModal();
       });
     },

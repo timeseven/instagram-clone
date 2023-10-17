@@ -6,6 +6,8 @@ const initialState: IGlobalState = {
   isDeletePostGlobal: false,
   isEditPostGlobal: false,
 
+  isSearchGlobal: false,
+
   postModalId: null,
 };
 
@@ -23,6 +25,15 @@ const globalStateSlice = createSlice({
     setIsEditPostGlobal(state) {
       state.isEditPostGlobal = !state.isEditPostGlobal;
     },
+    setIsSearchGlobal(state) {
+      state.isSearchGlobal = !state.isSearchGlobal;
+    },
+    setIsSearchGlobalTrue(state) {
+      state.isSearchGlobal = true;
+    },
+    setIsSearchGlobalFalse(state) {
+      state.isSearchGlobal = false;
+    },
     // Define the setPostId action
     setPostModalId: (state, action) => {
       state.postModalId = action.payload;
@@ -35,6 +46,9 @@ const globalStateSlice = createSlice({
 export const { setIsCreatePostGlobal } = globalStateSlice.actions;
 export const { setIsDeletePostGlobal } = globalStateSlice.actions;
 export const { setIsEditPostGlobal } = globalStateSlice.actions;
+export const { setIsSearchGlobal } = globalStateSlice.actions;
+export const { setIsSearchGlobalTrue } = globalStateSlice.actions;
+export const { setIsSearchGlobalFalse } = globalStateSlice.actions;
 export const { setPostModalId } = globalStateSlice.actions;
 
 export default globalStateSlice.reducer;

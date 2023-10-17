@@ -1,7 +1,8 @@
 import React from "react";
 import { Link, NavLink } from "react-router-dom";
-
-import logo from "../../images/logo.png";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../../redux/store";
+import { setIsCreatePostGlobal } from "../../redux/features/globalStateSlice";
 import {
   CreateIcon,
   ExploreIcon,
@@ -15,6 +16,7 @@ import { ClassNameProps } from "../../utils/interface";
 import avatar from "../../images/avatar-default.jpg";
 
 const NavBarBot: React.FC<ClassNameProps> = ({ className }) => {
+  const dispatch: AppDispatch = useDispatch();
   return (
     <div
       className={`${className} fixed bg-white bottom-0 w-full h-[48px] flex items-center justify-evenly border-t border-solid border-neutral-300 z-20 transition-all duration-300 ease-in-out`}
@@ -23,15 +25,15 @@ const NavBarBot: React.FC<ClassNameProps> = ({ className }) => {
         <NavLink to="/">
           <HomeIcon className="w-[24px] h-[24px] flex justify-center" />
         </NavLink>
-        <NavLink to="/">
-          <SearchIcon className="w-[24px] h-[24px] flex justify-center" />
-        </NavLink>
-        <NavLink to="/">
+        <div>
           <ExploreIcon className="w-[24px] h-[24px] flex justify-center" />
-        </NavLink>
-        <NavLink to="/">
+        </div>
+        <div onClick={() => dispatch(setIsCreatePostGlobal())}>
+          <CreateIcon className="w-[24px] h-[24px] flex justify-center" />
+        </div>
+        <div>
           <MessagesIcon className="w-[24px] h-[24px] flex justify-center" />
-        </NavLink>
+        </div>
         <NavLink to="/abcd">
           <div className="w-6 h-6 rounded-[50%]">
             <img src={avatar} alt="user-avatar" />

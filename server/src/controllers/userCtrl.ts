@@ -10,9 +10,9 @@ const searchUser = asyncHandler(async (req: Request, res: Response): Promise<voi
       username: { $regex: req.query.username },
     })
       .limit(10)
-      .select("fullname username avatar"); // return id, fullname, username and avatar
+      .select("avatar username fullname followers following"); // return id, fullname, username and avatar
 
-    res.json({ users });
+    res.json(users);
   } catch (error: any) {
     res.status(400).json({ msg: error.message });
   }

@@ -26,10 +26,16 @@ const unFollowUser = async (id: string) => {
   return response.data;
 };
 
+const searchUser = async (search: string) => {
+  const response = await fetch.get(`/user/search?username=${search}`);
+  return response.data;
+};
+
 const userService = {
   getSuggestionUser,
   followUser,
   unFollowUser,
+  searchUser,
 };
 
 export default userService;

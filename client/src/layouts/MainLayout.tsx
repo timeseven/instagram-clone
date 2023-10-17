@@ -5,6 +5,7 @@ import NavBarBot from "./components/NavBarBot";
 import CreatePost from "../components/post/CreatePost";
 import DeletePost from "../components/post/DeletePost";
 import EditPost from "../components/post/EditPost";
+import Search from "../components/Search";
 const MainLayout: React.FC = () => {
   return (
     <div
@@ -13,6 +14,7 @@ const MainLayout: React.FC = () => {
     >
       <NavBarTop />
       <Outlet />
+      <Search />
       <CreatePost />
       <DeletePost />
       <EditPost />

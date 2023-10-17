@@ -167,6 +167,14 @@ export interface suggestionUserState {
   isSuccess: boolean;
   message: string;
 }
+/* userState */
+export interface userState {
+  users: User[] | null;
+  isError: boolean;
+  isLoading: boolean;
+  isSuccess: boolean;
+  message: string;
+}
 
 /* GlobalState  */
 
@@ -174,6 +182,8 @@ export interface IGlobalState {
   isCreatePostGlobal: boolean;
   isDeletePostGlobal: boolean;
   isEditPostGlobal: boolean;
+
+  isSearchGlobal: boolean;
 
   postModalId: string | null; // Add postId to the GlobalState interface
 }
