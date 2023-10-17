@@ -115,7 +115,7 @@ export interface ICreatePost {
 
 export interface postUpdate {
   content: string;
-  id: string;
+  postId: string;
 }
 
 export interface postState {
@@ -173,6 +173,7 @@ export interface suggestionUserState {
 export interface IGlobalState {
   isCreatePostGlobal: boolean;
   isDeletePostGlobal: boolean;
+  isEditPostGlobal: boolean;
 
   postModalId: string | null; // Add postId to the GlobalState interface
 }

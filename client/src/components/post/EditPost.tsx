@@ -3,33 +3,29 @@ import { useFormik } from "formik";
 import * as yup from "yup";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../redux/store";
-import { setIsCreatePostGlobal } from "../../redux/features/globalStateSlice";
+import { setIsEditPostGlobal } from "../../redux/features/globalStateSlice";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
 import EmojiPicker, { EmojiClickData } from "emoji-picker-react";
-import { AiOutlineCamera, AiOutlineClose } from "react-icons/ai";
-import { EmojiIcon, UploadImg } from "../Icons";
-import Load from "../../images/loading.gif";
-import { getImgPost, uploadImgPost } from "../../redux/features/uploadImgSlice";
-import { createPost } from "../../redux/features/postSlice";
+import { AiOutlineClose } from "react-icons/ai";
+import { EmojiIcon } from "../Icons";
+import { updatePost } from "../../redux/features/postSlice";
+
 let schema = yup.object().shape({
   content: yup.string().required("Content is Required"),
 });
 
-const CreatePost: React.FC = () => {
-  const { isCreatePostGlobal } = useSelector((state: RootState) => state.globalState);
+const EditPost: React.FC = () => {
+  const { isEditPostGlobal, postModalId } = useSelector((state: RootState) => state.globalState);
   const { user } = useSelector((state: RootState) => state.auth);
-  const { message, iData } = useSelector((state: RootState) => state.upload);
-
+  const { imgObj } = useSelector((state: RootState) => state.upload);
+  const { pData } = useSelector((state: RootState) => state.post);
   const dispatch: AppDispatch = useDispatch();
 
-  const ref = createRef<HTMLInputElement>();
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const refCanvas = useRef<HTMLCanvasElement>(null);
+  const filteredPost = pData.filter((value) => value._id === postModalId)[0];
 
   const [images, setImages] = useState<string[]>([]);
-  const [imageCloud, setImageCloud] = useState<File[]>([]);
-  const [loading, setLoading] = useState<boolean>(false);
+  const [postId, setPostId] = useState<string>("");
   const [emoji, setEmoji] = useState<boolean>(false);
 
   const formik = useFormik({
@@ -38,45 +34,14 @@ const CreatePost: React.FC = () => {
     },
     validationSchema: schema,
     onSubmit: (values) => {
-      // save images to aws first
-      dispatch(uploadImgPost(imageCloud)).then((response) => {
-        if (response.payload.length > 0) {
-          const images = response.payload;
-          setLoading(false);
-          // then create post
-          dispatch(createPost({ ...values, images })).then((response) => {
-            const newPost = response.payload;
-            console.log("newPost", newPost);
-            setImages([]);
-            formik.resetForm();
-            dispatch(setIsCreatePostGlobal());
-          });
-        }
+      dispatch(updatePost({ ...values, postId })).then(() => {
+        handleCloseModal();
       });
     },
   });
 
   const handleCloseModal = () => {
-    setImages([]);
-    setImageCloud([]);
-    dispatch(setIsCreatePostGlobal());
-  };
-
-  // select from computer
-  const handleClick = () => {
-    ref.current?.click();
-  };
-
-  // show upload image in fronend using URL.createObjectURL
-  const uploadImages = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const fileList: FileList = e.target.files!;
-    const filesArray: File[] = Array.from(fileList);
-    let images: string[] = [];
-    filesArray.forEach((item) => {
-      images.push(URL.createObjectURL(item));
-    });
-    setImages(images);
-    setImageCloud(filesArray); // used to save images to aws cloud
+    dispatch(setIsEditPostGlobal());
   };
 
   // add emoji
@@ -85,22 +50,16 @@ const CreatePost: React.FC = () => {
   };
 
   useEffect(() => {
-    if (message === "upload/upload-images-post pedding") {
-      setLoading(true);
+    if (isEditPostGlobal) {
+      setImages(filteredPost.images);
+      setPostId(filteredPost._id);
+      formik.setFieldValue("content", filteredPost.content);
     }
-  }, [message]);
+  }, [isEditPostGlobal]);
 
-  useEffect(() => {
-    if (iData[0] !== undefined && message === "upload/upload-images-post success") {
-      dispatch(getImgPost(iData)); // add valid image url to imgObj
-      const urls = iData.map((image) => image);
-      setImageCloud([]);
-      setImages(urls);
-    }
-  }, [iData, message]);
   return (
     <>
-      {isCreatePostGlobal && (
+      {isEditPostGlobal && (
         <div className="fixed flex top-0 left-0 w-full h-screen overflow-auto bg-black bg-opacity-50 z-30">
           <button onClick={handleCloseModal} title="close" className="absolute top-4 right-4">
             <AiOutlineClose className="w-6 h-6 fill-white" />
@@ -111,7 +70,7 @@ const CreatePost: React.FC = () => {
             className="flex flex-col w-full h-screen m-auto max-w-[90vw] max-h-[70vh] bg-white rounded-md tablet-lg:max-w-[60vw]"
           >
             <div className="flex items-center justify-center px-4 py-2 border rounded-t-md">
-              <span className="w-full flex items-center justify-center font-semibold">Create new post</span>
+              <span className="w-full flex items-center justify-center font-semibold">Edit Content</span>
               <button
                 type="submit"
                 className={`${
@@ -119,12 +78,12 @@ const CreatePost: React.FC = () => {
                 } font-semibold leading-5 flex items-center`}
                 disabled={images.length > 0 && formik.values.content ? false : true}
               >
-                Share
+                Finish
               </button>
             </div>
             <div className="w-full h-full max-h-[calc(70vh-42px)] flex flex-col justify-center tablet-lg:flex-row">
               <div className="w-full flex h-2/3 items-center justify-center tablet-lg:h-full tablet-lg:w-[40vw]">
-                {images.length > 0 ? (
+                {images.length > 0 && (
                   <Swiper
                     navigation={true}
                     modules={[Navigation]}
@@ -132,37 +91,10 @@ const CreatePost: React.FC = () => {
                   >
                     {images.map((image, index) => (
                       <SwiperSlide key={index}>
-                        <button title="close" className="absolute top-4 right-4">
-                          <AiOutlineClose className="w-6 h-6 fill-white" />
-                        </button>
-                        <img src={image} alt={image} className="h-full mx-auto" />
+                        <img src={`${imgObj[image as keyof typeof imgObj]}`} alt={image} className="h-full mx-auto" />
                       </SwiperSlide>
                     ))}
                   </Swiper>
-                ) : (
-                  <div className="w-full h-full flex flex-col items-center justify-center border-r">
-                    <UploadImg className="grow tablet:h-2/3" />
-                    <div className="tablet:h-1/3">
-                      <button
-                        type="button"
-                        onClick={handleClick}
-                        className="h-9 p-1 m-auto bg-sky-500 text-sm font-semibold text-white border rounded-md "
-                      >
-                        Select from computer
-                      </button>
-                    </div>
-                    <input
-                      className="hidden"
-                      type="file"
-                      name="file"
-                      id="file_up"
-                      multiple
-                      accept="image/*"
-                      ref={ref}
-                      onChange={uploadImages}
-                    />
-                    {loading ? <img src={Load} alt="" width={20} height={20} /> : null}
-                  </div>
                 )}
               </div>
               <div className="flex flex-col w-full h-1/3 justify-center px-3 py-3 bg-white tablet-lg:h-full tablet-lg:w-[20vw] tablet-lg:justify-start">
@@ -201,4 +133,4 @@ const CreatePost: React.FC = () => {
   );
 };
 
-export default CreatePost;
+export default EditPost;

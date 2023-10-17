@@ -1,7 +1,7 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../redux/store";
-import { setIsDeletePostGlobal } from "../../redux/features/globalStateSlice";
+import { setIsDeletePostGlobal, setIsEditPostGlobal } from "../../redux/features/globalStateSlice";
 import { deletePost, getAPost } from "../../redux/features/postSlice";
 import { deleteImgPost } from "../../redux/features/uploadImgSlice";
 
@@ -22,6 +22,11 @@ const DeletePost: React.FC = () => {
     });
   };
 
+  const handleEdit = () => {
+    dispatch(setIsEditPostGlobal());
+    dispatch(setIsDeletePostGlobal());
+  };
+
   return (
     <>
       {isDeletePostGlobal && (
@@ -33,7 +38,7 @@ const DeletePost: React.FC = () => {
               </button>
             </div>
             <div className="w-full leading-10 py-1 px-2 flex items-center justify-center cursor-pointer">
-              <button>Edit</button>
+              <button onClick={() => handleEdit()}>Edit</button>
             </div>
             <div
               onClick={() => dispatch(setIsDeletePostGlobal())}

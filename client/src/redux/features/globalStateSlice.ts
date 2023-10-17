@@ -4,6 +4,7 @@ import { IGlobalState } from "../../utils/interface";
 const initialState: IGlobalState = {
   isCreatePostGlobal: false,
   isDeletePostGlobal: false,
+  isEditPostGlobal: false,
 
   postModalId: null,
 };
@@ -19,6 +20,9 @@ const globalStateSlice = createSlice({
     setIsDeletePostGlobal(state) {
       state.isDeletePostGlobal = !state.isDeletePostGlobal;
     },
+    setIsEditPostGlobal(state) {
+      state.isEditPostGlobal = !state.isEditPostGlobal;
+    },
     // Define the setPostId action
     setPostModalId: (state, action) => {
       state.postModalId = action.payload;
@@ -30,6 +34,7 @@ const globalStateSlice = createSlice({
 // export them as named exports from this "slice" file
 export const { setIsCreatePostGlobal } = globalStateSlice.actions;
 export const { setIsDeletePostGlobal } = globalStateSlice.actions;
+export const { setIsEditPostGlobal } = globalStateSlice.actions;
 export const { setPostModalId } = globalStateSlice.actions;
 
 export default globalStateSlice.reducer;

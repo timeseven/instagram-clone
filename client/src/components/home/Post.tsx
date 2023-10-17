@@ -184,8 +184,10 @@ const Post: React.FC<PostProps> = ({ post }) => {
 
       <form onKeyDown={handleKeyDown} className="w-full relative flex ml-3 mt-2">
         <div className="absolute z-10">
-          <span onClick={() => setEmoji(!emoji)}>
-            <EmojiIcon />
+          <span>
+            <span onClick={() => setEmoji(!emoji)}>
+              <EmojiIcon />
+            </span>
             {emoji ? <EmojiPicker height={500} onEmojiClick={handleEmojiClick} /> : null}
           </span>
         </div>

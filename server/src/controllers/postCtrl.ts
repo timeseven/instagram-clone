@@ -168,16 +168,15 @@ const unlikePost = asyncHandler(async (req: IReqAuth, res: Response): Promise<an
 // update post
 const updatePost = asyncHandler(async (req: IReqAuth, res: Response): Promise<any | void> => {
   try {
-    const { id, content, images } = req.body;
+    const { postId, content } = req.body;
 
     // update the post
     const post = await Post.findOneAndUpdate(
       {
-        _id: id,
+        _id: postId,
       },
       {
         content,
-        images,
       },
       { new: true }
     ).populate("user", "avatar username fullname followers");

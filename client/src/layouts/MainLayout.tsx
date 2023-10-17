@@ -4,6 +4,7 @@ import NavBarTop from "./components/NavBarTop";
 import NavBarBot from "./components/NavBarBot";
 import CreatePost from "../components/post/CreatePost";
 import DeletePost from "../components/post/DeletePost";
+import EditPost from "../components/post/EditPost";
 const MainLayout: React.FC = () => {
   return (
     <div
@@ -14,6 +15,7 @@ const MainLayout: React.FC = () => {
       <Outlet />
       <CreatePost />
       <DeletePost />
+      <EditPost />
       <NavBarBot className="tablet:hidden" />
     </div>
   );
