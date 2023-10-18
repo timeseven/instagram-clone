@@ -26,6 +26,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
+import { savePost, unSavePost } from "../../redux/features/userSlice";
 
 let schema = yup.object().shape({
   content: yup.string().required("Content is Required"),
@@ -37,6 +38,7 @@ const Post: React.FC<PostProps> = ({ post }) => {
   const { message, imgObj } = useSelector((state: RootState) => state.upload);
   const { cData } = useSelector((state: RootState) => state.comment);
   const { user } = useSelector((state: RootState) => state.auth);
+  const { userData } = useSelector((state: RootState) => state.user);
 
   const filteredComments = cData.filter((value) => value.postId === post._id);
   const lastComment = filteredComments.filter((value) => !value.reply).pop();
@@ -61,6 +63,16 @@ const Post: React.FC<PostProps> = ({ post }) => {
       dispatch(unLikePost(post._id));
     }
     setLike(!like);
+  };
+
+  /**handle Save Post */
+  const handleSave = () => {
+    if (savedPost === false) {
+      dispatch(savePost(post._id));
+    } else {
+      dispatch(unSavePost(post._id));
+    }
+    setSavedPost(!savedPost);
   };
 
   /** handle Comment Start */
@@ -95,9 +107,16 @@ const Post: React.FC<PostProps> = ({ post }) => {
     if (post.likes.find((_id) => _id === user?._id)) {
       setLike(true);
     }
-
     return () => setLike(false);
   }, [dispatch, user?._id, post.likes]);
+
+  useEffect(() => {
+    console.log("sdfsdf", userData);
+    if (userData?.saved.includes(post._id)) {
+      setSavedPost(true);
+    }
+    return () => setSavedPost(false);
+  }, [dispatch, post._id, userData?.saved]);
 
   return (
     <div className=" last:pb-16 mt-2 pb-2 border-b">
@@ -140,19 +159,11 @@ const Post: React.FC<PostProps> = ({ post }) => {
         <Link to={`/${post._id}/comments`}>
           <CommentIcon />
         </Link>
-        <span className="mx-1">
+        <span className="mx-1 grow">
           <ShareIcon />
         </span>
-        <span className="mx-1">
-          {savedPost ? (
-            <div>
-              <SaveActiveIcon />
-            </div>
-          ) : (
-            <div>
-              <SaveIcon />
-            </div>
-          )}
+        <span className="mx-1" onClick={handleSave}>
+          {savedPost ? <SaveActiveIcon /> : <SaveIcon />}
         </span>
       </div>
       <div className="mt-2 ml-3">{post.likes.length} likes</div>

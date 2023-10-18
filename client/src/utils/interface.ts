@@ -170,6 +170,7 @@ export interface suggestionUserState {
 /* userState */
 export interface userState {
   users: User[] | null;
+  userData: User | null;
   isError: boolean;
   isLoading: boolean;
   isSuccess: boolean;

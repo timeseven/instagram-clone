@@ -4,6 +4,11 @@ import { ICreatePost, postUpdate } from "../utils/interface";
 
 const createPost = async (data: ICreatePost) => {
   const response = await fetch.post("/post", data, config());
+  if (response.data) {
+    let userData = JSON.parse(localStorage.getItem("user")!);
+    userData.post.push(response.data._id);
+    localStorage.setItem("user", JSON.stringify(userData));
+  }
   return response.data;
 };
 const getPost = async () => {
@@ -36,6 +41,12 @@ const updatePost = async (data: postUpdate) => {
 };
 const deletePost = async (id: string) => {
   const response = await fetch.delete(`/post/delete/${id}`, config());
+  if (response.data) {
+    let userData = JSON.parse(localStorage.getItem("user")!);
+    let filterPost = userData.post.filter((item: string) => item !== response.data._id);
+    userData.post = filterPost;
+    localStorage.setItem("user", JSON.stringify(userData));
+  }
   return response.data;
 };
 

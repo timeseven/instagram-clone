@@ -6,6 +6,7 @@ import Post from "./Post";
 import { getPost } from "../../redux/features/postSlice";
 import { getImgPost } from "../../redux/features/uploadImgSlice";
 import { getComments } from "../../redux/features/commentSlice";
+import { getUser } from "../../redux/features/userSlice";
 
 type Props = {};
 
@@ -13,6 +14,7 @@ const PostList = (props: Props) => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const { user } = useSelector((state: RootState) => state.auth);
   const { message, pData } = useSelector((state: RootState) => state.post);
+  const { userData } = useSelector((state: RootState) => state.user);
   const dispatch: AppDispatch = useDispatch();
 
   useEffect(() => {
@@ -25,7 +27,10 @@ const PostList = (props: Props) => {
       dispatch(getImgPost(imagesData));
     });
     dispatch(getComments());
-  }, [user, dispatch]);
+    if (userData === null) {
+      dispatch(getUser(user!.username));
+    }
+  }, [user, dispatch, userData]);
 
   useEffect(() => {
     if (message === "post/get-current-post success") {

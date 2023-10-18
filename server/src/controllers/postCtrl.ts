@@ -196,7 +196,7 @@ const deletePost = asyncHandler(async (req: IReqAuth, res: Response): Promise<an
       user: req.user!._id,
     });
 
-    // delete the post id in the post of user
+    // delete the post id in the post and saved of user
     await User.findOneAndUpdate(
       { _id: req.user?._id },
       {
