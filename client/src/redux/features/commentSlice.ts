@@ -26,6 +26,22 @@ export const getComments = createAsyncThunk("comment/get-comments", async (_, th
   }
 });
 
+export const likeComment = createAsyncThunk("comment/like-a-comment", async (id: string, thunkAPI) => {
+  try {
+    return await commentService.likeComment(id);
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error);
+  }
+});
+
+export const unLikeComment = createAsyncThunk("comment/unlike-a-comment", async (id: string, thunkAPI) => {
+  try {
+    return await commentService.unLikeComment(id);
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error);
+  }
+});
+
 export const commentSlice = createSlice({
   name: "comment",
   initialState: initialState,
@@ -64,6 +80,50 @@ export const commentSlice = createSlice({
         state.isLoading = false;
         state.isSuccess = false;
         state.message = action.error.message ?? "An error occurred.";
+      })
+      .addCase(likeComment.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(likeComment.fulfilled, (state, action: PayloadAction<IComment>) => {
+        state.isError = false;
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.cData = state.cData!.map((item) => {
+          if (item._id === action.payload._id) {
+            return { ...item, likes: action.payload.likes };
+          } else {
+            return item;
+          }
+        });
+        state.message = "success";
+      })
+      .addCase(likeComment.rejected, (state, action) => {
+        state.isError = true;
+        state.isSuccess = false;
+        state.message = action.error.message ?? "An error occurred.";
+        state.isLoading = false;
+      })
+      .addCase(unLikeComment.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(unLikeComment.fulfilled, (state, action: PayloadAction<IComment>) => {
+        state.isError = false;
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.cData = state.cData!.map((item) => {
+          if (item._id === action.payload._id) {
+            return { ...item, likes: action.payload.likes };
+          } else {
+            return item;
+          }
+        });
+        state.message = "success";
+      })
+      .addCase(unLikeComment.rejected, (state, action) => {
+        state.isError = true;
+        state.isSuccess = false;
+        state.message = action.error.message ?? "An error occurred.";
+        state.isLoading = false;
       });
   },
 });

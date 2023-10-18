@@ -11,6 +11,7 @@ const InfoProfile: React.FC = () => {
   const { user } = useSelector((state: RootState) => state.auth);
   const [isEditEnabled, setIsEditEnabled] = useState<boolean>(false);
   const { userData, isLoading } = useSelector((state: RootState) => state.user);
+  const [onEdit, setOnEdit] = useState<boolean>(false);
   const { username } = useParams() as {
     username: string;
   };
@@ -36,8 +37,9 @@ const InfoProfile: React.FC = () => {
                     type="button"
                     className="bg-[#efefef] w-[8rem] h-8 font-semibold text-sm  rounded-md"
                     title="Edit profile"
+                    onClick={() => setOnEdit(true)}
                   >
-                    Edit profile55
+                    Edit profile
                   </button>
                 </div>
               </div>
@@ -71,6 +73,7 @@ const InfoProfile: React.FC = () => {
                     <div className="text-xl leading-[40px]">{userData?.username}</div>
                     <div className={`${isEditEnabled ? "inline-block" : "hidden"} leading-[32px] ml-5`}>
                       <button
+                        onClick={() => setOnEdit(true)}
                         type="button"
                         className="bg-[#efefef] w-auto px-4 h-8 font-semibold text-sm  rounded-md"
                         title="Edit profile"
@@ -100,6 +103,7 @@ const InfoProfile: React.FC = () => {
               </div>
             </div>
           </div>
+          {onEdit && <EditProfile setOnEdit={setOnEdit} />}
         </div>
       )}
     </div>

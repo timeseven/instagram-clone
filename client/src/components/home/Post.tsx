@@ -5,7 +5,7 @@ import { AppDispatch, RootState } from "../../redux/store";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import { setIsDeletePostGlobal, setPostModalId } from "../../redux/features/globalStateSlice";
-import { createComment } from "../../redux/features/commentSlice";
+import { createComment, likeComment, unLikeComment } from "../../redux/features/commentSlice";
 import { likePost, unLikePost } from "../../redux/features/postSlice";
 import { PostProps } from "../../utils/interface";
 import {
@@ -97,6 +97,16 @@ const Post: React.FC<PostProps> = ({ post }) => {
     }
   };
 
+  // handle like comment
+  const handleLikeComment = (id: string) => {
+    if (likeCmt === false) {
+      dispatch(likeComment(id));
+    } else {
+      dispatch(unLikeComment(id));
+    }
+    setLikeCmt(!likeCmt);
+  };
+
   const handleEmojiClick = (emojiData: EmojiClickData, event: MouseEvent) => {
     formik.setFieldValue("content", formik.values.content + emojiData.emoji);
   };
@@ -108,7 +118,15 @@ const Post: React.FC<PostProps> = ({ post }) => {
       setLike(true);
     }
     return () => setLike(false);
-  }, [dispatch, user?._id, post.likes]);
+  }, [post.likes]);
+
+  // show comment likes
+  useEffect(() => {
+    if (lastComment?.likes.find((_id) => _id === user?._id)) {
+      setLikeCmt(true);
+    }
+    return () => setLikeCmt(false);
+  }, [lastComment]);
 
   useEffect(() => {
     console.log("sdfsdf", userData);
@@ -186,7 +204,7 @@ const Post: React.FC<PostProps> = ({ post }) => {
               {lastComment.user.username}
             </Link>
             <span>{lastComment.content}</span>
-            <span className="ml-2">
+            <span className="ml-2" onClick={() => handleLikeComment(lastComment._id)}>
               {likeCmt ? <UnlikeCommentIcon className="" /> : <LikeCommentIcon className="" />}
             </span>
           </div>

@@ -1,5 +1,5 @@
-import fetch from "../utils/axiosConfig";
-import { IUserRegister, IUserLogin, IForgotPassword, IResetPassword } from "../utils/interface";
+import fetch, { config } from "../utils/axiosConfig";
+import { IUserRegister, IUserLogin, IForgotPassword, IResetPassword, UserEdit } from "../utils/interface";
 
 const register = async (user: IUserRegister) => {
   const response = await fetch.post("/auth/register", user);
@@ -36,6 +36,14 @@ const resetPassword = async (data: IResetPassword) => {
   return response.data;
 };
 
-const authService = { register, login, logout, forgotPassword, resetPassword };
+const editUser = async (user: UserEdit) => {
+  const response = await fetch.patch("/auth", user, config());
+  if (response.data) {
+    localStorage.setItem("user", JSON.stringify(response.data));
+  }
+  return response.data;
+};
+
+const authService = { register, login, logout, forgotPassword, resetPassword, editUser };
 
 export default authService;

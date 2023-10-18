@@ -177,6 +177,17 @@ export interface userState {
   message: string;
 }
 
+export interface UserEdit {
+  fullname: string;
+  username: string;
+  avatar: string;
+  mobile: string;
+  gender: string;
+  address: string;
+  story: string;
+  website: string;
+}
+
 /* GlobalState  */
 
 export interface IGlobalState {

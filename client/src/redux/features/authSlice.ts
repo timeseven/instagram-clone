@@ -1,7 +1,15 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import authService from "../../services/authServices";
 import userService from "../../services/userServices";
-import { IAuthState, User, IUserLogin, IUserRegister, IForgotPassword, IResetPassword } from "../../utils/interface";
+import {
+  IAuthState,
+  User,
+  IUserLogin,
+  IUserRegister,
+  IForgotPassword,
+  IResetPassword,
+  UserEdit,
+} from "../../utils/interface";
 import { getTokenFromLocalStorage } from "../../utils/axiosConfig";
 
 const initialState: IAuthState = {
@@ -92,6 +100,14 @@ export const follow = createAsyncThunk("auth/follow", async (id: string, thunkAP
 export const unFollow = createAsyncThunk("auth/unfollow", async (id: string, thunkAPI) => {
   try {
     return await userService.unFollowUser(id);
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error);
+  }
+});
+
+export const editUser = createAsyncThunk("auth/edit-user", async (userData: UserEdit, thunkAPI) => {
+  try {
+    return await authService.editUser(userData);
   } catch (error) {
     return thunkAPI.rejectWithValue(error);
   }
@@ -244,6 +260,22 @@ export const authSlice = createSlice({
         state.isLoading = false;
         state.isSuccess = false;
         state.message = action.error.message ?? "An error occurred.";
+      })
+      .addCase(editUser.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(editUser.fulfilled, (state, action: PayloadAction<User>) => {
+        state.isError = false;
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.user = action.payload;
+        state.message = "success";
+      })
+      .addCase(editUser.rejected, (state, action) => {
+        state.isError = true;
+        state.isSuccess = false;
+        state.message = action.error.message ?? "An error occurred.";
+        state.isLoading = false;
       });
   },
 });
