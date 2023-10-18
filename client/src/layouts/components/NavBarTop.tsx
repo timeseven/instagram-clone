@@ -28,6 +28,7 @@ import { resetUser, searchUser } from "../../redux/features/userSlice";
 
 const NavBarTop: React.FC = () => {
   const { isSearchGlobal } = useSelector((state: RootState) => state.globalState);
+  const { user } = useSelector((state: RootState) => state.auth);
   const [isMenuMore, setIsMenuMore] = useState<boolean>(false);
   const [searchValue, setSearchValue] = useState<string>("");
   const dispatch: AppDispatch = useDispatch();
@@ -203,7 +204,7 @@ const NavBarTop: React.FC = () => {
               </button>
             </div>
             <div className="tablet:p-2 mb-4 hidden tablet:inline-block">
-              <NavLink to="/abcd">
+              <NavLink to={`/${user?.username}`}>
                 <div className="flex items-center m-auto">
                   <div className="w-6 h-6 rounded-[50%]">
                     <img src={avatar} alt="user-avatar" />

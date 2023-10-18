@@ -50,8 +50,8 @@ const deletePost = async (id: string) => {
   return response.data;
 };
 
-const getSavePost = async (id: String) => {
-  const response = await fetch.get(`/post/save/${id}`, config());
+const getSavePost = async (username: string) => {
+  const response = await fetch.get(`/post/save/${username}`, config());
   return response.data;
 };
 const postService = {

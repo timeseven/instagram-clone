@@ -82,9 +82,9 @@ export const getExplorePosts = createAsyncThunk("post/get-explore-post", async (
     return thunkAPI.rejectWithValue(error);
   }
 });
-export const getSavePost = createAsyncThunk("post/get-saved-posts", async (id: String, thunkAPI) => {
+export const getSavePost = createAsyncThunk("post/get-saved-posts", async (username: string, thunkAPI) => {
   try {
-    return await postService.getSavePost(id);
+    return await postService.getSavePost(username);
   } catch (error) {
     return thunkAPI.rejectWithValue(error);
   }

@@ -1,11 +1,23 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import InfoProfileSkeleton from "../skeleton/InfoProfileSkeleton";
 import EditProfile from "./EditProfile";
 
 import avatar from "../../images/avatar-default.jpg";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
+import { useParams } from "react-router-dom";
 
-const InfoProfile = () => {
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+const InfoProfile: React.FC = () => {
+  const { user } = useSelector((state: RootState) => state.auth);
+  const [isEditEnabled, setIsEditEnabled] = useState<boolean>(false);
+  const { userData, isLoading } = useSelector((state: RootState) => state.user);
+  const { username } = useParams() as {
+    username: string;
+  };
+
+  useEffect(() => {
+    setIsEditEnabled(user?.username === username);
+  }, [username]);
   return (
     <div className="flex">
       {isLoading ? (
@@ -18,30 +30,30 @@ const InfoProfile = () => {
                 <img src={avatar} width={77} height={77} alt="user-profile" />
               </div>
               <div className="flex flex-col justify-between grow">
-                <div className="text-xl leading-[40px]">timeseven</div>
-                <div className="leading-[32px]">
+                <div className="text-xl leading-[40px]">{userData?.username}</div>
+                <div className={`${isEditEnabled ? "inline-block" : "hidden"} leading-[32px]`}>
                   <button
                     type="button"
                     className="bg-[#efefef] w-[8rem] h-8 font-semibold text-sm  rounded-md"
                     title="Edit profile"
                   >
-                    Edit profile
+                    Edit profile55
                   </button>
                 </div>
               </div>
             </div>
-            <div className="px-4 pb-5 leading-4 font-semibold text-sm">even qian</div>
+            <div className="px-4 pb-5 leading-4 font-semibold text-sm">{userData?.fullname}</div>
             <div className="flex justify-around py-3 border-t">
               <button className="w-1/3 flex flex-col items-center justify-center">
-                <span className="leading-[18px] font-medium pr-1">3</span>
+                <span className="leading-[18px] font-medium pr-1">{userData?.post.length}</span>
                 <span className="leading-[18px] text-neutral-500">Post</span>
               </button>
               <button className="w-1/3 flex flex-col items-center justify-center">
-                <span className="leading-[18px] font-medium pr-1">10</span>
+                <span className="leading-[18px] font-medium pr-1">{userData?.followers.length}</span>
                 <span className="leading-[18px] text-neutral-500">followers</span>
               </button>
               <button className="w-1/3 flex flex-col items-center justify-center">
-                <span className="leading-[18px] font-medium pr-1">34</span>
+                <span className="leading-[18px] font-medium pr-1">{userData?.following.length}</span>
                 <span className="leading-[18px] text-neutral-500">following</span>
               </button>
             </div>
@@ -56,8 +68,8 @@ const InfoProfile = () => {
                 </div>
                 <div className="flex flex-col justify-between grow">
                   <div className="flex items-center">
-                    <div className="text-xl leading-[40px]">timeseven</div>
-                    <div className="leading-[32px] ml-5">
+                    <div className="text-xl leading-[40px]">{userData?.username}</div>
+                    <div className={`${isEditEnabled ? "inline-block" : "hidden"} leading-[32px] ml-5`}>
                       <button
                         type="button"
                         className="bg-[#efefef] w-auto px-4 h-8 font-semibold text-sm  rounded-md"
@@ -69,20 +81,20 @@ const InfoProfile = () => {
                   </div>
                   <div className="flex">
                     <button className="flex items-center mr-10">
-                      <span className="leading-[18px] font-medium pr-1">3</span>
+                      <span className="leading-[18px] font-medium pr-1">{userData?.post.length}</span>
                       <span className="leading-[18px] text-neutral-500">Post</span>
                     </button>
                     <button className="flex items-center mr-10">
-                      <span className="leading-[18px] font-medium pr-1">10</span>
+                      <span className="leading-[18px] font-medium pr-1">{userData?.followers.length}</span>
                       <span className="leading-[18px] text-neutral-500">followers</span>
                     </button>
                     <button className="flex items-center mr-10">
-                      <span className="leading-[18px] font-medium pr-1">34</span>
+                      <span className="leading-[18px] font-medium pr-1">{userData?.following.length}</span>
                       <span className="leading-[18px] text-neutral-500">following</span>
                     </button>
                   </div>
                   <div className="flex">
-                    <div className="pb-5 leading-4 font-semibold text-sm">even qian</div>
+                    <div className="pb-5 leading-4 font-semibold text-sm">{userData?.fullname}</div>
                   </div>
                 </div>
               </div>
