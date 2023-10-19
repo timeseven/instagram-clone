@@ -9,7 +9,7 @@ import { IReqAuth } from "../config/interface";
 const createComment = asyncHandler(async (req: IReqAuth, res: Response): Promise<any | void> => {
   try {
     const { postId, content, tag, reply } = req.body;
-
+    console.log(reply, "sdfsdf");
     // check if the post exists
     const post = await Post.findById(postId);
     if (!post) {

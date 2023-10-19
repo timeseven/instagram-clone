@@ -35,7 +35,7 @@ export interface IPost extends Document {
 export interface IComment extends Document {
   content: string;
   tag: IUser;
-  reply: IComment;
+  reply: string;
   likes: Array<IUser>;
   user: IUser;
   postId: IPost;

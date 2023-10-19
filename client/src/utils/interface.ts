@@ -157,6 +157,14 @@ export interface ICommentState {
 /* CommentProps  */
 export interface CommentProps {
   cmt: IComment;
+  setReplyComment: (value: IComment) => void;
+  deleteComment: (id: string) => void;
+}
+
+export interface ReplyCommentProps {
+  reply: IComment;
+  setReplyComment: (value: IComment) => void;
+  deleteComment: (id: string) => void;
 }
 
 /* suggestionUserState */

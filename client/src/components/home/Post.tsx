@@ -129,7 +129,6 @@ const Post: React.FC<PostProps> = ({ post }) => {
   }, [lastComment]);
 
   useEffect(() => {
-    console.log("sdfsdf", userData);
     if (userData?.saved.includes(post._id)) {
       setSavedPost(true);
     }

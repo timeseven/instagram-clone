@@ -22,10 +22,22 @@ const unLikeComment = async (id: string) => {
   return response.data;
 };
 
+const getCommentsByPost = async (id: string) => {
+  const response = await fetch.get(`/comment/${id}`, config());
+  return response.data;
+};
+
+const deleteComment = async (id: string) => {
+  const response = await fetch.delete(`/comment/delete/${id}`, config());
+  return response.data;
+};
+
 const commentService = {
   createComment,
   getComments,
   likeComment,
   unLikeComment,
+  getCommentsByPost,
+  deleteComment,
 };
 export default commentService;
