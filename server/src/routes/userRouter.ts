@@ -17,9 +17,9 @@ router.get("/search", searchUser);
 router.get("/suggestions", authMiddleware, getSuggestionUser);
 router.get("/:username", authMiddleware, getUser);
 
-router.post("/follow/:id", authMiddleware, followUser);
-router.post("/unfollow/:id", authMiddleware, unfollowUser);
-router.post("/save-post/:id", authMiddleware, savePost);
-router.post("/unsave-post/:id", authMiddleware, unSavePost);
+router.put("/follow/:id", authMiddleware, followUser);
+router.put("/unfollow/:id", authMiddleware, unfollowUser);
+router.put("/save-post/:id", authMiddleware, savePost);
+router.put("/unsave-post/:id", authMiddleware, unSavePost);
 
 export default router;

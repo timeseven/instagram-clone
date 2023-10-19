@@ -37,7 +37,7 @@ const resetPassword = async (data: IResetPassword) => {
 };
 
 const editUser = async (user: UserEdit) => {
-  const response = await fetch.patch("/auth", user, config());
+  const response = await fetch.put("/auth", user, config());
   if (response.data) {
     localStorage.setItem("user", JSON.stringify(response.data));
   }

@@ -13,12 +13,12 @@ const getComments = async () => {
 };
 
 const likeComment = async (id: string) => {
-  const response = await fetch.post(`/comment/like/${id}`, null, config());
+  const response = await fetch.put(`/comment/like/${id}`, null, config());
   return response.data;
 };
 
 const unLikeComment = async (id: string) => {
-  const response = await fetch.post(`/comment/unlike/${id}`, null, config());
+  const response = await fetch.put(`/comment/unlike/${id}`, null, config());
   return response.data;
 };
 

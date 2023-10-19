@@ -28,15 +28,15 @@ const getAPost = async (id: string) => {
   return response.data;
 };
 const likePost = async (id: string) => {
-  const response = await fetch.post(`/post/like/${id}`, null, config());
+  const response = await fetch.put(`/post/like/${id}`, null, config());
   return response.data;
 };
 const unLikePost = async (id: string) => {
-  const response = await fetch.post(`/post/unlike/${id}`, null, config());
+  const response = await fetch.put(`/post/unlike/${id}`, null, config());
   return response.data;
 };
 const updatePost = async (data: postUpdate) => {
-  const response = await fetch.patch("/post/update", data, config());
+  const response = await fetch.put("/post/update", data, config());
   return response.data;
 };
 const deletePost = async (id: string) => {

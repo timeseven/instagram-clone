@@ -13,7 +13,7 @@ const getUser = async (username: string) => {
 };
 
 const followUser = async (id: string) => {
-  const response = await fetch.post(`/user/follow/${id}`, null, config());
+  const response = await fetch.put(`/user/follow/${id}`, null, config());
   if (response.data) {
     localStorage.setItem("user", JSON.stringify(response.data));
   }
@@ -22,7 +22,7 @@ const followUser = async (id: string) => {
 };
 
 const unFollowUser = async (id: string) => {
-  const response = await fetch.post(`/user/unfollow/${id}`, null, config());
+  const response = await fetch.put(`/user/unfollow/${id}`, null, config());
 
   if (response.data) {
     localStorage.setItem("user", JSON.stringify(response.data));
@@ -37,14 +37,14 @@ const searchUser = async (search: string) => {
 };
 
 const savePost = async (id: string) => {
-  const response = await fetch.post(`/user/save-post/${id}`, null, config());
+  const response = await fetch.put(`/user/save-post/${id}`, null, config());
   if (response.data) {
     localStorage.setItem("user", JSON.stringify(response.data));
   }
   return response.data;
 };
 const unSavePost = async (id: string) => {
-  const response = await fetch.post(`/user/unsave-post/${id}`, null, config());
+  const response = await fetch.put(`/user/unsave-post/${id}`, null, config());
   if (response.data) {
     localStorage.setItem("user", JSON.stringify(response.data));
   }

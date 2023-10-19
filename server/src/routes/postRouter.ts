@@ -20,9 +20,9 @@ router.get("/:id", authMiddleware, getOnePost);
 router.get("/user/:username", authMiddleware, getUserPosts);
 router.get("/save/:username", authMiddleware, getSavedPost);
 router.post("/", authMiddleware, createPost);
-router.post("/like/:id", authMiddleware, likePost);
-router.post("/unlike/:id", authMiddleware, unlikePost);
-router.patch("/update", authMiddleware, updatePost);
+router.put("/like/:id", authMiddleware, likePost);
+router.put("/unlike/:id", authMiddleware, unlikePost);
+router.put("/update", authMiddleware, updatePost);
 router.delete("/delete/:id", authMiddleware, deletePost);
 
 export default router;
