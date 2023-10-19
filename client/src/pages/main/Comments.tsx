@@ -19,6 +19,7 @@ let schema = yup.object().shape({
 const Comments: React.FC = () => {
   const { cData } = useSelector((state: RootState) => state.comment);
   const [postData, setPostData] = useState<IPost>();
+  const [commentData, setCommentData] = useState<IComment[]>([]);
   const [isActive, setIsActive] = useState<boolean>(false);
   const [reply, setReply] = useState("");
   const [replyId, setReplyId] = useState("");
@@ -39,10 +40,16 @@ const Comments: React.FC = () => {
       if (replyId !== "") {
         await dispatch(createComment({ ...values, postId: id, reply: replyId })).then(() => {
           clearReply();
+          dispatch(getCommentsByPost(id)).then((response: any) => {
+            setCommentData(response.payload);
+          });
         });
       } else {
         await dispatch(createComment({ ...values, postId: id })).then(() => {
           clearReply();
+          dispatch(getCommentsByPost(id)).then((response: any) => {
+            setCommentData(response.payload);
+          });
         });
       }
     },
@@ -62,14 +69,19 @@ const Comments: React.FC = () => {
     setReply("");
     setReplyId("");
   };
-  const handleDeleteComment = (id: string) => {
-    dispatch(deleteComment(id));
+  const handleDeleteComment = (cId: string) => {
+    dispatch(deleteComment(cId));
+    dispatch(getCommentsByPost(id)).then((response: any) => {
+      setCommentData(response.payload);
+    });
   };
 
   useEffect(() => {
     dispatch(getAPost(id)).then((response: any) => {
       setPostData(response?.payload[0]);
-      dispatch(getCommentsByPost(id));
+    });
+    dispatch(getCommentsByPost(id)).then((response: any) => {
+      setCommentData(response.payload);
     });
   }, []);
 
@@ -157,8 +169,8 @@ const Comments: React.FC = () => {
           </div>
 
           <div className="border-t">
-            {cData &&
-              cData?.map((cmt) => (
+            {commentData &&
+              commentData?.map((cmt) => (
                 <Comment
                   key={cmt._id}
                   cmt={cmt}
