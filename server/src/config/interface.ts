@@ -58,3 +58,14 @@ export interface ISendEmail {
   subject: string;
   html: string;
 }
+
+export interface INotification extends Document {
+  id: Object;
+  user: IUser;
+  recipients: Array<IUser>;
+  images: string;
+  url: string;
+
+  content: string;
+  isRead: boolean;
+}
