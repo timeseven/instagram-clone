@@ -33,7 +33,7 @@ const DeletePost: React.FC = () => {
   return (
     <>
       {isDeletePostGlobal && (
-        <div className="fixed flex top-0 left-0 w-full h-screen overflow-auto bg-black bg-opacity-50 z-50">
+        <div className="fixed flex top-0 left-0 w-full h-screen overflow-auto bg-black bg-opacity-50 z-30">
           <div className="flex flex-col items-center justify-start w-[80vw] h-[472px] m-auto min-w-[300px] max-w-[440px] bg-white rounded-md">
             <div className="w-full leading-10 py-1 px-2 flex items-center justify-center cursor-pointer">
               <button onClick={() => handleDelete()} className="font-semibold text-red-500">

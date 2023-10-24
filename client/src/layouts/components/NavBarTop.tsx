@@ -23,6 +23,9 @@ import {
   SearchIcon,
   SettingsIcon,
   LikeIcon,
+  SearchActiveIcon,
+  NotificationsActiveIcon,
+  NotificationsIcon,
 } from "../../components/Icons";
 import avatar from "../../images/avatar-default.jpg";
 import { resetUser, searchUser } from "../../redux/features/userSlice";
@@ -151,7 +154,11 @@ const NavBarTop: React.FC = () => {
             </div>
             <div className="tablet:p-2 mb-4 hidden tablet:inline-block">
               <div onClick={() => handleSearchClick()} className="flex items-center m-auto cursor-pointer">
-                <SearchIcon className="w-[24px] h-[24px] flex justify-center" />
+                {isSearchGlobal ? (
+                  <SearchActiveIcon className="w-[24px] h-[24px] flex justify-center" />
+                ) : (
+                  <SearchIcon className="w-[24px] h-[24px] flex justify-center" />
+                )}
                 <span className={`pl-4 text-[#262626] hidden ${isFolded ? "desktop:hidden" : "desktop:inline-block"}`}>
                   Search
                 </span>
@@ -195,7 +202,11 @@ const NavBarTop: React.FC = () => {
             <div className="p-2 tablet:mb-4">
               <div onClick={() => handleNotificationClick()}>
                 <div className="flex items-center m-auto">
-                  <LikeIcon className="w-[24px] h-[24px] flex justify-center" />
+                  {isNotificationGlobal ? (
+                    <NotificationsActiveIcon className="w-[24px] h-[24px] flex justify-center" />
+                  ) : (
+                    <NotificationsIcon className="w-[24px] h-[24px] flex justify-center" />
+                  )}
                   <span
                     className={`pl-4 text-[#262626] hidden ${isFolded ? "desktop:hidden" : "desktop:inline-block"}`}
                   >
