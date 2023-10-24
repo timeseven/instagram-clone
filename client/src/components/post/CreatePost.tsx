@@ -12,6 +12,7 @@ import { EmojiIcon, UploadImg } from "../Icons";
 import Load from "../../images/loading.gif";
 import { getImgPost, uploadImgPost } from "../../redux/features/uploadImgSlice";
 import { createPost } from "../../redux/features/postSlice";
+import { createNotification } from "../../redux/features/notificationSlice";
 let schema = yup.object().shape({
   content: yup.string().required("Content is Required"),
 });
@@ -46,7 +47,17 @@ const CreatePost: React.FC = () => {
           // then create post
           dispatch(createPost({ ...values, images })).then((response) => {
             const newPost = response.payload;
-            console.log("newPost", newPost);
+            console.log("create notification");
+            dispatch(
+              createNotification({
+                id: newPost._id,
+                recipients: [...newPost.user.followers],
+                images: newPost.images[0],
+                url: `/${newPost.user.username}/${newPost._id}`,
+                content: `posted: "${newPost.content}"`,
+                user: newPost.user._id,
+              })
+            );
             setImages([]);
             formik.resetForm();
             dispatch(setIsCreatePostGlobal());

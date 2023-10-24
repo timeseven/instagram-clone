@@ -153,17 +153,11 @@ export const postSlice = createSlice({
       .addCase(getAPost.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(getAPost.fulfilled, (state, action: PayloadAction<IPost>) => {
+      .addCase(getAPost.fulfilled, (state, action: PayloadAction<IPost[]>) => {
         state.isError = false;
         state.isLoading = false;
         state.isSuccess = true;
-        state.pData = state.pData!.map((item) => {
-          if (item._id === action.payload._id) {
-            return { ...item, comments: action.payload.comments };
-          } else {
-            return item;
-          }
-        });
+        state.pData = action.payload;
         state.message = "success";
       })
       .addCase(getAPost.rejected, (state, action) => {

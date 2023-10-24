@@ -6,6 +6,7 @@ import CreatePost from "../components/post/CreatePost";
 import DeletePost from "../components/post/DeletePost";
 import EditPost from "../components/post/EditPost";
 import Search from "../components/Search";
+import NotificationBox from "../components/NotificationBox";
 const MainLayout: React.FC = () => {
   return (
     <div
@@ -15,6 +16,7 @@ const MainLayout: React.FC = () => {
       <NavBarTop />
       <Outlet />
       <Search />
+      <NotificationBox />
       <CreatePost />
       <DeletePost />
       <EditPost />

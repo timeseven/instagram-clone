@@ -118,7 +118,6 @@ const likePost = asyncHandler(async (req: IReqAuth, res: Response): Promise<any 
   try {
     const post = await Post.find({ _id: req.params?.id, likes: { $nin: req.user?._id } });
 
-    console.log("likepost", post);
     if (post.length === 0) {
       return res.status(400).json({ msg: "This post does not exist or this user already liked the post." });
     }

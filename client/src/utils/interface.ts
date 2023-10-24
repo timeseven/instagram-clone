@@ -204,6 +204,36 @@ export interface IGlobalState {
   isEditPostGlobal: boolean;
 
   isSearchGlobal: boolean;
+  isNotificationGlobal: boolean;
 
   postModalId: string | null; // Add postId to the GlobalState interface
+}
+
+/* Notification  */
+export interface ICreateNotification {
+  id: string;
+  recipients: Array<string>;
+  images: string;
+  url: string;
+  content: string;
+  user: string;
+}
+
+export interface INotification {
+  _id: string;
+  id: string;
+  user: User;
+  recipients: Array<string>;
+  images: string;
+  url: string;
+  content: string;
+  isRead: boolean;
+}
+
+export interface NotificationState {
+  nData: INotification[];
+  isError: boolean;
+  isLoading: boolean;
+  isSuccess: boolean;
+  message: string;
 }

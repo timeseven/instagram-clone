@@ -12,6 +12,7 @@ import Home from "./pages/main/Home";
 import Profile from "./pages/main/Profile";
 import PrivateRouter from "./PrivateRoute";
 import Comments from "./pages/main/Comments";
+import Post from "./pages/main/Post";
 
 function App() {
   return (
@@ -37,6 +38,7 @@ function App() {
             />
             <Route path="/:username" element={<Profile />} />
             <Route path="/:id/comments" element={<Comments />} />
+            <Route path="/:username/:id" element={<Post />} />
           </Route>
         </Routes>
       </BrowserRouter>

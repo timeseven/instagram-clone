@@ -6,7 +6,7 @@ import { IReqAuth } from "../config/interface";
 const createNotify = asyncHandler(async (req: IReqAuth, res: Response): Promise<void> => {
   try {
     const { id, recipients, images, url, content } = req.body;
-
+    console.log("create notification");
     const filteredRecipients = recipients.filter((recipientId: string) => recipientId !== req.user!._id.toString());
 
     const notify = new Notify({

@@ -138,7 +138,7 @@ const Post: React.FC<PostProps> = ({ post }) => {
   return (
     <div className=" last:pb-16 mt-2 pb-2 border-b">
       <div className="relative flex items-center">
-        <Link to={`/`} className="flex items-center">
+        <Link to={`/${post.user.username}`} className="flex items-center">
           <div className="mr-4">
             <img className="rounded-[50%]" height={40} width={40} src={post.user.avatar} alt={post.user.username} />
           </div>
@@ -158,13 +158,15 @@ const Post: React.FC<PostProps> = ({ post }) => {
         <Swiper navigation={true} modules={[Navigation]} className="flex items-center justify-center mySwiper">
           {post.images.map((image, index) => (
             <SwiperSlide key={index}>
-              <img
-                className="rounded-sm"
-                src={`${imgObj[image as keyof typeof imgObj]}`}
-                width={500}
-                height={500}
-                alt={image}
-              />
+              <Link to={`/${post.user.username}/${post._id}`}>
+                <img
+                  className="rounded-sm"
+                  src={`${imgObj[image as keyof typeof imgObj]}`}
+                  width={500}
+                  height={500}
+                  alt={image}
+                />
+              </Link>
             </SwiperSlide>
           ))}
         </Swiper>
