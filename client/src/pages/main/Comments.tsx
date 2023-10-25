@@ -18,6 +18,7 @@ let schema = yup.object().shape({
 
 const Comments: React.FC = () => {
   const { cData } = useSelector((state: RootState) => state.comment);
+  const { user } = useSelector((state: RootState) => state.auth);
   const [postData, setPostData] = useState<IPost>();
   const [commentData, setCommentData] = useState<IComment[]>([]);
   const [isActive, setIsActive] = useState<boolean>(false);
@@ -112,7 +113,7 @@ const Comments: React.FC = () => {
       desktop-lg:left-[335px] desktop-lg:max-w-[calc(100vw-335px)]"
           >
             <div className="w-[50px]">
-              <img src={""} alt="user-profile" height={40} width={40} />
+              <img src={user?.avatar} alt="user-profile" height={40} width={40} />
             </div>
             <div className="relative w-full ml-5">
               <input
@@ -154,7 +155,7 @@ const Comments: React.FC = () => {
           <div className="h-fit flex p-4 cursor-point hover:bg-neutral-100">
             <div className="flex w-full">
               <div className="w-[50px]">
-                <img src={""} alt="user-profile" height={40} width={40} />
+                <img src={postData?.user.avatar} alt="user-profile" height={40} width={40} />
               </div>
               <div className="flex flex-col items-center justify-start ml-5">
                 <div className="flex w-full mb-1">

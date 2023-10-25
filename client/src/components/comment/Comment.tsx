@@ -39,7 +39,7 @@ const Comment: React.FC<CommentProps> = ({ cmt, setReplyComment, deleteComment }
         <div className="h-fit flex flex-col p-4 cursor-point">
           <div className="flex w-full">
             <div className="w-[50px]">
-              <img src={""} alt="user-profile" height={40} width={40} />
+              <img src={cmt.user.avatar} alt="user-profile" height={40} width={40} />
             </div>
             <div className="flex flex-col items-center ml-5 mr-auto">
               <div className="w-full flex mb-1 justify-start">

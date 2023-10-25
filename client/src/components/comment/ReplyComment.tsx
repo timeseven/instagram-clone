@@ -33,7 +33,7 @@ const ReplyComment: React.FC<ReplyCommentProps> = ({ reply, setReplyComment, del
   return (
     <div className="flex w-full h-fit mt-3">
       <div className="w-[50px]">
-        <img src={""} alt="user-profile" height={40} width={40} />
+        <img src={reply.user?.avatar} alt="user-profile" height={40} width={40} />
       </div>
       <div className="flex flex-col items-center ml-5 mr-auto">
         <div className="flex mb-1">
