@@ -28,7 +28,7 @@ const InfoProfile: React.FC = () => {
           <div className="w-full tablet-sm:hidden">
             <div className="flex mt-4 mx-4 mb-6">
               <div className="mr-7 min-w-[77px]">
-                <img src={avatar} width={77} height={77} alt="user-profile" />
+                <img src={userData?.avatar || avatar} width={77} height={77} alt="user-profile" />
               </div>
               <div className="flex flex-col justify-between grow">
                 <div className="text-xl leading-[40px]">{userData?.username}</div>
@@ -65,7 +65,7 @@ const InfoProfile: React.FC = () => {
               <div className="w-full flex">
                 <div className="flex mr-[30px]">
                   <div className="mx-[31px]">
-                    <img src={avatar} width={150} height={150} alt="user-profile" />
+                    <img src={userData?.avatar || avatar} width={150} height={150} alt="user-profile" />
                   </div>
                 </div>
                 <div className="flex flex-col justify-between grow">

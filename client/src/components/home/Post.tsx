@@ -34,8 +34,6 @@ let schema = yup.object().shape({
 
 const Post: React.FC<PostProps> = ({ post }) => {
   const dispatch: AppDispatch = useDispatch();
-
-  const { message, imgObj } = useSelector((state: RootState) => state.upload);
   const { cData } = useSelector((state: RootState) => state.comment);
   const { user } = useSelector((state: RootState) => state.auth);
   const { userData } = useSelector((state: RootState) => state.user);
@@ -73,6 +71,36 @@ const Post: React.FC<PostProps> = ({ post }) => {
       dispatch(unSavePost(post._id));
     }
     setSavedPost(!savedPost);
+  };
+
+  // handle Slide change on Video
+  const handleSlideChange = (change: any) => {
+    let activeSlide = document.getElementById("postContent")!.getElementsByClassName("swiper-slide")[
+      change.activeIndex
+    ];
+    let prevSlide = document.getElementById("postContent")!.getElementsByClassName("swiper-slide")[
+      change.previousIndex
+    ];
+    let activeSlideVideo = activeSlide.getElementsByTagName("video");
+    let prevSlideVideo = prevSlide.getElementsByTagName("video");
+    if (activeSlideVideo.length > 0) {
+      activeSlideVideo[0].play();
+    }
+    if (prevSlideVideo.length > 0) {
+      prevSlideVideo[0].pause();
+    }
+  };
+
+  // handle Swiper
+  const handleSwiper = (swiper: any) => {
+    let activeSlide = document.getElementById("postContent")!.getElementsByClassName("swiper-slide")[
+      swiper.activeIndex
+    ];
+    let activeSlideVideo = activeSlide.getElementsByTagName("video");
+    console.log(activeSlideVideo, "sdfsdf");
+    if (activeSlideVideo.length > 0) {
+      activeSlideVideo[0].play();
+    }
   };
 
   /** handle Comment Start */
@@ -154,19 +182,24 @@ const Post: React.FC<PostProps> = ({ post }) => {
           </span>
         </div>
       </div>
-      <div className="mt-2">
-        <Swiper navigation={true} modules={[Navigation]} className="flex items-center justify-center mySwiper">
-          {post.images.map((image, index) => (
+      <div id="postContent" className="mt-2">
+        <Swiper
+          navigation={true}
+          modules={[Navigation]}
+          onSwiper={(swiper: any) => handleSwiper(swiper)}
+          onSlideChange={(change: any) => handleSlideChange(change)}
+          className="w-[468px] h-[468px] flex items-center justify-center"
+        >
+          {post.medias.map((media, index) => (
             <SwiperSlide key={index}>
-              <Link to={`/${post.user.username}/${post._id}`}>
-                <img
-                  className="rounded-sm"
-                  src={`${imgObj[image as keyof typeof imgObj]}`}
-                  width={500}
-                  height={500}
-                  alt={image}
-                />
-              </Link>
+              {media.includes(".mp4") ? (
+                <video width="468" height="468" autoPlay muted>
+                  <source src={media} type="video/mp4" />
+                  Your browser does not support the video tag.
+                </video>
+              ) : (
+                <img className="rounded-sm" src={media} width={468} height={468} alt={media} />
+              )}
             </SwiperSlide>
           ))}
         </Swiper>

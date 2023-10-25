@@ -92,7 +92,7 @@ export interface PostProps {
 export interface IPost {
   user: User;
   content: string;
-  images: string[];
+  medias: string[];
   likes: string[];
   comments: string[];
   _id: string;
@@ -110,7 +110,7 @@ export interface uploadImgState {
 }
 export interface ICreatePost {
   content: string;
-  images: string[];
+  medias: File[];
 }
 
 export interface postUpdate {
@@ -205,6 +205,7 @@ export interface IGlobalState {
 
   isSearchGlobal: boolean;
   isNotificationGlobal: boolean;
+  isAvatarEditGlobal: boolean;
 
   postModalId: string | null; // Add postId to the GlobalState interface
 }
@@ -236,4 +237,13 @@ export interface NotificationState {
   isLoading: boolean;
   isSuccess: boolean;
   message: string;
+}
+
+export interface UpLoadContent {
+  url: string;
+  type: string;
+}
+
+export interface AvatarProps {
+  confirmAvatar: (value: string) => void;
 }

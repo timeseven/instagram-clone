@@ -8,7 +8,7 @@ const postSchema = new mongoose.Schema(
       trim: true,
       maxlength: 2200,
     },
-    images: {
+    medias: {
       type: Array,
       required: true,
     },

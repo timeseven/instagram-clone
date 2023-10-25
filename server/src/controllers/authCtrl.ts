@@ -38,7 +38,14 @@ const registerUser = asyncHandler(async (req: Request, res: Response): Promise<a
     }
 
     //create a user to database
-    const newUser = await new User({ fullname, username, email, password, faceBookId, avatar }).save();
+    const newUser = await new User({
+      fullname,
+      username,
+      email,
+      password,
+      faceBookId,
+      avatar,
+    }).save();
 
     //create access token and refresh token
     const accessToken = await generateAccessToken(newUser?.id);

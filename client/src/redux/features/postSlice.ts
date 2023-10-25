@@ -13,7 +13,13 @@ const initialState: postState = {
 
 export const createPost = createAsyncThunk("post/create", async (data: ICreatePost, thunkAPI) => {
   try {
-    return await postService.createPost(data);
+    const formData = new FormData();
+    formData.append("content", data.content);
+    for (let i = 0; i < data.medias.length; i++) {
+      formData.append("postMedia", data.medias[i]);
+    }
+    console.log(data, "xxxxxxxxx");
+    return await postService.createPost(formData);
   } catch (error) {
     return thunkAPI.rejectWithValue(error);
   }

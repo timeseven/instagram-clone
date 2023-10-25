@@ -4,12 +4,10 @@ import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../redux/store";
 import { getSavePost, getUserPost } from "../../redux/features/postSlice";
-import { getImgPost } from "../../redux/features/uploadImgSlice";
 
 const PostAndSave = () => {
   const { user } = useSelector((state: RootState) => state.auth);
   const { pData } = useSelector((state: RootState) => state.post);
-  const { imgObj } = useSelector((state: RootState) => state.upload);
   const { userData } = useSelector((state: RootState) => state.user);
   const dispatch: AppDispatch = useDispatch();
   const [isEditEnabled, setIsEditEnabled] = useState<boolean>(false);
@@ -34,23 +32,11 @@ const PostAndSave = () => {
   };
 
   const getPostData = () => {
-    dispatch(getUserPost(username)).then((response) => {
-      let imagesData: string[] = [];
-      response.payload.forEach((item: any) => {
-        imagesData.push(...item.images);
-      });
-      dispatch(getImgPost(imagesData));
-    });
+    dispatch(getUserPost(username));
   };
 
   const getSaveData = () => {
-    dispatch(getSavePost(username)).then((response) => {
-      let imagesData: string[] = [];
-      response.payload.forEach((item: any) => {
-        imagesData.push(...item.images);
-      });
-      dispatch(getImgPost(imagesData));
-    });
+    dispatch(getSavePost(username));
   };
 
   useEffect(() => {
@@ -104,13 +90,16 @@ const PostAndSave = () => {
       {pData.length > 0 ? (
         <div className="grow">
           <div className="grid grid-cols-3 grid-flow-row gap-1">
-            {pData.map((item) => (
-              <img
-                className="w-full h-full"
-                src={`${imgObj[item.images[0] as keyof typeof imgObj]}`}
-                key={item.images[0]}
-              />
-            ))}
+            {pData.map((item) =>
+              item.medias[0].includes(".mp4") ? (
+                <video className="aspect-square" width="468" height="468" key={item.medias[0]} autoPlay muted>
+                  <source src={item.medias[0]} type="video/mp4" />
+                  Your browser does not support the video tag.
+                </video>
+              ) : (
+                <img className="aspect-square" width={468} height={468} src={item.medias[0]} key={item.medias[0]} />
+              )
+            )}
           </div>
         </div>
       ) : (

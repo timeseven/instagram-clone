@@ -94,8 +94,8 @@ const Comments: React.FC = () => {
   }, [formik.values.content]);
   return (
     <Helmet title="Comments">
-      <div className="fixed w-full h-screen top-0 left-0 bg-white z-50 overflow-auto tablet:left-[72px] desktop:left-[245px] desktop-lg:left-[335px]">
-        <div className="w-full h-[60px] fixed items-center justify-center top-0 flex z-30 bg-white">
+      <div className="fixed w-full h-screen top-0 left-0 bg-white z-40 overflow-auto tablet:left-[72px] desktop:left-[245px] desktop-lg:left-[335px]">
+        <div className="w-full h-[60px] fixed items-center justify-center top-0 flex  bg-white">
           <div onClick={() => navigate(-1)} className="flex mx-3">
             <AiOutlineLeft className="w-7 h-7" />
           </div>

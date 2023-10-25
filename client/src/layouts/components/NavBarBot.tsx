@@ -1,7 +1,7 @@
 import React from "react";
 import { Link, NavLink } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { AppDispatch } from "../../redux/store";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../../redux/store";
 import { setIsCreatePostGlobal } from "../../redux/features/globalStateSlice";
 import {
   CreateIcon,
@@ -14,8 +14,8 @@ import {
 } from "../../components/Icons";
 import { ClassNameProps } from "../../utils/interface";
 import avatar from "../../images/avatar-default.jpg";
-
 const NavBarBot: React.FC<ClassNameProps> = ({ className }) => {
+  const { user } = useSelector((state: RootState) => state.auth);
   const dispatch: AppDispatch = useDispatch();
   return (
     <div
@@ -34,9 +34,9 @@ const NavBarBot: React.FC<ClassNameProps> = ({ className }) => {
         <div>
           <MessagesIcon className="w-[24px] h-[24px] flex justify-center" />
         </div>
-        <NavLink to="/abcd">
+        <NavLink to={`/${user?.username}`}>
           <div className="w-6 h-6 rounded-[50%]">
-            <img src={avatar} alt="user-avatar" />
+            <img src={user?.avatar || avatar} alt="user-avatar" />
           </div>
         </NavLink>
       </div>

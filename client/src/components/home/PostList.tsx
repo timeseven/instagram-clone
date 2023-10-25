@@ -4,7 +4,6 @@ import { AppDispatch, RootState } from "../../redux/store";
 import PostListSkeleton from "../skeleton/PostListSkeleton";
 import Post from "./Post";
 import { getPost } from "../../redux/features/postSlice";
-import { getImgPost } from "../../redux/features/uploadImgSlice";
 import { getComments } from "../../redux/features/commentSlice";
 import { getUser } from "../../redux/features/userSlice";
 
@@ -19,13 +18,8 @@ const PostList = (props: Props) => {
 
   useEffect(() => {
     console.log("here", message);
-    dispatch(getPost()).then((response: any) => {
-      let imagesData: string[] = [];
-      response.payload.forEach((item: any) => {
-        imagesData.push(...item.images);
-      });
-      dispatch(getImgPost(imagesData));
-    });
+    dispatch(getPost());
+    console.log("post Data", pData);
     dispatch(getComments());
     if (userData === null) {
       dispatch(getUser(user!.username));

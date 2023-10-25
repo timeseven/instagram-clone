@@ -6,7 +6,6 @@ import userReducer from "./features/userSlice";
 import postReducer from "./features/postSlice";
 import commentReducer from "./features/commentSlice";
 import globalStateSlice from "./features/globalStateSlice";
-import uploadImgSlice from "./features/uploadImgSlice";
 import suggestionUserReducer from "./features/suggestionUserSlice";
 import notificationReducer from "./features/notificationSlice";
 
@@ -18,7 +17,6 @@ import notificationReducer from "./features/notificationSlice";
 const reducer = combineReducers({
   auth: authReducer,
   user: userReducer,
-  upload: uploadImgSlice,
   post: postReducer,
   comment: commentReducer,
   suggestionUser: suggestionUserReducer,

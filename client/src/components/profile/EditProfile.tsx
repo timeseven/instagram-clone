@@ -7,7 +7,9 @@ import { AppDispatch, RootState } from "../../redux/store";
 import { editUser } from "../../redux/features/authSlice";
 import { getUser } from "../../redux/features/userSlice";
 import { useNavigate } from "react-router-dom";
-
+import avatar from "../../images/avatar-default.jpg";
+import UploadAvatar from "./UploadAvatar";
+import { setIsAvatarEditGlobalFalse, setIsAvatarEditGlobalTrue } from "../../redux/features/globalStateSlice";
 type EditProfileProps = {
   setOnEdit: (value: boolean) => void;
 };
@@ -23,7 +25,9 @@ let schema = yup.object().shape({
 
 const EditProfile: React.FC<EditProfileProps> = ({ setOnEdit }) => {
   const { user } = useSelector((state: RootState) => state.auth);
+  const { isAvatarEditGlobal } = useSelector((state: RootState) => state.globalState);
   const [isActive, setIsActive] = useState<boolean>(false);
+  const [avatarPre, setAvatarPre] = useState<string>("");
   const dispatch: AppDispatch = useDispatch();
   const navigate = useNavigate();
   const handleBack = () => {
@@ -31,6 +35,7 @@ const EditProfile: React.FC<EditProfileProps> = ({ setOnEdit }) => {
   };
   const formik = useFormik({
     initialValues: {
+      avatar: user?.avatar || avatar,
       username: user?.username || "",
       fullname: user?.fullname || "",
       mobile: user?.mobile || "",
@@ -41,13 +46,20 @@ const EditProfile: React.FC<EditProfileProps> = ({ setOnEdit }) => {
     },
     validationSchema: schema,
     onSubmit: (values) => {
-      console.log("edit profile");
-      dispatch(editUser({ ...values, avatar: "" }));
-      dispatch(getUser(values.username));
-      navigate(`/${values.username}`);
-      setOnEdit(false);
+      console.log("edit profile", values);
+      dispatch(editUser({ ...values })).then(() => {
+        dispatch(getUser(values.username));
+        navigate(`/${values.username}`);
+        setOnEdit(false);
+      });
     },
   });
+
+  const confirmAvatar = (avatar: string) => {
+    dispatch(setIsAvatarEditGlobalFalse());
+    formik.setFieldValue("avatar", avatar);
+    console.log(avatar, "xxx");
+  };
 
   useEffect(() => {
     if (formik.values.username.length > 0 && formik.values.fullname.length > 0) {
@@ -57,8 +69,8 @@ const EditProfile: React.FC<EditProfileProps> = ({ setOnEdit }) => {
     }
   }, [formik.values.username.length, formik.values.fullname.length]);
   return (
-    <div className="fixed w-full h-screen top-0 left-0 bg-white z-50 overflow-auto tablet:left-[72px] desktop:left-[245px] desktop-lg:left-[335px]">
-      <div className="w-full h-[60px] fixed items-center justify-center top-0 flex z-30 bg-white">
+    <div className="fixed w-full h-screen top-0 left-0 bg-white z-40 overflow-auto tablet:left-[72px] desktop:left-[245px] desktop-lg:left-[335px]">
+      <div className="w-full h-[60px] fixed items-center justify-center top-0 flex  bg-white">
         <div className="flex mx-3" onClick={() => handleBack()}>
           <AiOutlineLeft className="w-7 h-7" />
         </div>
@@ -73,14 +85,15 @@ const EditProfile: React.FC<EditProfileProps> = ({ setOnEdit }) => {
       >
         <div className="flex w-full">
           <div className="w-16 h-16 border rounded-[50%] cursor-pointer overflow-hidden">
-            <img src={""} alt="avatar" title="Change profile photo" />
+            <img src={formik.values.avatar} alt="avatar" title="Change profile photo" />
           </div>
           <div className="ml-4 flex flex-col items-center justify-center">
             <div className="w-full h-full flex items-center">username</div>
             <span className="h-full flex bg-white text-blue-600 text-sm font-semibold grow">
-              <p role="button" className="flex items-center">
+              <p onClick={() => dispatch(setIsAvatarEditGlobalTrue())} role="button" className="flex items-center">
                 Change profile photo
               </p>
+              {isAvatarEditGlobal && <UploadAvatar confirmAvatar={confirmAvatar} />}
               <input
                 type="file"
                 name="file"

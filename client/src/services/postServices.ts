@@ -2,7 +2,8 @@ import fetch from "../utils/axiosConfig";
 import { config } from "../utils/axiosConfig";
 import { ICreatePost, postUpdate } from "../utils/interface";
 
-const createPost = async (data: ICreatePost) => {
+const createPost = async (data: FormData) => {
+  console.log("createpost....", data);
   const response = await fetch.post("/post", data, config());
   if (response.data) {
     let userData = JSON.parse(localStorage.getItem("user")!);

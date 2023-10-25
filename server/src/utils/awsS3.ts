@@ -1,6 +1,7 @@
 import { S3Client, PutObjectCommand, GetObjectCommand, DeleteObjectCommand } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import sharp from "sharp";
+import fs from "fs";
 import { AWS_ACCESS_KEY_ID, AWS_S3_BUCKET_NAME, AWS_SECRET_ACCESS_KEY, AWS_REGION } from "../variables";
 
 const client = new S3Client({
@@ -11,12 +12,14 @@ const client = new S3Client({
   },
 });
 
-export const awsUploadImgPost = async (fileUpload: any) => {
-  const fileBuffer = await sharp(fileUpload.path).toBuffer();
+export const awsUploadMediaPost = async (fileUpload: any) => {
+  console.log("awssdfsdfsdf");
+  const fileContent = fs.readFileSync(fileUpload.path);
+  console.log(fileContent);
   const command = new PutObjectCommand({
     Bucket: AWS_S3_BUCKET_NAME,
     Key: fileUpload.filename,
-    Body: fileBuffer,
+    Body: fileContent,
   });
   try {
     await sharp.cache(false);
@@ -30,7 +33,7 @@ export const awsUploadImgPost = async (fileUpload: any) => {
   }
 };
 
-export const awsGetImgPost = async (filename: string) => {
+export const awsGetMediaPost = async (filename: string) => {
   const command = new GetObjectCommand({
     Bucket: AWS_S3_BUCKET_NAME,
     Key: filename,
@@ -43,7 +46,7 @@ export const awsGetImgPost = async (filename: string) => {
   }
 };
 
-export const awsDeleteImgPost = async (filename: string) => {
+export const awsDeleteMediaPost = async (filename: string) => {
   console.log(filename);
   const command = new DeleteObjectCommand({
     Bucket: AWS_S3_BUCKET_NAME,

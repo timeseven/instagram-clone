@@ -5,14 +5,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../redux/store";
 import { setIsCreatePostGlobal } from "../../redux/features/globalStateSlice";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation } from "swiper/modules";
+import { Autoplay, Navigation } from "swiper/modules";
 import EmojiPicker, { EmojiClickData } from "emoji-picker-react";
 import { AiOutlineCamera, AiOutlineClose } from "react-icons/ai";
 import { EmojiIcon, UploadImg } from "../Icons";
 import Load from "../../images/loading.gif";
-import { getImgPost, uploadImgPost } from "../../redux/features/uploadImgSlice";
 import { createPost } from "../../redux/features/postSlice";
 import { createNotification } from "../../redux/features/notificationSlice";
+import { UpLoadContent } from "../../utils/interface";
 let schema = yup.object().shape({
   content: yup.string().required("Content is Required"),
 });
@@ -20,16 +20,14 @@ let schema = yup.object().shape({
 const CreatePost: React.FC = () => {
   const { isCreatePostGlobal } = useSelector((state: RootState) => state.globalState);
   const { user } = useSelector((state: RootState) => state.auth);
-  const { message, iData } = useSelector((state: RootState) => state.upload);
 
   const dispatch: AppDispatch = useDispatch();
 
   const ref = createRef<HTMLInputElement>();
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const refCanvas = useRef<HTMLCanvasElement>(null);
+  // upload content
+  const [content, setContent] = useState<UpLoadContent[]>([]); // blob url shown on frontend
+  const [contentUpload, setContentUpload] = useState<File[]>([]); // file saved on backend
 
-  const [images, setImages] = useState<string[]>([]);
-  const [imageCloud, setImageCloud] = useState<File[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [emoji, setEmoji] = useState<boolean>(false);
 
@@ -39,37 +37,30 @@ const CreatePost: React.FC = () => {
     },
     validationSchema: schema,
     onSubmit: (values) => {
-      // save images to aws first
-      dispatch(uploadImgPost(imageCloud)).then((response) => {
-        if (response.payload.length > 0) {
-          const images = response.payload;
-          setLoading(false);
-          // then create post
-          dispatch(createPost({ ...values, images })).then((response) => {
-            const newPost = response.payload;
-            console.log("create notification");
-            dispatch(
-              createNotification({
-                id: newPost._id,
-                recipients: [...newPost.user.followers],
-                images: newPost.images[0],
-                url: `/${newPost.user.username}/${newPost._id}`,
-                content: `posted: "${newPost.content}"`,
-                user: newPost.user._id,
-              })
-            );
-            setImages([]);
-            formik.resetForm();
-            dispatch(setIsCreatePostGlobal());
-          });
-        }
+      console.log("upload", values, content, contentUpload);
+      dispatch(createPost({ ...values, medias: contentUpload })).then((response) => {
+        const newPost = response.payload;
+        dispatch(
+          createNotification({
+            id: newPost._id,
+            recipients: [...newPost.user.followers],
+            images: newPost.images[0],
+            url: `/${newPost.user.username}/${newPost._id}`,
+            content: `posted: "${newPost.content}"`,
+            user: newPost.user._id,
+          })
+        );
+        setContent([]);
+        formik.resetForm();
+        dispatch(setIsCreatePostGlobal());
       });
     },
   });
 
   const handleCloseModal = () => {
-    setImages([]);
-    setImageCloud([]);
+    setContent([]);
+    setContentUpload([]);
+    formik.resetForm();
     dispatch(setIsCreatePostGlobal());
   };
 
@@ -82,12 +73,41 @@ const CreatePost: React.FC = () => {
   const uploadImages = (e: React.ChangeEvent<HTMLInputElement>) => {
     const fileList: FileList = e.target.files!;
     const filesArray: File[] = Array.from(fileList);
-    let images: string[] = [];
+    let images: UpLoadContent[] = [];
     filesArray.forEach((item) => {
-      images.push(URL.createObjectURL(item));
+      images.push({ url: URL.createObjectURL(item), type: item.type });
     });
-    setImages(images);
-    setImageCloud(filesArray); // used to save images to aws cloud
+    setContent(images);
+    setContentUpload(filesArray); // used to save images to aws cloud
+  };
+
+  // handle Slide change on Video
+  const handleSlideChange = (change: any) => {
+    let activeSlide = document.getElementById("createContent")!.getElementsByClassName("swiper-slide")[
+      change.activeIndex
+    ];
+    let prevSlide = document.getElementById("createContent")!.getElementsByClassName("swiper-slide")[
+      change.previousIndex
+    ];
+    let activeSlideVideo = activeSlide.getElementsByTagName("video");
+    let prevSlideVideo = prevSlide.getElementsByTagName("video");
+    if (activeSlideVideo.length > 0) {
+      activeSlideVideo[0].play();
+    }
+    if (prevSlideVideo.length > 0) {
+      prevSlideVideo[0].pause();
+    }
+  };
+
+  // handle Swiper
+  const handleSwiper = (swiper: any) => {
+    let activeSlide = document.getElementById("createContent")!.getElementsByClassName("swiper-slide")[
+      swiper.activeIndex
+    ];
+    let activeSlideVideo = activeSlide.getElementsByTagName("video");
+    if (activeSlideVideo.length > 0) {
+      activeSlideVideo[0].play();
+    }
   };
 
   // add emoji
@@ -95,20 +115,6 @@ const CreatePost: React.FC = () => {
     formik.setFieldValue("content", formik.values.content + emojiData.emoji);
   };
 
-  useEffect(() => {
-    if (message === "upload/upload-images-post pedding") {
-      setLoading(true);
-    }
-  }, [message]);
-
-  useEffect(() => {
-    if (iData[0] !== undefined && message === "upload/upload-images-post success") {
-      dispatch(getImgPost(iData)); // add valid image url to imgObj
-      const urls = iData.map((image) => image);
-      setImageCloud([]);
-      setImages(urls);
-    }
-  }, [iData, message]);
   return (
     <>
       {isCreatePostGlobal && (
@@ -119,34 +125,46 @@ const CreatePost: React.FC = () => {
           <form
             onSubmit={formik.handleSubmit}
             encType="multipart/form-data"
-            className="flex flex-col w-full h-screen m-auto max-w-[90vw] max-h-[70vh] bg-white rounded-md tablet-lg:max-w-[60vw]"
+            className="flex flex-col w-full h-screen m-auto max-w-[468px] max-h-[70vh] bg-white rounded-md tablet-lg:max-w-[60vw] tablet-lg:h-[510px]"
           >
             <div className="flex items-center justify-center px-4 py-2 border rounded-t-md">
               <span className="w-full flex items-center justify-center font-semibold">Create new post</span>
               <button
                 type="submit"
                 className={`${
-                  images.length > 0 && formik.values.content ? "text-sky-500" : "text-sky-300"
+                  content.length > 0 && formik.values.content ? "text-sky-500" : "text-sky-300"
                 } font-semibold leading-5 flex items-center`}
-                disabled={images.length > 0 && formik.values.content ? false : true}
+                disabled={content.length > 0 && formik.values.content ? false : true}
               >
                 Share
               </button>
             </div>
             <div className="w-full h-full max-h-[calc(70vh-42px)] flex flex-col justify-center tablet-lg:flex-row">
-              <div className="w-full flex h-2/3 items-center justify-center tablet-lg:h-full tablet-lg:w-[40vw]">
-                {images.length > 0 ? (
+              <div
+                id="createContent"
+                className="flex h-2/3 max-h-[468px] items-center justify-center tablet-lg:h-[468px] tablet-lg:w-[468px]"
+              >
+                {content.length > 0 ? (
                   <Swiper
                     navigation={true}
                     modules={[Navigation]}
-                    className="w-full h-full flex items-center justify-center"
+                    onSwiper={(swiper: any) => handleSwiper(swiper)}
+                    onSlideChange={(change: any) => handleSlideChange(change)}
+                    className="w-[468px] h-[468px] flex items-center justify-center"
                   >
-                    {images.map((image, index) => (
+                    {content.map((item, index) => (
                       <SwiperSlide key={index}>
                         <button title="close" className="absolute top-4 right-4">
                           <AiOutlineClose className="w-6 h-6 fill-white" />
                         </button>
-                        <img src={image} alt={image} className="h-full mx-auto" />
+                        {item.type.startsWith("image") ? (
+                          <img className="object-fill" width={468} height={468} src={item.url} alt={item.url} />
+                        ) : (
+                          <video width="468" height="468">
+                            <source className="object-fill" src={item.url} type={item.type} />
+                            Your browser does not support the video tag.
+                          </video>
+                        )}
                       </SwiperSlide>
                     ))}
                   </Swiper>
@@ -168,7 +186,7 @@ const CreatePost: React.FC = () => {
                       name="file"
                       id="file_up"
                       multiple
-                      accept="image/*"
+                      // accept="image/*"
                       ref={ref}
                       onChange={uploadImages}
                     />
@@ -176,7 +194,7 @@ const CreatePost: React.FC = () => {
                   </div>
                 )}
               </div>
-              <div className="flex flex-col w-full h-1/3 justify-center px-3 py-3 bg-white tablet-lg:h-full tablet-lg:w-[20vw] tablet-lg:justify-start">
+              <div className="flex flex-col w-full h-1/3 justify-center px-3 py-3 bg-white tablet-lg:h-[468px] tablet-lg:w-[20vw] tablet-lg:justify-start">
                 <div className="flex">
                   <div className="flex items-center justify-center cursor-pointer">
                     <img src={user?.avatar} alt={user?.username} width={20} height={20} />

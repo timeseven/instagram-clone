@@ -18,7 +18,7 @@ const PORT: string | number = process.env.PORT || 4000;
 dbConnect();
 
 // middleware config
-app.use(express.json()); // parse incoming requests with JSON payloads
+app.use(express.json({ limit: "200mb" })); // parse incoming requests with JSON payloads
 app.use(cookies());
 app.use(cors({ credentials: true, origin: process.env.URL_FRONTEND }));
 

@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../redux/store";
 import { setIsDeletePostGlobal, setIsEditPostGlobal } from "../../redux/features/globalStateSlice";
 import { deletePost, getAPost } from "../../redux/features/postSlice";
-import { deleteImgPost } from "../../redux/features/uploadImgSlice";
 import { useNavigate } from "react-router-dom";
 
 const DeletePost: React.FC = () => {
@@ -13,15 +12,16 @@ const DeletePost: React.FC = () => {
 
   const handleDelete = () => {
     // delete images of post from aws first
-    dispatch(getAPost(postModalId!)).then((response: any) => {
-      console.log("get post id payload", response.payload);
-      dispatch(deleteImgPost(response?.payload[0]?.images)).then(() => {
-        // delete post from mongodb
-        dispatch(deletePost(postModalId!)).then(() => {
-          dispatch(setIsDeletePostGlobal());
-          navigate("/");
-        });
-      });
+    // dispatch(getAPost(postModalId!)).then((response: any) => {
+    //   console.log("get post id payload", response.payload);
+    //   dispatch(deleteImgPost(response?.payload[0]?.images)).then(() => {
+    //     // delete post from mongodb
+
+    //   });
+    // });
+    dispatch(deletePost(postModalId!)).then(() => {
+      dispatch(setIsDeletePostGlobal());
+      navigate("/");
     });
   };
 

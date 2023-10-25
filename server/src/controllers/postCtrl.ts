@@ -2,22 +2,34 @@ import { Request, Response } from "express";
 import asyncHandler from "express-async-handler";
 import Post from "../models/postModel";
 import User from "../models/userModel";
-import { IReqAuth } from "../config/interface";
+import { IPost, IReqAuth } from "../config/interface";
+import fs from "fs";
+import { awsDeleteMediaPost, awsGetMediaPost, awsUploadMediaPost } from "../utils/awsS3";
 
 // create Post
 const createPost = asyncHandler(async (req: IReqAuth, res: Response): Promise<any | void> => {
   try {
-    const { content, images } = req.body;
+    let urls: string[] = [];
+    const { content } = req.body;
+    const files = req.files as Express.Multer.File[];
 
-    // check if the images are uploaded
-    if (images.length === 0) {
-      return res.status(400).json({ msg: "Please upload your images" });
+    // check if the files are uploaded
+    if (files.length === 0) {
+      return res.status(400).json({ msg: "Please upload your images or videos" });
+    }
+    console.log(files, content);
+    // handle fils
+    for (const file of files) {
+      const { path } = file;
+      const cloudPath = await awsUploadMediaPost(file);
+      urls.push(cloudPath);
+      fs.unlinkSync(path);
     }
 
     // create new post
     const newPost = new Post({
       content,
-      images,
+      medias: urls,
       user: req.user?._id,
     });
 
@@ -42,12 +54,22 @@ const createPost = asyncHandler(async (req: IReqAuth, res: Response): Promise<an
 // get Posts from the current user and his following
 const getPosts = asyncHandler(async (req: IReqAuth, res: Response): Promise<void> => {
   try {
-    const posts = await Post.find({
+    const posts = (await Post.find({
       user: [req.user?._id, ...req.user!.following],
     })
       .sort("-createdAt")
-      .populate("user", "avatar username fullname followers");
+      .populate("user", "avatar username fullname followers")) as IPost[];
 
+    // get image or video valid url from aws
+    for (const post of posts) {
+      let urls: string[] = [];
+      console.log("post", post.medias);
+      for (const media of post.medias) {
+        const cloudUrl = await awsGetMediaPost(media);
+        urls.push(cloudUrl!);
+      }
+      post.medias = urls;
+    }
     res.status(200).json(posts);
   } catch (error: any) {
     res.status(400).json({ msg: error.message });
@@ -60,6 +82,19 @@ const getOnePost = asyncHandler(async (req: IReqAuth, res: Response): Promise<vo
     const post = await Post.find({
       _id: req.params?.id,
     }).populate("user", "avatar username fullname followers");
+
+    console.log("a post", post);
+
+    // get image or video valid url from aws
+    // let urls: string[] = [];
+    // if (post) {
+    //   for (const media of post.medias) {
+    //     const cloudUrl = await awsGetMediaPost(media);
+    //     urls.push(cloudUrl!);
+    //   }
+    //   post.medias = urls;
+    // }
+
     res.status(200).json(post);
   } catch (error: any) {
     res.status(400).json({ msg: error.message });
@@ -93,6 +128,17 @@ const getUserPosts = asyncHandler(async (req: IReqAuth, res: Response): Promise<
       .sort("-createdAt")
       .populate("user", "avatar username fullname followers");
 
+    // get image or video valid url from aws
+    for (const post of posts) {
+      let urls: string[] = [];
+      console.log("post", post.medias);
+      for (const media of post.medias) {
+        const cloudUrl = await awsGetMediaPost(media);
+        urls.push(cloudUrl!);
+      }
+      post.medias = urls;
+    }
+
     res.status(200).json(posts);
   } catch (error: any) {
     res.status(400).json({ msg: error.message });
@@ -106,6 +152,17 @@ const getSavedPost = asyncHandler(async (req: IReqAuth, res: Response): Promise<
     const posts = await Post.find({ _id: { $in: user!.saved } })
       .sort("-createdAt")
       .populate("user", "avatar username fullname followers");
+
+    // get image or video valid url from aws
+    for (const post of posts) {
+      let urls: string[] = [];
+      console.log("post", post.medias);
+      for (const media of post.medias) {
+        const cloudUrl = await awsGetMediaPost(media);
+        urls.push(cloudUrl!);
+      }
+      post.medias = urls;
+    }
 
     res.status(200).json(posts);
   } catch (error: any) {
@@ -195,6 +252,12 @@ const deletePost = asyncHandler(async (req: IReqAuth, res: Response): Promise<an
       user: req.user!._id,
     });
 
+    if (post) {
+      for (const media of post.medias) {
+        await awsDeleteMediaPost(media);
+      }
+    }
+    console.log("delete post", post);
     // delete the post id in the post and saved of user
     await User.findOneAndUpdate(
       { _id: req.user?._id },

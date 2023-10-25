@@ -27,8 +27,8 @@ import {
   NotificationsActiveIcon,
   NotificationsIcon,
 } from "../../components/Icons";
-import avatar from "../../images/avatar-default.jpg";
 import { resetUser, searchUser } from "../../redux/features/userSlice";
+import avatar from "../../images/avatar-default.jpg";
 
 const NavBarTop: React.FC = () => {
   const { isSearchGlobal, isNotificationGlobal } = useSelector((state: RootState) => state.globalState);
@@ -231,7 +231,7 @@ const NavBarTop: React.FC = () => {
               <NavLink to={`/${user?.username}`}>
                 <div className="flex items-center m-auto">
                   <div className="w-6 h-6 rounded-[50%]">
-                    <img src={avatar} alt="user-avatar" />
+                    <img src={user?.avatar || avatar} alt="user-avatar" />
                   </div>
                   <span
                     className={`pl-4 text-[#262626] hidden ${isFolded ? "desktop:hidden" : "desktop:inline-block"}`}

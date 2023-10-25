@@ -8,6 +8,7 @@ const initialState: IGlobalState = {
 
   isSearchGlobal: false,
   isNotificationGlobal: false,
+  isAvatarEditGlobal: false,
 
   postModalId: null,
 };
@@ -38,6 +39,12 @@ const globalStateSlice = createSlice({
     setIsNotificationGlobalFalse(state) {
       state.isNotificationGlobal = false;
     },
+    setIsAvatarEditGlobalTrue(state) {
+      state.isAvatarEditGlobal = true;
+    },
+    setIsAvatarEditGlobalFalse(state) {
+      state.isAvatarEditGlobal = false;
+    },
     // Define the setPostId action
     setPostModalId: (state, action) => {
       state.postModalId = action.payload;
@@ -54,6 +61,8 @@ export const { setIsSearchGlobalTrue } = globalStateSlice.actions;
 export const { setIsSearchGlobalFalse } = globalStateSlice.actions;
 export const { setIsNotificationGlobalTrue } = globalStateSlice.actions;
 export const { setIsNotificationGlobalFalse } = globalStateSlice.actions;
+export const { setIsAvatarEditGlobalTrue } = globalStateSlice.actions;
+export const { setIsAvatarEditGlobalFalse } = globalStateSlice.actions;
 export const { setPostModalId } = globalStateSlice.actions;
 
 export default globalStateSlice.reducer;

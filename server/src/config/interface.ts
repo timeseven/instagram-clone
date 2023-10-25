@@ -25,7 +25,7 @@ export interface IUser extends Document {
 //Post interface
 export interface IPost extends Document {
   content: string;
-  images: Array<string>;
+  medias: Array<string>;
   likes: Array<IUser>;
   comments: Array<IComment>;
   user: string;

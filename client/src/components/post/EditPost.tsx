@@ -18,7 +18,6 @@ let schema = yup.object().shape({
 const EditPost: React.FC = () => {
   const { isEditPostGlobal, postModalId } = useSelector((state: RootState) => state.globalState);
   const { user } = useSelector((state: RootState) => state.auth);
-  const { imgObj } = useSelector((state: RootState) => state.upload);
   const { pData } = useSelector((state: RootState) => state.post);
   const dispatch: AppDispatch = useDispatch();
 
@@ -51,7 +50,7 @@ const EditPost: React.FC = () => {
 
   useEffect(() => {
     if (isEditPostGlobal) {
-      setImages(filteredPost.images);
+      setImages(filteredPost.medias);
       setPostId(filteredPost._id);
       formik.setFieldValue("content", filteredPost.content);
     }
@@ -91,7 +90,7 @@ const EditPost: React.FC = () => {
                   >
                     {images.map((image, index) => (
                       <SwiperSlide key={index}>
-                        <img src={`${imgObj[image as keyof typeof imgObj]}`} alt={image} className="h-full mx-auto" />
+                        <img width={468} height={468} src={image} alt={image} className="mx-auto" />
                       </SwiperSlide>
                     ))}
                   </Swiper>

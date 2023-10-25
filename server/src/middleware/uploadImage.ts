@@ -11,21 +11,26 @@ const storage = multer.diskStorage({
   },
   filename: function (req, file, cb) {
     const uniquesuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
-    cb(null, file.fieldname + "-" + uniquesuffix + ".jpeg");
+    if (file.mimetype.startsWith("image")) {
+      cb(null, file.fieldname + "-" + uniquesuffix + ".jpeg");
+    }
+    if (file.mimetype.startsWith("video")) {
+      cb(null, file.fieldname + "-" + uniquesuffix + ".mp4");
+    }
   },
 });
 
 const multerFilter = (req: Request, file: any, cb: FileFilterCallback) => {
   // The function should call `cb` with a boolean
   // to indicate if the file should be accepted
-  if (file.mimetype.startsWith("image")) {
+  if (file.mimetype.startsWith("image") || file.mimetype.startsWith("video")) {
     cb(null, true); // accept
   } else {
     cb(null, false); // reject
   }
 };
 
-export const uploadPhoto = multer({
+export const uploadContent = multer({
   storage: storage,
   fileFilter: multerFilter,
   limits: { fileSize: 2000000 },
