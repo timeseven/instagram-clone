@@ -6,6 +6,9 @@
   .search-input-angle {
     clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%);
   }
+  .round-checkbox {
+    clip-path: circle(50% at 50% 50%);
+  }
 }
 
 body {

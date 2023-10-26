@@ -7,6 +7,7 @@ import DeletePost from "../components/post/DeletePost";
 import EditPost from "../components/post/EditPost";
 import Search from "../components/Search";
 import NotificationBox from "../components/NotificationBox";
+import SendMessage from "../components/messages/SendMessage";
 const MainLayout: React.FC = () => {
   return (
     <div
@@ -20,6 +21,7 @@ const MainLayout: React.FC = () => {
       <CreatePost />
       <DeletePost />
       <EditPost />
+      <SendMessage />
       <NavBarBot className="tablet:hidden" />
     </div>
   );

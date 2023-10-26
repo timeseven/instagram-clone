@@ -136,7 +136,8 @@ const Post: React.FC<PostProps> = ({ post }) => {
   };
 
   const handleEmojiClick = (emojiData: EmojiClickData, event: MouseEvent) => {
-    formik.setFieldValue("content", formik.values.content + emojiData.emoji);
+    formik.values.content = formik.values.content + emojiData.emoji;
+    formik.setFieldValue("content", formik.values.content);
   };
 
   /**useEffect */
@@ -229,9 +230,9 @@ const Post: React.FC<PostProps> = ({ post }) => {
       {lastComment && (
         <div className="mt-2 ml-3">
           {filteredComments.length > 0 ? (
-            <div className="mb-1">
+            <Link to={`/${post._id}/comments`} className="mb-1 cursor-pointer">
               View all <span>{filteredComments.length}</span> comments
-            </div>
+            </Link>
           ) : null}
           <div className="mt-2 flex items-center">
             <Link to={`/`} className="mr-2">
@@ -259,6 +260,7 @@ const Post: React.FC<PostProps> = ({ post }) => {
           placeholder="Add a comment..."
           name="content"
           value={formik.values.content}
+          onFocus={() => setEmoji(false)}
           onChange={formik.handleChange("content")}
         />
       </form>

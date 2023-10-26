@@ -177,7 +177,7 @@ const NavBarTop: React.FC = () => {
               </NavLink>
             </div>
             <div className="tablet:p-2 mb-4 hidden tablet:inline-block">
-              <NavLink to="/">
+              <NavLink to="/direct/inbox">
                 <div className="flex items-center m-auto">
                   <MessagesIcon className="w-[24px] h-[24px] flex justify-center" />
                   <span

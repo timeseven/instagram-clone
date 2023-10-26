@@ -69,3 +69,18 @@ export interface INotification extends Document {
   content: string;
   isRead: boolean;
 }
+
+export interface IMessages extends Document {
+  conversation: IConversation;
+  sender: IUser;
+  recipient: IUser;
+  text: string;
+  media: Array<string>;
+  call: Object;
+}
+
+export interface IConversation extends Document {
+  recipients: Array<IUser>;
+  isRead: boolean;
+  lastMessages: string;
+}

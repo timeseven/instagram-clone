@@ -112,7 +112,8 @@ const CreatePost: React.FC = () => {
 
   // add emoji
   const handleEmojiClick = (emojiData: EmojiClickData, event: MouseEvent) => {
-    formik.setFieldValue("content", formik.values.content + emojiData.emoji);
+    formik.values.content = formik.values.content + emojiData.emoji;
+    formik.setFieldValue("content", formik.values.content);
   };
 
   return (
@@ -208,6 +209,7 @@ const CreatePost: React.FC = () => {
                   placeholder="Write a caption..."
                   value={formik.values.content}
                   onChange={formik.handleChange("content")}
+                  onFocus={() => setEmoji(false)}
                 />
 
                 <div className="relative w-full mt-1">

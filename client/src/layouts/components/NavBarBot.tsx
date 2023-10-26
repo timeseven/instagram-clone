@@ -31,9 +31,9 @@ const NavBarBot: React.FC<ClassNameProps> = ({ className }) => {
         <div onClick={() => dispatch(setIsCreatePostGlobal())}>
           <CreateIcon className="w-[24px] h-[24px] flex justify-center" />
         </div>
-        <div>
+        <NavLink to="/direct/inbox">
           <MessagesIcon className="w-[24px] h-[24px] flex justify-center" />
-        </div>
+        </NavLink>
         <NavLink to={`/${user?.username}`}>
           <div className="w-6 h-6 rounded-[50%]">
             <img src={user?.avatar || avatar} alt="user-avatar" />

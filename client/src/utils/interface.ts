@@ -22,6 +22,13 @@ export interface IResetPassword {
   token: string;
 }
 
+export interface IUserInfo {
+  _id: string;
+  fullname: string;
+  username: string;
+  avatar: string;
+}
+
 export interface IUser {
   _id: string;
   fullname: string;
@@ -202,6 +209,7 @@ export interface IGlobalState {
   isCreatePostGlobal: boolean;
   isDeletePostGlobal: boolean;
   isEditPostGlobal: boolean;
+  isCreateMessageGlobal: boolean;
 
   isSearchGlobal: boolean;
   isNotificationGlobal: boolean;
@@ -246,4 +254,61 @@ export interface UpLoadContent {
 
 export interface AvatarProps {
   confirmAvatar: (value: string) => void;
+}
+
+/* Messages  */
+export interface Call {
+  start: string;
+  end: string;
+  video: boolean;
+  audio: boolean;
+}
+export interface ICreateMessage {
+  conversation: string;
+  sender: string;
+  call?: Call;
+  recipient: string;
+  text?: string;
+  media?: string;
+}
+export interface IMessage {
+  _id: string;
+  conversation: string;
+  sender: User;
+  call: Call;
+  recipient: User;
+  text: string;
+  media: string;
+  createdAt: string;
+}
+
+export interface messagesState {
+  mData: IMessage[];
+  isError: boolean;
+  isLoading: boolean;
+  isSuccess: boolean;
+  message: string;
+}
+
+/* Conversation  */
+export interface INewMessageConversation {
+  _id: string;
+  recipients: User[];
+  lastMessages: string;
+  updatedAt: string;
+}
+export interface IConversation {
+  _id: string;
+  recipients: User[];
+  isRead: boolean;
+  lastMessages: string;
+  updatedAt: string;
+}
+
+export interface conversationState {
+  csData: IConversation[];
+  isError: boolean;
+  isLoading: boolean;
+  isSuccess: boolean;
+  message: string;
 }

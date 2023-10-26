@@ -8,6 +8,8 @@ import commentReducer from "./features/commentSlice";
 import globalStateSlice from "./features/globalStateSlice";
 import suggestionUserReducer from "./features/suggestionUserSlice";
 import notificationReducer from "./features/notificationSlice";
+import conversationReducer from "./features/conversationSlice";
+import messagesReducer from "./features/messagesSlice";
 
 // const persistConfig = {
 //   key: "root",
@@ -21,6 +23,8 @@ const reducer = combineReducers({
   comment: commentReducer,
   suggestionUser: suggestionUserReducer,
   notification: notificationReducer,
+  conversation: conversationReducer,
+  messages: messagesReducer,
   globalState: globalStateSlice,
 });
 
