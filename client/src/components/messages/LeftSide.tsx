@@ -15,7 +15,6 @@ const LeftSide = () => {
   const dispatch: AppDispatch = useDispatch();
 
   const handleIsRead = (csdata: IConversation) => {
-    console.log("isread", csdata.recipients[1]._id);
     if (csdata.recipients[0]._id === user!._id && !csdata.isRead) {
       dispatch(isReadConversation(csdata._id));
     }

@@ -1,3 +1,4 @@
+import { Socket } from "socket.io-client";
 /*     User     */
 export interface IUserLogin {
   email: string;
@@ -318,4 +319,9 @@ export interface conversationState {
 
 export interface ChatBoxProps {
   id: string;
+}
+
+/* Socket  */
+export interface SocketState {
+  sData: Socket | null;
 }

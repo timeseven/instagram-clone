@@ -17,9 +17,7 @@ const PostList = (props: Props) => {
   const dispatch: AppDispatch = useDispatch();
 
   useEffect(() => {
-    console.log("here", message);
     dispatch(getPost());
-    console.log("post Data", pData);
     dispatch(getComments());
     if (userData === null) {
       dispatch(getUser(user!.username));

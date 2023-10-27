@@ -12,7 +12,6 @@ const initialState: ICommentState = {
 
 export const createComment = createAsyncThunk("comment/create", async (data: Comment, thunkAPI) => {
   try {
-    console.log("createComment", data);
     return await commentService.createComment(data);
   } catch (error) {
     return thunkAPI.rejectWithValue(error);
@@ -82,7 +81,6 @@ export const commentSlice = createSlice({
         state.message = action.error.message ?? "An error occurred.";
       })
       .addCase(getComments.pending, (state) => {
-        console.log("getCommentss");
         state.isLoading = true;
       })
       .addCase(getComments.fulfilled, (state, action: PayloadAction<IComment[]>) => {
@@ -99,7 +97,6 @@ export const commentSlice = createSlice({
         state.message = action.error.message ?? "An error occurred.";
       })
       .addCase(getCommentsByPost.pending, (state) => {
-        console.log("getCommentss");
         state.isLoading = true;
       })
       .addCase(getCommentsByPost.fulfilled, (state, action: PayloadAction<IComment[]>) => {

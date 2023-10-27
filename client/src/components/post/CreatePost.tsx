@@ -10,7 +10,7 @@ import EmojiPicker, { EmojiClickData } from "emoji-picker-react";
 import { AiOutlineCamera, AiOutlineClose } from "react-icons/ai";
 import { EmojiIcon, UploadImg } from "../Icons";
 import Load from "../../images/loading.gif";
-import { createPost } from "../../redux/features/postSlice";
+import { createPost, getPost } from "../../redux/features/postSlice";
 import { createNotification } from "../../redux/features/notificationSlice";
 import { UpLoadContent } from "../../utils/interface";
 let schema = yup.object().shape({
@@ -37,21 +37,21 @@ const CreatePost: React.FC = () => {
     },
     validationSchema: schema,
     onSubmit: (values) => {
-      console.log("upload", values, content, contentUpload);
       dispatch(createPost({ ...values, medias: contentUpload })).then((response) => {
+        dispatch(getPost());
         const newPost = response.payload;
         dispatch(
           createNotification({
             id: newPost._id,
             recipients: [...newPost.user.followers],
-            images: newPost.images[0],
+            images: newPost.medias[0],
             url: `/${newPost.user.username}/${newPost._id}`,
             content: `posted: "${newPost.content}"`,
             user: newPost.user._id,
           })
         );
         setContent([]);
-        formik.resetForm();
+        formik.setFieldValue("content", "");
         dispatch(setIsCreatePostGlobal());
       });
     },
@@ -60,7 +60,7 @@ const CreatePost: React.FC = () => {
   const handleCloseModal = () => {
     setContent([]);
     setContentUpload([]);
-    formik.resetForm();
+    formik.setFieldValue("content", "");
     dispatch(setIsCreatePostGlobal());
   };
 
@@ -83,18 +83,19 @@ const CreatePost: React.FC = () => {
 
   // handle Slide change on Video
   const handleSlideChange = (change: any) => {
+    console.log(change, change.activeIndex, change.previousIndex);
     let activeSlide = document.getElementById("createContent")!.getElementsByClassName("swiper-slide")[
       change.activeIndex
     ];
     let prevSlide = document.getElementById("createContent")!.getElementsByClassName("swiper-slide")[
       change.previousIndex
     ];
-    let activeSlideVideo = activeSlide.getElementsByTagName("video");
-    let prevSlideVideo = prevSlide.getElementsByTagName("video");
-    if (activeSlideVideo.length > 0) {
+    let activeSlideVideo = activeSlide?.getElementsByTagName("video");
+    let prevSlideVideo = prevSlide?.getElementsByTagName("video");
+    if (activeSlideVideo?.length > 0) {
       activeSlideVideo[0].play();
     }
-    if (prevSlideVideo.length > 0) {
+    if (prevSlideVideo?.length > 0) {
       prevSlideVideo[0].pause();
     }
   };
@@ -104,8 +105,8 @@ const CreatePost: React.FC = () => {
     let activeSlide = document.getElementById("createContent")!.getElementsByClassName("swiper-slide")[
       swiper.activeIndex
     ];
-    let activeSlideVideo = activeSlide.getElementsByTagName("video");
-    if (activeSlideVideo.length > 0) {
+    let activeSlideVideo = activeSlide?.getElementsByTagName("video");
+    if (activeSlideVideo?.length > 0) {
       activeSlideVideo[0].play();
     }
   };
@@ -114,6 +115,14 @@ const CreatePost: React.FC = () => {
   const handleEmojiClick = (emojiData: EmojiClickData, event: MouseEvent) => {
     formik.values.content = formik.values.content + emojiData.emoji;
     formik.setFieldValue("content", formik.values.content);
+  };
+
+  // handle delete slide
+  const handleDeleteSlide = (slide: UpLoadContent) => {
+    let filterResult: UpLoadContent[] = [];
+    filterResult = content.filter((item) => item.url !== slide.url);
+    console.log("filterResult", filterResult);
+    setContent(filterResult);
   };
 
   return (
@@ -126,7 +135,7 @@ const CreatePost: React.FC = () => {
           <form
             onSubmit={formik.handleSubmit}
             encType="multipart/form-data"
-            className="flex flex-col w-full h-screen m-auto max-w-[468px] max-h-[70vh] bg-white rounded-md tablet-lg:max-w-[60vw] tablet-lg:h-[510px]"
+            className="flex flex-col w-full h-screen m-auto max-w-[468px] max-h-[70vh] bg-white rounded-md tablet-lg:max-w-[702px] tablet-lg:h-[510px]"
           >
             <div className="flex items-center justify-center px-4 py-2 border rounded-t-md">
               <span className="w-full flex items-center justify-center font-semibold">Create new post</span>
@@ -140,10 +149,10 @@ const CreatePost: React.FC = () => {
                 Share
               </button>
             </div>
-            <div className="w-full h-full max-h-[calc(70vh-42px)] flex flex-col justify-center tablet-lg:flex-row">
+            <div className="w-full h-full max-w-[702px] max-h-[calc(70vh-42px)] flex flex-col justify-center tablet-lg:flex-row">
               <div
                 id="createContent"
-                className="flex h-2/3 max-h-[468px] items-center justify-center tablet-lg:h-[468px] tablet-lg:w-[468px]"
+                className="flex h-3/4 max-h-[468px] items-center justify-center tablet-lg:h-[468px] tablet-lg:w-[468px]"
               >
                 {content.length > 0 ? (
                   <Swiper
@@ -151,11 +160,15 @@ const CreatePost: React.FC = () => {
                     modules={[Navigation]}
                     onSwiper={(swiper: any) => handleSwiper(swiper)}
                     onSlideChange={(change: any) => handleSlideChange(change)}
-                    className="w-[468px] h-[468px] flex items-center justify-center"
+                    className="w-full h-full flex items-center justify-center"
                   >
                     {content.map((item, index) => (
                       <SwiperSlide key={index}>
-                        <button title="close" className="absolute top-4 right-4">
+                        <button
+                          title="close"
+                          onClick={() => handleDeleteSlide(item)}
+                          className="absolute top-4 right-4 bg-slate-400"
+                        >
                           <AiOutlineClose className="w-6 h-6 fill-white" />
                         </button>
                         {item.type.startsWith("image") ? (
@@ -195,7 +208,7 @@ const CreatePost: React.FC = () => {
                   </div>
                 )}
               </div>
-              <div className="flex flex-col w-full h-1/3 justify-center px-3 py-3 bg-white tablet-lg:h-[468px] tablet-lg:w-[20vw] tablet-lg:justify-start">
+              <div className="flex flex-col w-full h-1/4 justify-center px-3 py-3 bg-white tablet-lg:h-[468px] tablet-lg:max-w-[234px] tablet-lg:justify-start">
                 <div className="flex">
                   <div className="flex items-center justify-center cursor-pointer">
                     <img src={user?.avatar} alt={user?.username} width={20} height={20} />

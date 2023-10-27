@@ -17,9 +17,7 @@ const Profile: React.FC = () => {
   const dispatch: AppDispatch = useDispatch();
 
   useEffect(() => {
-    console.log("profile", username);
     dispatch(getUser(username));
-    console.log(userData);
   }, [username]);
   return (
     <Helmet title={`Profile • Instagram photos and videos`}>

@@ -84,3 +84,10 @@ export interface IConversation extends Document {
   isRead: boolean;
   lastMessages: string;
 }
+
+export interface ISocket {
+  id: string;
+  socketId: string;
+  online: Array<string>;
+  caller?: string | null;
+}

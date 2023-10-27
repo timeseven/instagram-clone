@@ -18,7 +18,6 @@ export const createPost = createAsyncThunk("post/create", async (data: ICreatePo
     for (let i = 0; i < data.medias.length; i++) {
       formData.append("postMedia", data.medias[i]);
     }
-    console.log(data, "xxxxxxxxx");
     return await postService.createPost(formData);
   } catch (error) {
     return thunkAPI.rejectWithValue(error);
@@ -27,7 +26,6 @@ export const createPost = createAsyncThunk("post/create", async (data: ICreatePo
 
 export const getPost = createAsyncThunk("post/get-current-post", async (_, thunkAPI) => {
   try {
-    console.log("post/get-current-post");
     return await postService.getPost();
   } catch (error) {
     return thunkAPI.rejectWithValue(error);

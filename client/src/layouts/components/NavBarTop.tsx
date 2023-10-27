@@ -63,7 +63,6 @@ const NavBarTop: React.FC = () => {
   };
 
   const handleSearchClick = () => {
-    console.log("click", isSearchGlobal);
     if (isSearchGlobal) {
       dispatch(setIsSearchGlobalFalse());
     } else {

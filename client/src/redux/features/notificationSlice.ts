@@ -14,7 +14,6 @@ export const createNotification = createAsyncThunk(
   "notification/create-notification",
   async (data: ICreateNotification, thunkAPI) => {
     try {
-      console.log("notification slice");
       return await notificationService.createNotification(data);
     } catch (error) {
       return thunkAPI.rejectWithValue(error);

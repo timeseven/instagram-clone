@@ -74,7 +74,6 @@ const CreateConversation: React.FC = () => {
   const handleUser = (data: IUserInfo) => {
     let result: IUserInfo[] = [];
     let tempId: string[] = [];
-    console.log(resultId, data._id, !resultId.includes(data._id));
     if (!resultId.includes(data._id)) {
       result.push(...resultValue);
       tempId.push(...resultId);

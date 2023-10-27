@@ -43,7 +43,7 @@ const ResetPwd: React.FC = () => {
           token: token,
         })
       );
-      formik.resetForm();
+      formik.setFieldValue("password", "");
     },
   });
 

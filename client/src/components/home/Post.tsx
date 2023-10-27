@@ -97,7 +97,6 @@ const Post: React.FC<PostProps> = ({ post }) => {
       swiper.activeIndex
     ];
     let activeSlideVideo = activeSlide.getElementsByTagName("video");
-    console.log(activeSlideVideo, "sdfsdf");
     if (activeSlideVideo.length > 0) {
       activeSlideVideo[0].play();
     }
@@ -110,9 +109,8 @@ const Post: React.FC<PostProps> = ({ post }) => {
     },
     validationSchema: schema,
     onSubmit: async (values) => {
-      console.log("add comment");
       await dispatch(createComment({ ...values, postId })).then((response) => {
-        formik.resetForm();
+        formik.setFieldValue("content", "");
       });
     },
   });

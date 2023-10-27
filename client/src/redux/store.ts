@@ -10,6 +10,7 @@ import suggestionUserReducer from "./features/suggestionUserSlice";
 import notificationReducer from "./features/notificationSlice";
 import conversationReducer from "./features/conversationSlice";
 import messagesReducer from "./features/messagesSlice";
+import socketReducer from "./features/socketSlice";
 
 // const persistConfig = {
 //   key: "root",
@@ -25,6 +26,7 @@ const reducer = combineReducers({
   notification: notificationReducer,
   conversation: conversationReducer,
   messages: messagesReducer,
+  socket: socketReducer,
   globalState: globalStateSlice,
 });
 

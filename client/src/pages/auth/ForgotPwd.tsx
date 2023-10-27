@@ -28,7 +28,7 @@ const ForgotPwd: React.FC = () => {
     validationSchema: schema,
     onSubmit: (values) => {
       dispatch(forgotPassword(values));
-      formik.resetForm();
+      formik.setFieldValue("email", "");
     },
   });
 

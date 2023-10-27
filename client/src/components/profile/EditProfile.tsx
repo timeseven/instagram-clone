@@ -46,7 +46,6 @@ const EditProfile: React.FC<EditProfileProps> = ({ setOnEdit }) => {
     },
     validationSchema: schema,
     onSubmit: (values) => {
-      console.log("edit profile", values);
       dispatch(editUser({ ...values })).then(() => {
         dispatch(getUser(values.username));
         navigate(`/${values.username}`);
@@ -58,7 +57,6 @@ const EditProfile: React.FC<EditProfileProps> = ({ setOnEdit }) => {
   const confirmAvatar = (avatar: string) => {
     dispatch(setIsAvatarEditGlobalFalse());
     formik.setFieldValue("avatar", avatar);
-    console.log(avatar, "xxx");
   };
 
   useEffect(() => {

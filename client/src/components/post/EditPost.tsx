@@ -9,7 +9,7 @@ import { Navigation } from "swiper/modules";
 import EmojiPicker, { EmojiClickData } from "emoji-picker-react";
 import { AiOutlineClose } from "react-icons/ai";
 import { EmojiIcon } from "../Icons";
-import { updatePost } from "../../redux/features/postSlice";
+import { getPost, updatePost } from "../../redux/features/postSlice";
 
 let schema = yup.object().shape({
   content: yup.string().required("Content is Required"),
@@ -34,6 +34,7 @@ const EditPost: React.FC = () => {
     validationSchema: schema,
     onSubmit: async (values) => {
       await dispatch(updatePost({ ...values, postId })).then(() => {
+        dispatch(getPost());
         handleCloseModal();
       });
     },
@@ -67,7 +68,7 @@ const EditPost: React.FC = () => {
           <form
             onSubmit={formik.handleSubmit}
             encType="multipart/form-data"
-            className="flex flex-col w-full h-screen m-auto max-w-[90vw] max-h-[70vh] bg-white rounded-md tablet-lg:max-w-[60vw]"
+            className="flex flex-col w-full h-screen m-auto max-w-[468px] max-h-[70vh] bg-white rounded-md tablet-lg:max-w-[702px] tablet-lg:h-[510px]"
           >
             <div className="flex items-center justify-center px-4 py-2 border rounded-t-md">
               <span className="w-full flex items-center justify-center font-semibold">Edit Content</span>
@@ -81,8 +82,8 @@ const EditPost: React.FC = () => {
                 Finish
               </button>
             </div>
-            <div className="w-full h-full max-h-[calc(70vh-42px)] flex flex-col justify-center tablet-lg:flex-row">
-              <div className="w-full flex h-2/3 items-center justify-center tablet-lg:h-full tablet-lg:w-[40vw]">
+            <div className="w-full h-full max-w-[702px] max-h-[calc(70vh-42px)] flex flex-col justify-center tablet-lg:flex-row">
+              <div className="flex h-3/4 max-h-[468px] items-center justify-center tablet-lg:h-[468px] tablet-lg:w-[468px]">
                 {images.length > 0 && (
                   <Swiper
                     navigation={true}
@@ -97,7 +98,7 @@ const EditPost: React.FC = () => {
                   </Swiper>
                 )}
               </div>
-              <div className="flex flex-col w-full h-1/3 justify-center px-3 py-3 bg-white tablet-lg:h-full tablet-lg:w-[20vw] tablet-lg:justify-start">
+              <div className="flex flex-col w-full h-1/4 justify-center px-3 py-3 bg-white tablet-lg:h-[468px] tablet-lg:max-w-[234px] tablet-lg:justify-start">
                 <div className="flex">
                   <div className="flex items-center justify-center cursor-pointer">
                     <img src={user?.avatar} alt={user?.username} width={20} height={20} />

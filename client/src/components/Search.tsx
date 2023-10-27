@@ -39,7 +39,6 @@ const Search: React.FC = () => {
 
   useEffect(() => {
     setSearchResult(users!.filter((item) => item._id !== user!._id));
-    console.log("users", users);
   }, [users]);
 
   useEffect(() => {

@@ -17,7 +17,7 @@ import { AppDispatch, RootState } from "../../redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import { createMessage, getMessages } from "../../redux/features/messagesSlice";
 import { setConversationModalId, setIsDeleteConversationGlobalTrue } from "../../redux/features/globalStateSlice";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 let schema = yup.object().shape({
   text: yup.string(),
@@ -27,8 +27,12 @@ const ChatBox: React.FC<ChatBoxProps> = ({ id }) => {
   const { user } = useSelector((state: RootState) => state.auth);
   const { csData } = useSelector((state: RootState) => state.conversation);
   const { mData } = useSelector((state: RootState) => state.messages);
+  const { sData } = useSelector((state: RootState) => state.socket);
   const [emoji, setEmoji] = useState<boolean>(false);
+  const [messageConversation, setMessageConversation] = useState<IMessage[]>([]);
+  const [csRecipient, setCsRecipient] = useState<any[]>([]);
   const dispatch: AppDispatch = useDispatch();
+  const navigate = useNavigate();
   /** handle Message Start */
   const formik = useFormik({
     initialValues: {
@@ -36,6 +40,7 @@ const ChatBox: React.FC<ChatBoxProps> = ({ id }) => {
     },
     validationSchema: schema,
     onSubmit: async (values) => {
+      setEmoji(false);
       if (values.text !== "") {
         dispatch(
           createMessage({
@@ -44,32 +49,44 @@ const ChatBox: React.FC<ChatBoxProps> = ({ id }) => {
             recipient: csRecipient[0]!.recipients._id,
             text: values.text,
           })
-        );
+        ).then((response) => {
+          sData!.emit("createMessage", response.payload);
+          scrollBot();
+        });
       }
-      formik.resetForm();
+      formik.setFieldValue("text", "");
     },
   });
 
-  const csRecipient: any = [];
-  csData!.forEach((item) => {
-    if (item._id === id) {
-      item.recipients.forEach((cv) => {
-        if (cv._id !== user!._id) {
-          csRecipient.push({
-            recipients: cv,
-            _id: item._id,
-          });
-        }
-      });
-    }
-  });
+  useEffect(() => {
+    const CsRecipient: any = [];
+    csData!.forEach((item) => {
+      if (item._id === id) {
+        item.recipients.forEach((cv) => {
+          if (cv._id !== user!._id) {
+            CsRecipient.push({
+              recipients: cv,
+              _id: item._id,
+            });
+          }
+        });
+      }
+    });
+    setCsRecipient(CsRecipient);
+  }, [csData]);
 
-  const MessageConversation: IMessage[] = [];
-  mData!.map((msg) => {
-    if (msg.conversation === id) {
-      MessageConversation.push(msg);
-    }
-  });
+  useEffect(() => {
+    const MessageConversation: IMessage[] = [];
+    mData!.map((msg) => {
+      if (msg.conversation === id) {
+        MessageConversation.push(msg);
+      }
+    });
+    setMessageConversation(MessageConversation);
+    setTimeout(() => {
+      scrollBot();
+    }, 100);
+  }, [mData]);
 
   const handleEmojiClick = (emojiData: EmojiClickData, event: MouseEvent) => {
     formik.values.text = formik.values.text + emojiData.emoji;
@@ -78,6 +95,13 @@ const ChatBox: React.FC<ChatBoxProps> = ({ id }) => {
   const handleSettingConversation = (id: string) => {
     dispatch(setIsDeleteConversationGlobalTrue());
     dispatch(setConversationModalId(id));
+  };
+
+  const scrollBot = () => {
+    const containerDiv = document.getElementById("conversationContainer");
+    if (containerDiv) {
+      containerDiv.scrollTop = containerDiv.scrollHeight;
+    }
   };
 
   useEffect(() => {
@@ -90,7 +114,7 @@ const ChatBox: React.FC<ChatBoxProps> = ({ id }) => {
         <>
           <div className="fixed w-[inherit] top-0 flex items-center justify-between h-[60px] px-4 border">
             <div className="flex">
-              <div className="flex items-center mr-4 cursor-pointer tablet:hidden">
+              <div onClick={() => navigate(-1)} className="flex items-center mr-4 cursor-pointer tablet:hidden">
                 <AiOutlineLeft className="w-7 h-7" />
               </div>
               <div className="max-w-[44px] max-h-[44px] rounded-full">
@@ -115,7 +139,10 @@ const ChatBox: React.FC<ChatBoxProps> = ({ id }) => {
               </div>
             </div>
           </div>
-          <div className="fixed flex flex-col w-[inherit] top-[60px] h-[calc(100vh-138px)] border-l overflow-y-auto">
+          <div
+            id="conversationContainer"
+            className="fixed flex flex-col w-[inherit] top-[60px] h-[calc(100vh-138px)] border-l overflow-y-auto"
+          >
             <div className="flex flex-col items-center justify-center p-7">
               <span className="max-w-[100px] max-h-[100px]">
                 <img
@@ -134,7 +161,7 @@ const ChatBox: React.FC<ChatBoxProps> = ({ id }) => {
               </Link>
             </div>
             <div className="flex flex-col-reverse">
-              {MessageConversation!.map((msg) =>
+              {messageConversation!.map((msg) =>
                 msg.sender._id === user!._id ? (
                   <div className="relative flex flex-col items-end justify-end" key={msg._id}>
                     <div className="flex flex-col items-end justify-end">
@@ -145,7 +172,7 @@ const ChatBox: React.FC<ChatBoxProps> = ({ id }) => {
                               <img src={msg.media} alt={msg.media} />
                             </div>
                           ) : (
-                            <div className="max-w-[20rem] py-1 px-2 mt-2 break-words rounded-full bg-sky-400">
+                            <div className="max-w-[20rem] py-1 px-3 mt-2 mr-2 break-words rounded-md bg-sky-400">
                               {msg.text}
                             </div>
                           )}
@@ -168,7 +195,7 @@ const ChatBox: React.FC<ChatBoxProps> = ({ id }) => {
                                 <img src={msg.media} alt={msg.media} />
                               </div>
                             ) : (
-                              <div className="max-w-[20rem] py-1 px-2 mt-2 break-words rounded-full bg-slate-200">
+                              <div className="max-w-[18rem] py-1 px-3 mt-2 break-words rounded-md bg-slate-200">
                                 {msg.text}
                               </div>
                             )}

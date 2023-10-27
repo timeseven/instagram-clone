@@ -11,14 +11,6 @@ const DeletePost: React.FC = () => {
   const navigate = useNavigate();
 
   const handleDelete = () => {
-    // delete images of post from aws first
-    // dispatch(getAPost(postModalId!)).then((response: any) => {
-    //   console.log("get post id payload", response.payload);
-    //   dispatch(deleteImgPost(response?.payload[0]?.images)).then(() => {
-    //     // delete post from mongodb
-
-    //   });
-    // });
     dispatch(deletePost(postModalId!)).then(() => {
       dispatch(setIsDeletePostGlobal());
       navigate("/");

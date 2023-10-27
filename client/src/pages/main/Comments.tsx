@@ -37,7 +37,6 @@ const Comments: React.FC = () => {
     },
     validationSchema: schema,
     onSubmit: async (values) => {
-      console.log("add comment", values, reply);
       if (replyId !== "") {
         await dispatch(createComment({ ...values, postId: id, reply: replyId })).then(() => {
           clearReply();
@@ -61,7 +60,6 @@ const Comments: React.FC = () => {
     formik.setFieldValue("content", `@${values.user.username} `);
     setReply(values.user.username);
     setReplyId(values.reply || values._id); // set second layer or above reply comment under the parent comment id(the reply id of first layer reply comment).
-    console.log("setReplyComment", values, "formik content", formik.values.content);
   };
 
   // clear reply
