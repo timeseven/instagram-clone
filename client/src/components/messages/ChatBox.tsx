@@ -1,17 +1,26 @@
 import React, { useEffect, useState } from "react";
 import { useFormik } from "formik";
 import * as yup from "yup";
-import { CallIcon, EmojiIcon, SettingsMessagesIcon, VideoCallIcon } from "../Icons";
+import {
+  CallActiveIcon,
+  CallIcon,
+  EmojiIcon,
+  SettingsMessagesIcon,
+  UpdateIcon,
+  VideoCallActiveIcon,
+  VideoCallIcon,
+} from "../Icons";
 import EmojiPicker, { EmojiClickData } from "emoji-picker-react";
 import { AiOutlineLeft } from "react-icons/ai";
-import { ChatBoxProps } from "../../utils/interface";
+import { ChatBoxProps, IMessage } from "../../utils/interface";
 import { AppDispatch, RootState } from "../../redux/store";
 import { useDispatch, useSelector } from "react-redux";
-import { getMessages } from "../../redux/features/messagesSlice";
+import { createMessage, getMessages } from "../../redux/features/messagesSlice";
 import { setConversationModalId, setIsDeleteConversationGlobalTrue } from "../../redux/features/globalStateSlice";
+import { Link } from "react-router-dom";
 
 let schema = yup.object().shape({
-  content: yup.string().required("Content is Required"),
+  text: yup.string(),
 });
 
 const ChatBox: React.FC<ChatBoxProps> = ({ id }) => {
@@ -23,10 +32,22 @@ const ChatBox: React.FC<ChatBoxProps> = ({ id }) => {
   /** handle Message Start */
   const formik = useFormik({
     initialValues: {
-      content: "",
+      text: "",
     },
     validationSchema: schema,
-    onSubmit: async (values) => {},
+    onSubmit: async (values) => {
+      if (values.text !== "") {
+        dispatch(
+          createMessage({
+            conversation: id,
+            sender: user!._id,
+            recipient: csRecipient[0]!.recipients._id,
+            text: values.text,
+          })
+        );
+      }
+      formik.resetForm();
+    },
   });
 
   const csRecipient: any = [];
@@ -43,9 +64,16 @@ const ChatBox: React.FC<ChatBoxProps> = ({ id }) => {
     }
   });
 
+  const MessageConversation: IMessage[] = [];
+  mData!.map((msg) => {
+    if (msg.conversation === id) {
+      MessageConversation.push(msg);
+    }
+  });
+
   const handleEmojiClick = (emojiData: EmojiClickData, event: MouseEvent) => {
-    formik.values.content = formik.values.content + emojiData.emoji;
-    formik.setFieldValue("content", formik.values.content);
+    formik.values.text = formik.values.text + emojiData.emoji;
+    formik.setFieldValue("text", formik.values.text);
   };
   const handleSettingConversation = (id: string) => {
     dispatch(setIsDeleteConversationGlobalTrue());
@@ -87,17 +115,83 @@ const ChatBox: React.FC<ChatBoxProps> = ({ id }) => {
               </div>
             </div>
           </div>
-          <div className="fixed w-[inherit] top-[60px] h-[calc(100vh-138px)] border-l overflow-y-auto"></div>
+          <div className="fixed flex flex-col w-[inherit] top-[60px] h-[calc(100vh-138px)] border-l overflow-y-auto">
+            <div className="flex flex-col items-center justify-center p-7">
+              <span className="max-w-[100px] max-h-[100px]">
+                <img
+                  src={csRecipient[0]!.recipients.avatar}
+                  alt={csRecipient[0]!.recipients.avatar}
+                  height={100}
+                  width={100}
+                />
+              </span>
+              <span className="font-semibold my-2">{csRecipient[0]!.recipients.fullname}</span>
+              <Link
+                to={`/${csRecipient[0]!.recipients.username}`}
+                className="border rounded-lg py-1 px-2 font-semibold bg-slate-200"
+              >
+                View Profile
+              </Link>
+            </div>
+            <div className="flex flex-col-reverse">
+              {MessageConversation!.map((msg) =>
+                msg.sender._id === user!._id ? (
+                  <div className="relative flex flex-col items-end justify-end" key={msg._id}>
+                    <div className="flex flex-col items-end justify-end">
+                      {msg.call ? null : (
+                        <>
+                          {msg.media && !msg.text ? (
+                            <div className="max-w-[16rem] mt-2">
+                              <img src={msg.media} alt={msg.media} />
+                            </div>
+                          ) : (
+                            <div className="max-w-[20rem] py-1 px-2 mt-2 break-words rounded-full bg-sky-400">
+                              {msg.text}
+                            </div>
+                          )}
+                        </>
+                      )}
+                      <div className="flex items-end grow">{msg.createdAt}</div>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="relative flex flex-col items-start justify-start" key={msg._id}>
+                    <div className="flex items-start justify-start">
+                      <div className="relative mt-2 w-10 h-10 mx-4">
+                        <img src={csRecipient[0]!.recipients.avatar} alt={csRecipient[0]!.recipients.avatar} />
+                      </div>
+                      <div className="flex flex-col items-start justify-start">
+                        {msg.call ? null : (
+                          <>
+                            {msg.media && !msg.text ? (
+                              <div className="max-w-[16rem] mt-2">
+                                <img src={msg.media} alt={msg.media} />
+                              </div>
+                            ) : (
+                              <div className="max-w-[20rem] py-1 px-2 mt-2 break-words rounded-full bg-slate-200">
+                                {msg.text}
+                              </div>
+                            )}
+                          </>
+                        )}
+                        <div className="flex items-start grow">{msg.createdAt}</div>
+                      </div>
+                    </div>
+                  </div>
+                )
+              )}
+            </div>
+          </div>
           <div className="fixed flex items-center w-[inherit] bottom-0 h-[78px] border overflow">
-            <form className="relative w-[inherit] px-4">
+            <form onSubmit={formik.handleSubmit} className="relative w-[inherit] px-4">
               <input
                 autoComplete="off"
                 placeholder="Send a message..."
-                name="content"
-                value={formik.values.content}
-                onChange={formik.handleChange("content")}
+                name="text"
+                value={formik.values.text}
+                onChange={formik.handleChange("text")}
                 onFocus={() => setEmoji(false)}
-                className="h-[40px] w-full p-4 rounded-full pl-7 pr-12 border"
+                className="h-[40px] w-full p-4 rounded-full pl-9 pr-12 border"
               />
               <div className="absolute top-3 left-6">
                 <span>
@@ -111,7 +205,7 @@ const ChatBox: React.FC<ChatBoxProps> = ({ id }) => {
                   ) : null}
                 </span>
               </div>
-              {formik.values.content !== "" && (
+              {formik.values.text !== "" && (
                 <button type="submit" className="absolute text-sky-500 font-semibold right-7 top-2 cursor-pointer">
                   Send
                 </button>
