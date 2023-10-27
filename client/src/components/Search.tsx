@@ -64,7 +64,7 @@ const Search: React.FC = () => {
       >
         {isSearchGlobal && (
           <div className="flex flex-col h-full">
-            <div className="relative tablet:hidden">
+            <div className="-z-10 relative tablet:hidden">
               <span className="absolute left-1/2 -top-2 bg-white border w-[30px] h-[30px] search-input-angle px-4"></span>
             </div>
             <div className="w-full p-2 mt-10 px-6 mx-auto relative hidden tablet:inline-block">
@@ -76,21 +76,21 @@ const Search: React.FC = () => {
               />
               <AiOutlineSearch className="absolute top-[15px] peer-focus:hidden left-8 w-6 h-6 group-focus:hidden fill-neutral-400" />
             </div>
-            <div className="flex flex-col">
+            <div className="flex flex-col overflow-y-auto">
               {searchResult.length > 0 &&
                 searchResult.map((item) => (
                   <div
                     onClick={() => handleRedirect(item.username)}
-                    className="h-[80px] flex p-4 cursor-point hover:bg-neutral-100"
+                    className="h-[112px] flex p-4 cursor-point hover:bg-neutral-100"
                     key={item._id}
                   >
                     <div className="flex w-full">
-                      <div className="">
+                      <div className="max-w-[80px] max-h-[80px]">
                         <img src={item.avatar} alt="user-profile" height={80} width={80} />
                       </div>
-                      <div className="flex flex-col">
-                        <div className="font-semibold">{item.username}</div>
-                        <div className="text-lg">
+                      <div className="flex flex-col justify-center ml-2">
+                        <div className="flex items-center font-semibold grow">{item.username}</div>
+                        <div className="flex items-center text-lg grow">
                           {item.fullname} · {item.followers.length} followers
                         </div>
                       </div>

@@ -1,7 +1,7 @@
 import React from "react";
 import Helmet from "../../components/Helmet";
 import { AiOutlineLeft } from "react-icons/ai";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { RootState } from "../../redux/store";
 import { useSelector } from "react-redux";
 import LeftSide from "../../components/messages/LeftSide";
@@ -9,6 +9,9 @@ import ChatBox from "../../components/messages/ChatBox";
 import { CreateMessagesIcon } from "../../components/Icons";
 
 const Messages: React.FC = () => {
+  const { id } = useParams() as {
+    id: string;
+  };
   return (
     <Helmet title={`Message • Direct`}>
       <div className="fixed w-full h-screen top-0 left-0 bg-white z-30 overflow-auto tablet:left-[72px] desktop:left-[245px] desktop-lg:left-[335px]">
@@ -22,7 +25,7 @@ const Messages: React.FC = () => {
             <LeftSide />
           </div>
           <div className="fixed w-full h-full tablet:left-[176px] tablet:w-[calc(100vw-176px)] desktop:left-[642px] desktop:w-[calc(100vw-642px)] desktop-lg:left-[732px] desktop-lg:w-[calc(100vw-732px)]">
-            <ChatBox />
+            <ChatBox id={id} />
           </div>
         </div>
       </div>

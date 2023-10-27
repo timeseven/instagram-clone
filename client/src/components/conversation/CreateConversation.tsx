@@ -2,15 +2,15 @@ import React, { KeyboardEvent, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState, AppDispatch } from "../../redux/store";
 import { AiOutlineClose } from "react-icons/ai";
-import { setIsCreateMessageGlobalFalse, setIsCreateMessageGlobalTrue } from "../../redux/features/globalStateSlice";
+import { setIsCreateConversationGlobalFalse } from "../../redux/features/globalStateSlice";
 import { IUserInfo } from "../../utils/interface";
 import useDebounce from "../../hooks/useDebounce";
 import userService from "../../services/userServices";
 import { createConversation } from "../../redux/features/conversationSlice";
 import { useNavigate } from "react-router-dom";
 
-const SendMessage: React.FC = () => {
-  const { isCreateMessageGlobal } = useSelector((state: RootState) => state.globalState);
+const CreateConversation: React.FC = () => {
+  const { isCreateConversationGlobal } = useSelector((state: RootState) => state.globalState);
   const { user } = useSelector((state: RootState) => state.auth);
 
   const [searchValue, setSearchValue] = useState<string>("");
@@ -49,17 +49,23 @@ const SendMessage: React.FC = () => {
     }
   };
   const handleCreateConversation = async () => {
-    // await dispatch(createConversation(resultValue!._id)).then((response) => {
-    //   navigate(`/direct/${response.payload._id}`);
-    // });
-    dispatch(setIsCreateMessageGlobalFalse());
+    if (resultValue.length === 1) {
+      await dispatch(createConversation(resultValue[0]!._id)).then((response) => {
+        navigate(`/direct/${response.payload._id}`);
+      });
+    }
+    if (resultValue.length > 1) {
+      // handle multi user conversation
+    }
+
+    dispatch(setIsCreateConversationGlobalFalse());
     setResultValue([]);
     setResultId([]);
     setSearchValue("");
   };
 
   const handleClose = () => {
-    dispatch(setIsCreateMessageGlobalFalse());
+    dispatch(setIsCreateConversationGlobalFalse());
     setResultValue([]);
     setResultId([]);
     setSearchValue("");
@@ -102,21 +108,9 @@ const SendMessage: React.FC = () => {
     }
   };
 
-  const handleMessage = () => {
-    if (resultId.length === 1) {
-      navigate(`/direct/${resultId[0]}`);
-    }
-    if (resultId.length > 1) {
-      navigate(`/direct`);
-    }
-    dispatch(setIsCreateMessageGlobalFalse());
-    setResultValue([]);
-    setResultId([]);
-    setSearchValue("");
-  };
   return (
     <>
-      {isCreateMessageGlobal && (
+      {isCreateConversationGlobal && (
         <div className="fixed flex items-center justify-center top-0 left-0 w-full h-screen overflow-auto bg-black bg-opacity-50 z-30">
           <div className="w-[30rem] h-[37rem] bg-white rounded-lg">
             <div className="flex w-full h-14 relative border rounded-t-lg">
@@ -185,7 +179,7 @@ const SendMessage: React.FC = () => {
             <div className="flex m-4">
               <button
                 disabled={resultValue.length === 0}
-                onClick={() => handleMessage()}
+                onClick={handleCreateConversation}
                 className={`${
                   resultValue.length === 0 ? "bg-sky-300" : "bg-sky-500"
                 } w-[28rem] h-[3rem] text-sm font-semibold text-white border border-none rounded-lg`}
@@ -200,4 +194,4 @@ const SendMessage: React.FC = () => {
   );
 };
 
-export default SendMessage;
+export default CreateConversation;

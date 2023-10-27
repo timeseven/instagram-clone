@@ -12,7 +12,7 @@ const createConversation = asyncHandler(async (req: IReqAuth, res: Response): Pr
     }).populate("recipients", "avatar username fullname");
 
     if (existingConversation) {
-      res.json(existingConversation);
+      res.status(200).json(existingConversation);
     } else {
       const newConversation = new Conversation({
         recipients: [req.user!._id, req.params.id],

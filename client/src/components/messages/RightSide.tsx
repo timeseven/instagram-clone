@@ -2,7 +2,7 @@ import React from "react";
 import { YourMessagesIcon } from "../Icons";
 import { AppDispatch } from "../../redux/store";
 import { useDispatch } from "react-redux";
-import { setIsCreateMessageGlobalTrue } from "../../redux/features/globalStateSlice";
+import { setIsCreateConversationGlobalTrue } from "../../redux/features/globalStateSlice";
 
 const RightSide: React.FC = () => {
   const dispatch: AppDispatch = useDispatch();
@@ -18,7 +18,7 @@ const RightSide: React.FC = () => {
         </div>
         <div className="flex items-center justify-center">
           <button
-            onClick={() => dispatch(setIsCreateMessageGlobalTrue())}
+            onClick={() => dispatch(setIsCreateConversationGlobalTrue())}
             className="bg-sky-500 h-9 text-sm px-5 font-semibold text-white border border-none rounded-lg"
           >
             Send Messages

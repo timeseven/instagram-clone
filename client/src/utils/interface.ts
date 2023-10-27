@@ -210,12 +210,15 @@ export interface IGlobalState {
   isDeletePostGlobal: boolean;
   isEditPostGlobal: boolean;
   isCreateMessageGlobal: boolean;
+  isCreateConversationGlobal: boolean;
+  isDeleteConversationGlobal: boolean;
 
   isSearchGlobal: boolean;
   isNotificationGlobal: boolean;
   isAvatarEditGlobal: boolean;
 
   postModalId: string | null; // Add postId to the GlobalState interface
+  conversationModalId: string | null;
 }
 
 /* Notification  */
@@ -311,4 +314,8 @@ export interface conversationState {
   isLoading: boolean;
   isSuccess: boolean;
   message: string;
+}
+
+export interface ChatBoxProps {
+  id: string;
 }

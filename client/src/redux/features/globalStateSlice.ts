@@ -7,11 +7,15 @@ const initialState: IGlobalState = {
   isEditPostGlobal: false,
   isCreateMessageGlobal: false,
 
+  isCreateConversationGlobal: false,
+  isDeleteConversationGlobal: false,
+
   isSearchGlobal: false,
   isNotificationGlobal: false,
   isAvatarEditGlobal: false,
 
   postModalId: null,
+  conversationModalId: null,
 };
 
 const globalStateSlice = createSlice({
@@ -52,9 +56,24 @@ const globalStateSlice = createSlice({
     setIsCreateMessageGlobalFalse(state) {
       state.isCreateMessageGlobal = false;
     },
+    setIsCreateConversationGlobalTrue(state) {
+      state.isCreateConversationGlobal = true;
+    },
+    setIsCreateConversationGlobalFalse(state) {
+      state.isCreateConversationGlobal = false;
+    },
+    setIsDeleteConversationGlobalTrue(state) {
+      state.isDeleteConversationGlobal = true;
+    },
+    setIsDeleteConversationGlobalFalse(state) {
+      state.isDeleteConversationGlobal = false;
+    },
     // Define the setPostId action
     setPostModalId: (state, action) => {
       state.postModalId = action.payload;
+    },
+    setConversationModalId: (state, action) => {
+      state.conversationModalId = action.payload;
     },
   },
 });
@@ -72,6 +91,11 @@ export const { setIsAvatarEditGlobalTrue } = globalStateSlice.actions;
 export const { setIsAvatarEditGlobalFalse } = globalStateSlice.actions;
 export const { setIsCreateMessageGlobalTrue } = globalStateSlice.actions;
 export const { setIsCreateMessageGlobalFalse } = globalStateSlice.actions;
+export const { setIsCreateConversationGlobalTrue } = globalStateSlice.actions;
+export const { setIsCreateConversationGlobalFalse } = globalStateSlice.actions;
+export const { setIsDeleteConversationGlobalTrue } = globalStateSlice.actions;
+export const { setIsDeleteConversationGlobalFalse } = globalStateSlice.actions;
 export const { setPostModalId } = globalStateSlice.actions;
+export const { setConversationModalId } = globalStateSlice.actions;
 
 export default globalStateSlice.reducer;
