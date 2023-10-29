@@ -5,6 +5,7 @@ import { AppDispatch, RootState } from "../../redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import ReplyComment from "./ReplyComment";
 import { likeComment, unLikeComment } from "../../redux/features/commentSlice";
+import { getTimesToWeekAgoString } from "../../utils/Times";
 
 const Comment: React.FC<CommentProps> = ({ cmt, setReplyComment, deleteComment }) => {
   const dispatch: AppDispatch = useDispatch();
@@ -47,7 +48,7 @@ const Comment: React.FC<CommentProps> = ({ cmt, setReplyComment, deleteComment }
                 <span className="text-sm flex-wrap">{cmt.content}</span>
               </div>
               <div className="flex w-full mt-1">
-                <p className="text-sm mr-4">1 day</p>
+                <p className="text-sm mr-4">{getTimesToWeekAgoString(cmt.createdAt)}</p>
                 <p className="text-sm font-semibold mr-4 cursor-pointer" onClick={() => setReplyComment(cmt)}>
                   Reply
                 </p>

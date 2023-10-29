@@ -3,17 +3,31 @@ import InfoProfileSkeleton from "../skeleton/InfoProfileSkeleton";
 import EditProfile from "./EditProfile";
 
 import avatar from "../../images/avatar-default.jpg";
-import { useSelector } from "react-redux";
-import { RootState } from "../../redux/store";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../../redux/store";
 import { useParams } from "react-router-dom";
+import { follow, unFollow } from "../../redux/features/authSlice";
 
 const InfoProfile: React.FC = () => {
   const { user } = useSelector((state: RootState) => state.auth);
   const [isEditEnabled, setIsEditEnabled] = useState<boolean>(false);
   const { userData, isLoading } = useSelector((state: RootState) => state.user);
   const [onEdit, setOnEdit] = useState<boolean>(false);
+
+  const dispatch: AppDispatch = useDispatch();
+
   const { username } = useParams() as {
     username: string;
+  };
+
+  // follow user
+  const handleFollow = (id: string) => {
+    dispatch(follow(id));
+  };
+
+  // unfollow user
+  const handleUnFollow = (id: string) => {
+    dispatch(unFollow(id));
   };
 
   useEffect(() => {
@@ -32,16 +46,36 @@ const InfoProfile: React.FC = () => {
               </div>
               <div className="flex flex-col justify-between grow">
                 <div className="text-xl leading-[40px]">{userData?.username}</div>
-                <div className={`${isEditEnabled ? "inline-block" : "hidden"} leading-[32px]`}>
+                {isEditEnabled ? (
+                  <div className="leading-[32px]">
+                    <button
+                      type="button"
+                      className="bg-[#efefef] w-[8rem] h-8 font-semibold text-sm  rounded-md"
+                      title="Edit profile"
+                      onClick={() => setOnEdit(true)}
+                    >
+                      Edit profile
+                    </button>
+                  </div>
+                ) : user!.following.find((obj) => obj._id === userData?._id) ? (
                   <button
                     type="button"
-                    className="bg-[#efefef] w-[8rem] h-8 font-semibold text-sm  rounded-md"
+                    className="bg-sky-300 w-[8rem] h-8 font-semibold text-sm  rounded-md"
                     title="Edit profile"
-                    onClick={() => setOnEdit(true)}
+                    onClick={() => handleUnFollow(userData!._id)}
                   >
-                    Edit profile
+                    unFollow
                   </button>
-                </div>
+                ) : (
+                  <button
+                    type="button"
+                    className="bg-sky-300 w-[8rem] h-8 font-semibold text-sm   rounded-md"
+                    title="Edit profile"
+                    onClick={() => handleFollow(userData!._id)}
+                  >
+                    Follow
+                  </button>
+                )}
               </div>
             </div>
             <div className="px-4 pb-5 leading-4 font-semibold text-sm">{userData?.fullname}</div>
@@ -71,16 +105,36 @@ const InfoProfile: React.FC = () => {
                 <div className="flex flex-col justify-between grow">
                   <div className="flex items-center">
                     <div className="text-xl leading-[40px]">{userData?.username}</div>
-                    <div className={`${isEditEnabled ? "inline-block" : "hidden"} leading-[32px] ml-5`}>
+                    {isEditEnabled ? (
+                      <div className="leading-[32px] ml-5">
+                        <button
+                          type="button"
+                          className="bg-[#efefef] w-[8rem] h-8 font-semibold text-sm  rounded-md"
+                          title="Edit profile"
+                          onClick={() => setOnEdit(true)}
+                        >
+                          Edit profile
+                        </button>
+                      </div>
+                    ) : user!.following.find((obj) => obj._id === userData?._id) ? (
                       <button
-                        onClick={() => setOnEdit(true)}
                         type="button"
-                        className="bg-[#efefef] w-auto px-4 h-8 font-semibold text-sm  rounded-md"
+                        className="bg-sky-300 w-[8rem] h-8 font-semibold text-sm rounded-md ml-5"
                         title="Edit profile"
+                        onClick={() => handleUnFollow(userData!._id)}
                       >
-                        Edit profile
+                        unFollow
                       </button>
-                    </div>
+                    ) : (
+                      <button
+                        type="button"
+                        className="bg-sky-300 w-[8rem] h-8 font-semibold text-sm rounded-md ml-5"
+                        title="Edit profile"
+                        onClick={() => handleFollow(userData!._id)}
+                      >
+                        Follow
+                      </button>
+                    )}
                   </div>
                   <div className="flex">
                     <button className="flex items-center mr-10">

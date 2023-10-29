@@ -11,6 +11,7 @@ import { AppDispatch, RootState } from "../../redux/store";
 import { getAPost } from "../../redux/features/postSlice";
 import { IComment, IPost } from "../../utils/interface";
 import { createComment, deleteComment, getCommentsByPost } from "../../redux/features/commentSlice";
+import { getTimesToWeekAgoString } from "../../utils/Times";
 
 let schema = yup.object().shape({
   content: yup.string().required("Content is Required"),
@@ -161,7 +162,7 @@ const Comments: React.FC = () => {
                   <span className="text-sm flex-wrap">{postData?.content}</span>
                 </div>
                 <div className="flex w-full mt-1">
-                  <p className="text-sm mr-4">{postData?.createdAt}</p>
+                  <p className="text-sm mr-4">{getTimesToWeekAgoString(postData?.createdAt!)}</p>
                 </div>
               </div>
             </div>

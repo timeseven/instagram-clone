@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import asyncHandler from "express-async-handler";
 import Notify from "../models/notificationModel";
 import { IReqAuth } from "../config/interface";
+import { awsGetMediaPost } from "../utils/awsS3";
 
 const createNotify = asyncHandler(async (req: IReqAuth, res: Response): Promise<void> => {
   try {
@@ -32,6 +33,12 @@ const getNotify = asyncHandler(async (req: IReqAuth, res: Response): Promise<voi
     })
       .sort("-createdAt")
       .populate("user", "avatar username following followers");
+
+    // get image or video valid url from aws
+    for (const notify of notifies) {
+      const cloudUrl = await awsGetMediaPost(notify.images);
+      notify.images = cloudUrl || "";
+    }
 
     res.status(200).json(notifies);
   } catch (error: any) {

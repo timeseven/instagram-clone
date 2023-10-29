@@ -7,6 +7,7 @@ import { CreateMessagesIcon } from "../../components/Icons";
 import { getConversations, isReadConversation } from "../../redux/features/conversationSlice";
 import { IConversation } from "../../utils/interface";
 import { getTimesToWeekAgoString } from "../../utils/Times";
+import { setIsCreateConversationGlobalTrue } from "../../redux/features/globalStateSlice";
 
 const LeftSide = () => {
   const { user } = useSelector((state: RootState) => state.auth);
@@ -33,7 +34,10 @@ const LeftSide = () => {
         <div className="w-full flex justify-center text-lg font-semibold mr-7 tablet:hidden desktop:flex">
           {user?.username}
         </div>
-        <div className="mx-3 ml-auto tablet:mx-auto desktop:mr-2">
+        <div
+          onClick={() => dispatch(setIsCreateConversationGlobalTrue())}
+          className="mx-3 ml-auto tablet:mx-auto desktop:mr-2"
+        >
           <CreateMessagesIcon />
         </div>
       </div>

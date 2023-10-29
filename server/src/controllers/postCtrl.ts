@@ -79,23 +79,22 @@ const getPosts = asyncHandler(async (req: IReqAuth, res: Response): Promise<void
 // get One Post
 const getOnePost = asyncHandler(async (req: IReqAuth, res: Response): Promise<void> => {
   try {
-    const post = await Post.find({
+    const posts = await Post.find({
       _id: req.params?.id,
     }).populate("user", "avatar username fullname followers");
 
-    console.log("a post", post);
-
     // get image or video valid url from aws
-    // let urls: string[] = [];
-    // if (post) {
-    //   for (const media of post.medias) {
-    //     const cloudUrl = await awsGetMediaPost(media);
-    //     urls.push(cloudUrl!);
-    //   }
-    //   post.medias = urls;
-    // }
+    for (const post of posts) {
+      let urls: string[] = [];
+      console.log("post", post.medias);
+      for (const media of post.medias) {
+        const cloudUrl = await awsGetMediaPost(media);
+        urls.push(cloudUrl!);
+      }
+      post.medias = urls;
+    }
 
-    res.status(200).json(post);
+    res.status(200).json(posts);
   } catch (error: any) {
     res.status(400).json({ msg: error.message });
   }

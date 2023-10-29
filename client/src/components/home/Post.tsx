@@ -27,6 +27,8 @@ import { Navigation } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import { savePost, unSavePost } from "../../redux/features/userSlice";
+import { getTimesToWeekAgoString } from "../../utils/Times";
+import { AiOutlineClose } from "react-icons/ai";
 
 let schema = yup.object().shape({
   content: yup.string().required("Content is Required"),
@@ -46,6 +48,8 @@ const Post: React.FC<PostProps> = ({ post }) => {
   const [likeCmt, setLikeCmt] = useState<boolean>(false);
   const [savedPost, setSavedPost] = useState<boolean>(false);
   const [emoji, setEmoji] = useState<boolean>(false);
+
+  const [isPreview, setIsPreview] = useState<boolean>(false);
 
   /**handle Post */
   const handlePost = () => {
@@ -75,16 +79,16 @@ const Post: React.FC<PostProps> = ({ post }) => {
 
   // handle Slide change on Video
   const handleSlideChange = (change: any) => {
-    let activeSlide = document.getElementById("postContent")!.getElementsByClassName("swiper-slide")[
+    let activeSlide = document.getElementById(`postContent-${post._id}`)!.getElementsByClassName("swiper-slide")[
       change.activeIndex
     ];
-    let prevSlide = document.getElementById("postContent")!.getElementsByClassName("swiper-slide")[
+    let prevSlide = document.getElementById(`postContent-${post._id}`)!.getElementsByClassName("swiper-slide")[
       change.previousIndex
     ];
     let activeSlideVideo = activeSlide.getElementsByTagName("video");
     let prevSlideVideo = prevSlide.getElementsByTagName("video");
     if (activeSlideVideo.length > 0) {
-      activeSlideVideo[0].play();
+      let playActive = activeSlideVideo[0].play();
     }
     if (prevSlideVideo.length > 0) {
       prevSlideVideo[0].pause();
@@ -92,15 +96,16 @@ const Post: React.FC<PostProps> = ({ post }) => {
   };
 
   // handle Swiper
-  const handleSwiper = (swiper: any) => {
-    let activeSlide = document.getElementById("postContent")!.getElementsByClassName("swiper-slide")[
-      swiper.activeIndex
-    ];
-    let activeSlideVideo = activeSlide.getElementsByTagName("video");
-    if (activeSlideVideo.length > 0) {
-      activeSlideVideo[0].play();
-    }
-  };
+  // const handleSwiper = (swiper: any) => {
+  //   console.log("fsdfsdf");
+  //   let activeSlide = document.getElementById(`postContent-${post._id}`)!.getElementsByClassName("swiper-slide")[
+  //     swiper.activeIndex
+  //   ];
+  //   let activeSlideVideo = activeSlide.getElementsByTagName("video");
+  //   if (activeSlideVideo.length > 0) {
+  //     activeSlideVideo[0].play();
+  //   }
+  // };
 
   /** handle Comment Start */
   const formik = useFormik({
@@ -173,7 +178,7 @@ const Post: React.FC<PostProps> = ({ post }) => {
         </Link>
         <div className="flex items-center ml-4">
           <div className="text-neutral-500 mr-1">•</div>
-          <div className="text-neutral-500">14 hours ago</div>
+          <div className="text-neutral-500">{getTimesToWeekAgoString(post.createdAt)}</div>
         </div>
         <div onClick={() => handlePost()} className="absolute right-0 cursor-pointer">
           <span>
@@ -181,18 +186,40 @@ const Post: React.FC<PostProps> = ({ post }) => {
           </span>
         </div>
       </div>
-      <div id="postContent" className="mt-2">
+      <div
+        id={`postContent-${post._id}`}
+        className={`${
+          isPreview ? "fixed mt-0 flex top-0 left-0 w-full h-screen overflow-auto bg-black bg-opacity-90 z-50" : "mt-2"
+        }`}
+      >
+        <button
+          onClick={() => {
+            setIsPreview(false);
+          }}
+          title="close"
+          className={`${isPreview ? "inline-block" : "hidden"} absolute top-4 right-4 cursor-pointer`}
+        >
+          <AiOutlineClose className="w-6 h-6 fill-white" />
+        </button>
         <Swiper
           navigation={true}
           modules={[Navigation]}
-          onSwiper={(swiper: any) => handleSwiper(swiper)}
+          // onSwiper={(swiper: any) => handleSwiper(swiper)}
           onSlideChange={(change: any) => handleSlideChange(change)}
-          className="w-[468px] h-[468px] flex items-center justify-center"
+          className={`${
+            isPreview ? "w-full h-[80vh] top-[10vh]" : "w-[468px] h-[468px] flex items-center justify-center"
+          } `}
         >
           {post.medias.map((media, index) => (
-            <SwiperSlide key={index}>
+            <SwiperSlide
+              className={`cursor-pointer ${
+                isPreview ? "w-[468px] h-[468px] left-0  mobile:left-[calc(50vw-234px)] top-[calc(50vh-350px)]" : ""
+              }`}
+              key={index}
+              onClick={() => setIsPreview(!isPreview)}
+            >
               {media.includes(".mp4") ? (
-                <video width="468" height="468" autoPlay muted>
+                <video width={468} height={468} autoPlay muted={!isPreview} controls={isPreview}>
                   <source src={media} type="video/mp4" />
                   Your browser does not support the video tag.
                 </video>
@@ -204,16 +231,16 @@ const Post: React.FC<PostProps> = ({ post }) => {
         </Swiper>
       </div>
       <div className="flex mt-1">
-        <span className="mx-1" onClick={handleLike}>
+        <span className="mx-1 cursor-pointer" onClick={handleLike}>
           {like ? <UnlikeIcon /> : <LikeIcon />}
         </span>
         <Link to={`/${post._id}/comments`}>
           <CommentIcon />
         </Link>
-        <span className="mx-1 grow">
+        <span className="mx-1 cursor-pointer grow">
           <ShareIcon />
         </span>
-        <span className="mx-1" onClick={handleSave}>
+        <span className="mx-1 cursor-pointer" onClick={handleSave}>
           {savedPost ? <SaveActiveIcon /> : <SaveIcon />}
         </span>
       </div>

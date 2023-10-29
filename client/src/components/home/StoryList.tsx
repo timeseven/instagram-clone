@@ -10,15 +10,22 @@ const StoryList = (props: Props) => {
     {
       media: "",
       user: {
-        avatar: require("../../images/avatar-default.jpg"),
-        username: "user1",
+        avatar: require("../../images/story-avatar1.png"),
+        username: "hanah",
       },
     },
     {
       media: "",
       user: {
-        avatar: require("../../images/avatar-default.jpg"),
-        username: "user2",
+        avatar: require("../../images/story-avatar2.png"),
+        username: "victoria",
+      },
+    },
+    {
+      media: "",
+      user: {
+        avatar: require("../../images/story-avatar3.png"),
+        username: "brad",
       },
     },
   ];

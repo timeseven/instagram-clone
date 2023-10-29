@@ -12,9 +12,11 @@ import Helmet from "../../components/Helmet";
 
 // images/logo
 import logo from "../../images/logo.png";
+import avatar from "../../images/avatar-default.jpg";
 import appStore from "../../images/app-store.png";
 import googlePlay from "../../images/google-play.png";
 import { AiFillFacebook } from "react-icons/ai";
+import { convertImgToBase64 } from "../../utils/convertImgBase64";
 
 // set schema for validation
 let schema = yup.object().shape({
@@ -37,6 +39,7 @@ const SignUp: React.FC = () => {
       fullname: "",
       username: "",
       password: "",
+      avatar: "",
     },
     validationSchema: schema,
     onSubmit: (values) => {
@@ -50,6 +53,9 @@ const SignUp: React.FC = () => {
     } else {
       dispatch(resetUser());
     }
+    convertImgToBase64(avatar, "jpeg", (base64: string) => {
+      formik.setFieldValue("avatar", base64);
+    });
   }, [user, navigate]);
 
   // jusdge button isActive

@@ -74,7 +74,7 @@ const ChatBox: React.FC<ChatBoxProps> = ({ id }) => {
       }
     });
     setCsRecipient(CsRecipient);
-  }, [csData]);
+  }, [csData, id]);
 
   useEffect(() => {
     const MessageConversation: IMessage[] = [];

@@ -102,7 +102,11 @@ const NotificationBox: React.FC = () => {
                         )}
                       </>
                     ) : (
-                      <Link to={notif.url} className="absolute right-6 w-11 h-11 mr-2">
+                      <Link
+                        onClick={() => handleIsRead(notif._id)}
+                        to={notif.url}
+                        className="absolute right-6 w-11 h-11 mr-2"
+                      >
                         <img src={notif.images} alt={notif.images} />
                       </Link>
                     )}

@@ -15,12 +15,23 @@ import { AppDispatch, RootState } from "../redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import { setSocket } from "../redux/features/socketSlice";
 import SocketClient from "../SocketClient";
+import { setIsNotificationGlobalFalse, setIsSearchGlobalFalse } from "../redux/features/globalStateSlice";
 const MainLayout: React.FC = () => {
   const { sData } = useSelector((state: RootState) => state.socket);
+  const { isSearchGlobal, isNotificationGlobal } = useSelector((state: RootState) => state.globalState);
   const { user } = useSelector((state: RootState) => state.auth);
   const dispatch: AppDispatch = useDispatch();
   const socketIo = io(BASE_URL_SOCKET);
   const socketRef = useRef<Socket>(socketIo);
+
+  const handleCloseSearchAndNotif = () => {
+    if (isNotificationGlobal === true) {
+      dispatch(setIsNotificationGlobalFalse());
+    }
+    if (isSearchGlobal === true) {
+      dispatch(setIsSearchGlobalFalse());
+    }
+  };
 
   useEffect(() => {
     socketRef.current = socketIo;
@@ -35,7 +46,9 @@ const MainLayout: React.FC = () => {
     >
       {user?.token && <SocketClient />}
       <NavBarTop />
-      <Outlet />
+      <div className="w-screen h-screen" onClick={() => handleCloseSearchAndNotif()}>
+        <Outlet />
+      </div>
       <Search />
       <NotificationBox />
       <CreatePost />

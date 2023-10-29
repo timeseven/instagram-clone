@@ -30,8 +30,7 @@ const Search: React.FC = () => {
     }
   };
 
-  const handleBlur = () => {
-    dispatch(setIsSearchGlobalFalse());
+  const handleClearSearch = () => {
     dispatch(resetUser());
     setSearchValue("");
     setSearchResult([]);
@@ -40,6 +39,12 @@ const Search: React.FC = () => {
   useEffect(() => {
     setSearchResult(users!.filter((item) => item._id !== user!._id));
   }, [users]);
+
+  useEffect(() => {
+    if (!isSearchGlobal) {
+      handleClearSearch();
+    }
+  }, [isSearchGlobal]);
 
   useEffect(() => {
     if (!debouncedValue.trim()) {
@@ -80,7 +85,7 @@ const Search: React.FC = () => {
                 searchResult.map((item) => (
                   <div
                     onClick={() => handleRedirect(item.username)}
-                    className="h-[112px] flex p-4 cursor-point hover:bg-neutral-100"
+                    className="h-[112px] flex p-4 cursor-pointer hover:bg-neutral-100"
                     key={item._id}
                   >
                     <div className="flex w-full">

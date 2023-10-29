@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { PostsIcon, SavedIcon } from "../Icons";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../redux/store";
 import { getSavePost, getUserPost } from "../../redux/features/postSlice";
@@ -10,8 +10,10 @@ const PostAndSave = () => {
   const { pData } = useSelector((state: RootState) => state.post);
   const { userData } = useSelector((state: RootState) => state.user);
   const dispatch: AppDispatch = useDispatch();
+  const navigate = useNavigate();
   const [isEditEnabled, setIsEditEnabled] = useState<boolean>(false);
   const [isSelected, setIsSelected] = useState<number>(1);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const { username } = useParams() as {
     username: string;
   };
@@ -32,11 +34,17 @@ const PostAndSave = () => {
   };
 
   const getPostData = () => {
-    dispatch(getUserPost(username));
+    setIsLoading(true);
+    dispatch(getUserPost(username)).then(() => {
+      setIsLoading(false);
+    });
   };
 
   const getSaveData = () => {
-    dispatch(getSavePost(username));
+    setIsLoading(true);
+    dispatch(getSavePost(username)).then(() => {
+      setIsLoading(false);
+    });
   };
 
   useEffect(() => {
@@ -87,19 +95,27 @@ const PostAndSave = () => {
           </div>
         ))}
       </div>
-      {pData.length > 0 ? (
+      {!isLoading && pData.length > 0 ? (
         <div className="grow">
           <div className="grid grid-cols-3 grid-flow-row gap-1">
-            {pData.map((item) =>
-              item.medias[0].includes(".mp4") ? (
-                <video className="aspect-square" width="468" height="468" key={item.medias[0]} autoPlay muted>
-                  <source src={item.medias[0]} type="video/mp4" />
-                  Your browser does not support the video tag.
-                </video>
-              ) : (
-                <img className="aspect-square" width={468} height={468} src={item.medias[0]} key={item.medias[0]} />
-              )
-            )}
+            {pData.map((item) => (
+              <span
+                className="cursor-pointer"
+                key={item._id}
+                onClick={() => {
+                  navigate(`/${item.user.username}/${item._id}`);
+                }}
+              >
+                {item.medias[0].includes(".mp4") ? (
+                  <video className="aspect-square" width="468" height="468" key={item.medias[0]} autoPlay muted>
+                    <source src={item.medias[0]} type="video/mp4" />
+                    Your browser does not support the video tag.
+                  </video>
+                ) : (
+                  <img className="aspect-square" width={468} height={468} src={item.medias[0]} key={item.medias[0]} />
+                )}
+              </span>
+            ))}
           </div>
         </div>
       ) : (

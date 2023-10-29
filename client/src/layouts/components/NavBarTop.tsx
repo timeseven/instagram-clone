@@ -49,13 +49,16 @@ const NavBarTop: React.FC = () => {
 
   const handleCreate = () => {
     dispatch(setIsCreatePostGlobal());
-    dispatch(setIsSearchGlobalFalse());
-    dispatch(setIsNotificationGlobalFalse());
+    handleCloseSearchAndNotif();
   };
-  const handleBlur = () => {
-    dispatch(setIsSearchGlobalFalse());
-    dispatch(resetUser());
-    setSearchValue("");
+
+  const handleCloseSearchAndNotif = () => {
+    if (isNotificationGlobal === true) {
+      dispatch(setIsNotificationGlobalFalse());
+    }
+    if (isSearchGlobal === true) {
+      dispatch(setIsSearchGlobalFalse());
+    }
   };
   const handleFocus = () => {
     dispatch(setIsSearchGlobalTrue());
@@ -96,6 +99,10 @@ const NavBarTop: React.FC = () => {
     } else {
       setIsFolded(false);
     }
+    if (!isSearchGlobal) {
+      dispatch(resetUser());
+      setSearchValue("");
+    }
   }, [isSearchGlobal, isNotificationGlobal]);
 
   return (
@@ -112,6 +119,7 @@ const NavBarTop: React.FC = () => {
                    ${isFolded ? "desktop:items-center" : "desktop:items-start"}`}
         >
           <div
+            onClick={() => handleCloseSearchAndNotif()}
             className={`h-full flex items-center justify-start flex-1
                      tablet:w-[48px] tablet:h-[92px] tablet:items-center tablet:justify-center
                      desktop: transition-[width] desktop: duration-300
@@ -139,7 +147,7 @@ const NavBarTop: React.FC = () => {
                      tablet:pt-3 tablet:flex-col 
                      desktop:items-start"
           >
-            <div className="mb-4 hidden tablet:p-2 tablet:inline-block">
+            <div className="mb-4 hidden tablet:p-2 tablet:inline-block" onClick={() => handleCloseSearchAndNotif()}>
               <NavLink to="/">
                 <div className="flex items-center m-auto">
                   <HomeIcon className="w-[24px] h-[24px] flex justify-center" />
@@ -163,7 +171,7 @@ const NavBarTop: React.FC = () => {
                 </span>
               </div>
             </div>
-            <div className="tablet:p-2 mb-4 hidden tablet:inline-block">
+            <div className="tablet:p-2 mb-4 hidden tablet:inline-block" onClick={() => handleCloseSearchAndNotif()}>
               <NavLink to="/">
                 <div className="flex items-center m-auto">
                   <ExploreIcon className="w-[24px] h-[24px] flex justify-center" />
@@ -175,7 +183,7 @@ const NavBarTop: React.FC = () => {
                 </div>
               </NavLink>
             </div>
-            <div className="tablet:p-2 mb-4 hidden tablet:inline-block">
+            <div className="tablet:p-2 mb-4 hidden tablet:inline-block" onClick={() => handleCloseSearchAndNotif()}>
               <NavLink to="/direct/inbox">
                 <div className="flex items-center m-auto">
                   <MessagesIcon className="w-[24px] h-[24px] flex justify-center" />
@@ -194,7 +202,7 @@ const NavBarTop: React.FC = () => {
                 value={searchValue}
                 onChange={handleSearchChange}
                 onFocus={() => handleFocus()}
-                onBlur={() => handleBlur()}
+                // onBlur={() => handleBlur()}
               />
               <AiOutlineSearch className="absolute top-[15px] peer-focus:hidden left-5 w-6 h-6 group-focus:hidden fill-neutral-400" />
             </div>
@@ -226,7 +234,10 @@ const NavBarTop: React.FC = () => {
                 </div>
               </button>
             </div>
-            <div className="tablet:p-2 mb-4 hidden tablet:inline-block">
+            <div
+              className="tablet:p-2 mb-4 hidden tablet:inline-block grow"
+              onClick={() => handleCloseSearchAndNotif()}
+            >
               <NavLink to={`/${user?.username}`}>
                 <div className="flex items-center m-auto">
                   <div className="w-6 h-6 rounded-[50%]">
@@ -243,7 +254,10 @@ const NavBarTop: React.FC = () => {
           </div>
           <div className="tablet:p-2 mb-3 hidden tablet:inline-block">
             <button
-              onClick={() => setIsMenuMore(!isMenuMore)}
+              onClick={() => {
+                setIsMenuMore(!isMenuMore);
+                handleCloseSearchAndNotif();
+              }}
               className="flex items-center justify-center"
               type="button"
               title="more options"
@@ -260,10 +274,12 @@ const NavBarTop: React.FC = () => {
             >
               <div className="border-t p-1 w-full">
                 <button
-                  onClick={() => dispatch(logout())}
+                  onClick={() => {
+                    dispatch(logout());
+                  }}
                   type="button"
                   title="logout"
-                  className="w-full cursor-pointer"
+                  className="w-full cursor-pointer text-red-500"
                 >
                   Logout
                 </button>

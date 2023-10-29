@@ -5,14 +5,15 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../redux/store";
 import { setIsCreatePostGlobal } from "../../redux/features/globalStateSlice";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Autoplay, Navigation } from "swiper/modules";
+import { Navigation } from "swiper/modules";
 import EmojiPicker, { EmojiClickData } from "emoji-picker-react";
-import { AiOutlineCamera, AiOutlineClose } from "react-icons/ai";
+import { AiOutlineClose } from "react-icons/ai";
 import { EmojiIcon, UploadImg } from "../Icons";
 import Load from "../../images/loading.gif";
-import { createPost, getPost } from "../../redux/features/postSlice";
+import { createPost, getPost, getUserPost } from "../../redux/features/postSlice";
 import { createNotification } from "../../redux/features/notificationSlice";
 import { UpLoadContent } from "../../utils/interface";
+import { useParams } from "react-router-dom";
 let schema = yup.object().shape({
   content: yup.string().required("Content is Required"),
 });
@@ -20,7 +21,9 @@ let schema = yup.object().shape({
 const CreatePost: React.FC = () => {
   const { isCreatePostGlobal } = useSelector((state: RootState) => state.globalState);
   const { user } = useSelector((state: RootState) => state.auth);
-
+  const { username } = useParams() as {
+    username: string;
+  };
   const dispatch: AppDispatch = useDispatch();
 
   const ref = createRef<HTMLInputElement>();
@@ -38,7 +41,12 @@ const CreatePost: React.FC = () => {
     validationSchema: schema,
     onSubmit: (values) => {
       dispatch(createPost({ ...values, medias: contentUpload })).then((response) => {
-        dispatch(getPost());
+        if (username) {
+          dispatch(getUserPost(username));
+        } else {
+          dispatch(getPost());
+        }
+
         const newPost = response.payload;
         dispatch(
           createNotification({
