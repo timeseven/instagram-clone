@@ -19,6 +19,7 @@ import { createMessage, getMessages } from "../../redux/features/messagesSlice";
 import { setConversationModalId, setIsDeleteConversationGlobalTrue } from "../../redux/features/globalStateSlice";
 import { Link, useNavigate } from "react-router-dom";
 import { getTimesMessagesString } from "../../utils/Times";
+import Load from "../../images/loading.gif";
 
 let schema = yup.object().shape({
   text: yup.string(),
@@ -32,6 +33,7 @@ const ChatBox: React.FC<ChatBoxProps> = ({ id }) => {
   const [emoji, setEmoji] = useState<boolean>(false);
   const [messageConversation, setMessageConversation] = useState<IMessage[]>([]);
   const [csRecipient, setCsRecipient] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const dispatch: AppDispatch = useDispatch();
   const navigate = useNavigate();
   /** handle Message Start */
@@ -106,7 +108,8 @@ const ChatBox: React.FC<ChatBoxProps> = ({ id }) => {
   };
 
   useEffect(() => {
-    dispatch(getMessages(id));
+    setIsLoading(true);
+    dispatch(getMessages(id)).then(() => setIsLoading(false));
   }, [dispatch, id]);
 
   return (
@@ -162,40 +165,14 @@ const ChatBox: React.FC<ChatBoxProps> = ({ id }) => {
               </Link>
             </div>
             <div className="flex flex-col-reverse">
-              {messageConversation!.map((msg, idx) =>
-                msg.sender._id === user!._id ? (
-                  <div className="relative flex flex-col items-end justify-end" key={msg._id}>
-                    <div className="flex flex-col items-end justify-end">
-                      <div className="flex w-screen items-center justify-center grow tablet:w-[calc(100vw-104px-72px)] desktop:w-[calc(100vw-397px-245px)] desktop-lg:w-[calc(100vw-397px-335px)]">
-                        {idx < messageConversation.length - 1 &&
-                        getTimesMessagesString(messageConversation[idx].createdAt) ===
-                          getTimesMessagesString(messageConversation[idx + 1].createdAt)
-                          ? ""
-                          : getTimesMessagesString(msg.createdAt)}
-                      </div>
-                      {msg.call ? null : (
-                        <>
-                          {msg.media && !msg.text ? (
-                            <div className="max-w-[16rem] mt-2">
-                              <img src={msg.media} alt={msg.media} />
-                            </div>
-                          ) : (
-                            <div className="max-w-[20rem] py-1 px-3 mt-2 mr-2 break-words rounded-md bg-sky-400">
-                              {msg.text}
-                            </div>
-                          )}
-                        </>
-                      )}
-                    </div>
-                  </div>
-                ) : (
-                  <div className="relative flex flex-col items-start justify-start" key={msg._id}>
-                    <div className="flex items-start justify-start">
-                      <div className="relative mt-2 w-10 h-10 mx-4">
-                        <img src={csRecipient[0]!.recipients.avatar} alt={csRecipient[0]!.recipients.avatar} />
-                      </div>
-                      <div className="flex flex-col items-start justify-start">
-                        <div className="flex w-[calc(100vw-9rem)] items-center justify-center grow tablet:w-[calc(100vw-104px-72px-9rem)] desktop:w-[calc(100vw-397px-245px-9rem)] desktop-lg:w-[calc(100vw-397px-335px-9rem)]">
+              {isLoading ? (
+                <img className="mx-auto" src={Load} alt={Load} width={20} height={20} />
+              ) : (
+                messageConversation!.map((msg, idx) =>
+                  msg.sender._id === user!._id ? (
+                    <div className="relative flex flex-col items-end justify-end" key={msg._id}>
+                      <div className="flex flex-col items-end justify-end">
+                        <div className="flex w-screen items-center justify-center grow tablet:w-[calc(100vw-104px-72px)] desktop:w-[calc(100vw-397px-245px)] desktop-lg:w-[calc(100vw-397px-335px)]">
                           {idx < messageConversation.length - 1 &&
                           getTimesMessagesString(messageConversation[idx].createdAt) ===
                             getTimesMessagesString(messageConversation[idx + 1].createdAt)
@@ -209,7 +186,7 @@ const ChatBox: React.FC<ChatBoxProps> = ({ id }) => {
                                 <img src={msg.media} alt={msg.media} />
                               </div>
                             ) : (
-                              <div className="max-w-[18rem] py-1 px-3 mt-2 break-words rounded-md bg-slate-200">
+                              <div className="max-w-[20rem] py-1 px-3 mt-2 mr-2 break-words rounded-md bg-sky-400">
                                 {msg.text}
                               </div>
                             )}
@@ -217,7 +194,37 @@ const ChatBox: React.FC<ChatBoxProps> = ({ id }) => {
                         )}
                       </div>
                     </div>
-                  </div>
+                  ) : (
+                    <div className="relative flex flex-col items-start justify-start" key={msg._id}>
+                      <div className="flex items-start justify-start">
+                        <div className="relative mt-2 w-10 h-10 mx-4">
+                          <img src={csRecipient[0]!.recipients.avatar} alt={csRecipient[0]!.recipients.avatar} />
+                        </div>
+                        <div className="flex flex-col items-start justify-start">
+                          <div className="flex w-[calc(100vw-9rem)] items-center justify-center grow tablet:w-[calc(100vw-104px-72px-9rem)] desktop:w-[calc(100vw-397px-245px-9rem)] desktop-lg:w-[calc(100vw-397px-335px-9rem)]">
+                            {idx < messageConversation.length - 1 &&
+                            getTimesMessagesString(messageConversation[idx].createdAt) ===
+                              getTimesMessagesString(messageConversation[idx + 1].createdAt)
+                              ? ""
+                              : getTimesMessagesString(msg.createdAt)}
+                          </div>
+                          {msg.call ? null : (
+                            <>
+                              {msg.media && !msg.text ? (
+                                <div className="max-w-[16rem] mt-2">
+                                  <img src={msg.media} alt={msg.media} />
+                                </div>
+                              ) : (
+                                <div className="max-w-[18rem] py-1 px-3 mt-2 break-words rounded-md bg-slate-200">
+                                  {msg.text}
+                                </div>
+                              )}
+                            </>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  )
                 )
               )}
             </div>

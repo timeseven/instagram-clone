@@ -180,11 +180,13 @@ const Post: React.FC<PostProps> = ({ post }) => {
           <div className="text-neutral-500 mr-1">•</div>
           <div className="text-neutral-500">{getTimesToWeekAgoString(post.createdAt)}</div>
         </div>
-        <div onClick={() => handlePost()} className="absolute right-0 cursor-pointer">
-          <span>
-            <UpdateIcon />
-          </span>
-        </div>
+        {user?._id === post.user._id && (
+          <div onClick={() => handlePost()} className="absolute right-0 cursor-pointer">
+            <span>
+              <UpdateIcon />
+            </span>
+          </div>
+        )}
       </div>
       <div
         id={`postContent-${post._id}`}
