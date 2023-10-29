@@ -200,7 +200,7 @@ const NavBarTop: React.FC = () => {
             </div>
             <div className="p-2 tablet:mb-4">
               <div onClick={() => handleNotificationClick()}>
-                <div className="flex items-center m-auto">
+                <div className="flex items-center m-auto cursor-pointer">
                   {isNotificationGlobal ? (
                     <NotificationsActiveIcon className="w-[24px] h-[24px] flex justify-center" />
                   ) : (

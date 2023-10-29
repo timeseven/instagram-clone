@@ -47,7 +47,6 @@ const SocketClient = () => {
     if (sData) {
       sData!.on("createMessageToClient", (msg) => {
         dispatch(setCreateMessageSocket(msg));
-
         if (location.pathname === `/direct/${msg.conversation}`) {
           dispatch(isReadConversation(msg.conversation));
           dispatch(

@@ -18,6 +18,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { createMessage, getMessages } from "../../redux/features/messagesSlice";
 import { setConversationModalId, setIsDeleteConversationGlobalTrue } from "../../redux/features/globalStateSlice";
 import { Link, useNavigate } from "react-router-dom";
+import { getTimesMessagesString } from "../../utils/Times";
 
 let schema = yup.object().shape({
   text: yup.string(),
@@ -161,10 +162,17 @@ const ChatBox: React.FC<ChatBoxProps> = ({ id }) => {
               </Link>
             </div>
             <div className="flex flex-col-reverse">
-              {messageConversation!.map((msg) =>
+              {messageConversation!.map((msg, idx) =>
                 msg.sender._id === user!._id ? (
                   <div className="relative flex flex-col items-end justify-end" key={msg._id}>
                     <div className="flex flex-col items-end justify-end">
+                      <div className="flex w-screen items-center justify-center grow tablet:w-[calc(100vw-104px-72px)] desktop:w-[calc(100vw-397px-245px)] desktop-lg:w-[calc(100vw-397px-335px)]">
+                        {idx < messageConversation.length - 1 &&
+                        getTimesMessagesString(messageConversation[idx].createdAt) ===
+                          getTimesMessagesString(messageConversation[idx + 1].createdAt)
+                          ? ""
+                          : getTimesMessagesString(msg.createdAt)}
+                      </div>
                       {msg.call ? null : (
                         <>
                           {msg.media && !msg.text ? (
@@ -178,7 +186,6 @@ const ChatBox: React.FC<ChatBoxProps> = ({ id }) => {
                           )}
                         </>
                       )}
-                      <div className="flex items-end grow">{msg.createdAt}</div>
                     </div>
                   </div>
                 ) : (
@@ -188,6 +195,13 @@ const ChatBox: React.FC<ChatBoxProps> = ({ id }) => {
                         <img src={csRecipient[0]!.recipients.avatar} alt={csRecipient[0]!.recipients.avatar} />
                       </div>
                       <div className="flex flex-col items-start justify-start">
+                        <div className="flex w-[calc(100vw-9rem)] items-center justify-center grow tablet:w-[calc(100vw-104px-72px-9rem)] desktop:w-[calc(100vw-397px-245px-9rem)] desktop-lg:w-[calc(100vw-397px-335px-9rem)]">
+                          {idx < messageConversation.length - 1 &&
+                          getTimesMessagesString(messageConversation[idx].createdAt) ===
+                            getTimesMessagesString(messageConversation[idx + 1].createdAt)
+                            ? ""
+                            : getTimesMessagesString(msg.createdAt)}
+                        </div>
                         {msg.call ? null : (
                           <>
                             {msg.media && !msg.text ? (
@@ -201,7 +215,6 @@ const ChatBox: React.FC<ChatBoxProps> = ({ id }) => {
                             )}
                           </>
                         )}
-                        <div className="flex items-start grow">{msg.createdAt}</div>
                       </div>
                     </div>
                   </div>
@@ -209,7 +222,7 @@ const ChatBox: React.FC<ChatBoxProps> = ({ id }) => {
               )}
             </div>
           </div>
-          <div className="fixed flex items-center w-[inherit] bottom-0 h-[78px] border overflow">
+          <div className="fixed flex items-center w-[inherit] bottom-0 h-[78px] border">
             <form onSubmit={formik.handleSubmit} className="relative w-[inherit] px-4">
               <input
                 autoComplete="off"

@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { CreateMessagesIcon } from "../../components/Icons";
 import { getConversations, isReadConversation } from "../../redux/features/conversationSlice";
 import { IConversation } from "../../utils/interface";
+import { getTimesToWeekAgoString } from "../../utils/Times";
 
 const LeftSide = () => {
   const { user } = useSelector((state: RootState) => state.auth);
@@ -66,7 +67,7 @@ const LeftSide = () => {
                         ) : (
                           <span>Send you a message</span>
                         )}
-                        ·14 hours ago
+                        · {getTimesToWeekAgoString(csdata.updatedAt)}
                       </span>
                     </div>
                   </div>
