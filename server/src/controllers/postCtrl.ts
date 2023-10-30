@@ -17,7 +17,6 @@ const createPost = asyncHandler(async (req: IReqAuth, res: Response): Promise<an
     if (files.length === 0) {
       return res.status(400).json({ msg: "Please upload your images or videos" });
     }
-    console.log(files, content);
     // handle fils
     for (const file of files) {
       const { path } = file;
@@ -63,7 +62,6 @@ const getPosts = asyncHandler(async (req: IReqAuth, res: Response): Promise<void
     // get image or video valid url from aws
     for (const post of posts) {
       let urls: string[] = [];
-      console.log("post", post.medias);
       for (const media of post.medias) {
         const cloudUrl = await awsGetMediaPost(media);
         urls.push(cloudUrl!);
@@ -86,7 +84,6 @@ const getOnePost = asyncHandler(async (req: IReqAuth, res: Response): Promise<vo
     // get image or video valid url from aws
     for (const post of posts) {
       let urls: string[] = [];
-      console.log("post", post.medias);
       for (const media of post.medias) {
         const cloudUrl = await awsGetMediaPost(media);
         urls.push(cloudUrl!);
@@ -130,7 +127,6 @@ const getUserPosts = asyncHandler(async (req: IReqAuth, res: Response): Promise<
     // get image or video valid url from aws
     for (const post of posts) {
       let urls: string[] = [];
-      console.log("post", post.medias);
       for (const media of post.medias) {
         const cloudUrl = await awsGetMediaPost(media);
         urls.push(cloudUrl!);
@@ -155,7 +151,6 @@ const getSavedPost = asyncHandler(async (req: IReqAuth, res: Response): Promise<
     // get image or video valid url from aws
     for (const post of posts) {
       let urls: string[] = [];
-      console.log("post", post.medias);
       for (const media of post.medias) {
         const cloudUrl = await awsGetMediaPost(media);
         urls.push(cloudUrl!);
@@ -256,7 +251,6 @@ const deletePost = asyncHandler(async (req: IReqAuth, res: Response): Promise<an
         await awsDeleteMediaPost(media);
       }
     }
-    console.log("delete post", post);
     // delete the post id in the post and saved of user
     await User.findOneAndUpdate(
       { _id: req.user?._id },

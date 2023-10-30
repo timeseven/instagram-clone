@@ -30,7 +30,6 @@ const SocketServer = (socket: Socket) => {
 
   // Create a Message
   socket.on("createMessage", (msg) => {
-    console.log("createMessage", msg);
     const user = users.find((user) => user.id === msg.recipient._id);
     user && socket.to(`${user.socketId}`).emit("createMessageToClient", msg);
   });

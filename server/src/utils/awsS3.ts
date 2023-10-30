@@ -13,9 +13,7 @@ const client = new S3Client({
 });
 
 export const awsUploadMediaPost = async (fileUpload: any) => {
-  console.log("awssdfsdfsdf");
   const fileContent = fs.readFileSync(fileUpload.path);
-  console.log(fileContent);
   const command = new PutObjectCommand({
     Bucket: "node-instagram-upload-bucket",
     Key: fileUpload.filename,
@@ -25,7 +23,6 @@ export const awsUploadMediaPost = async (fileUpload: any) => {
     await sharp.cache(false);
     const response = await client.send(command);
     if (response.$metadata.httpStatusCode === 200) {
-      console.log(response);
       return fileUpload.filename;
     }
   } catch (err) {
@@ -47,14 +44,12 @@ export const awsGetMediaPost = async (filename: string) => {
 };
 
 export const awsDeleteMediaPost = async (filename: string) => {
-  console.log(filename);
   const command = new DeleteObjectCommand({
     Bucket: "node-instagram-upload-bucket",
     Key: filename,
   });
   try {
     const response = await client.send(command);
-    console.log("delete", response);
   } catch (err) {
     console.log(err);
   }

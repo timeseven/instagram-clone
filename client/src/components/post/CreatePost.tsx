@@ -93,7 +93,6 @@ const CreatePost: React.FC = () => {
 
   // handle Slide change on Video
   const handleSlideChange = (change: any) => {
-    console.log(change, change.activeIndex, change.previousIndex);
     let activeSlide = document.getElementById("createContent")!.getElementsByClassName("swiper-slide")[
       change.activeIndex
     ];
@@ -131,7 +130,6 @@ const CreatePost: React.FC = () => {
   const handleDeleteSlide = (slide: UpLoadContent) => {
     let filterResult: UpLoadContent[] = [];
     filterResult = content.filter((item) => item.url !== slide.url);
-    console.log("filterResult", filterResult);
     setContent(filterResult);
   };
 

@@ -4,6 +4,7 @@ import { AppDispatch, RootState } from "../../redux/store";
 import { setIsDeletePostGlobal, setIsEditPostGlobal } from "../../redux/features/globalStateSlice";
 import { deletePost } from "../../redux/features/postSlice";
 import { useNavigate } from "react-router-dom";
+import { deleteNotification } from "../../redux/features/notificationSlice";
 
 const DeletePost: React.FC = () => {
   const { isDeletePostGlobal, postModalId } = useSelector((state: RootState) => state.globalState);
@@ -11,7 +12,9 @@ const DeletePost: React.FC = () => {
   const navigate = useNavigate();
 
   const handleDelete = () => {
-    dispatch(deletePost(postModalId!)).then(() => {
+    dispatch(deletePost(postModalId!)).then((response) => {
+      const delPost = response.payload;
+      dispatch(deleteNotification(delPost?._id));
       dispatch(setIsDeletePostGlobal());
       navigate("/");
     });

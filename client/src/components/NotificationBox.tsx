@@ -107,7 +107,14 @@ const NotificationBox: React.FC = () => {
                         to={notif.url}
                         className="absolute right-6 w-11 h-11 mr-2"
                       >
-                        <img src={notif.images} alt={notif.images} />
+                        {notif.images.includes(".mp4") ? (
+                          <video muted>
+                            <source className="object-fill" src={notif.images} type="video/mp4" />
+                            Your browser does not support the video tag.
+                          </video>
+                        ) : (
+                          <img src={notif.images} alt={notif.images} />
+                        )}
                       </Link>
                     )}
                   </div>
