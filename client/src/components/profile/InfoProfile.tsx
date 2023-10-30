@@ -62,7 +62,7 @@ const InfoProfile: React.FC = () => {
                     type="button"
                     className="bg-sky-300 w-[8rem] h-8 font-semibold text-sm  rounded-md"
                     title="Edit profile"
-                    onClick={() => handleUnFollow(userData!._id)}
+                    onClick={() => handleUnFollow(userData?._id || "")}
                   >
                     unFollow
                   </button>
@@ -71,7 +71,7 @@ const InfoProfile: React.FC = () => {
                     type="button"
                     className="bg-sky-300 w-[8rem] h-8 font-semibold text-sm   rounded-md"
                     title="Edit profile"
-                    onClick={() => handleFollow(userData!._id)}
+                    onClick={() => handleFollow(userData?._id || "")}
                   >
                     Follow
                   </button>
@@ -121,7 +121,7 @@ const InfoProfile: React.FC = () => {
                         type="button"
                         className="bg-sky-300 w-[8rem] h-8 font-semibold text-sm rounded-md ml-5"
                         title="Edit profile"
-                        onClick={() => handleUnFollow(userData!._id)}
+                        onClick={() => handleUnFollow(userData?._id || "")}
                       >
                         unFollow
                       </button>
@@ -130,7 +130,7 @@ const InfoProfile: React.FC = () => {
                         type="button"
                         className="bg-sky-300 w-[8rem] h-8 font-semibold text-sm rounded-md ml-5"
                         title="Edit profile"
-                        onClick={() => handleFollow(userData!._id)}
+                        onClick={() => handleFollow(userData?._id || "")}
                       >
                         Follow
                       </button>

@@ -21,7 +21,7 @@ const EditPost: React.FC = () => {
   const { pData } = useSelector((state: RootState) => state.post);
   const dispatch: AppDispatch = useDispatch();
 
-  const filteredPost = pData.filter((value) => value._id === postModalId)[0];
+  const filteredPost = pData.filter((value) => value?._id === postModalId)[0];
 
   const [images, setImages] = useState<string[]>([]);
   const [postId, setPostId] = useState<string>("");
@@ -52,8 +52,8 @@ const EditPost: React.FC = () => {
 
   useEffect(() => {
     if (isEditPostGlobal) {
-      setImages(filteredPost!.medias);
-      setPostId(filteredPost!._id);
+      setImages(filteredPost?.medias);
+      setPostId(filteredPost?._id);
       formik.setFieldValue("content", filteredPost!.content);
     }
   }, [isEditPostGlobal, filteredPost, formik]);

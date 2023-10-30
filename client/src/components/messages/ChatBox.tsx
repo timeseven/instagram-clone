@@ -40,7 +40,7 @@ const ChatBox: React.FC<ChatBoxProps> = ({ id }) => {
         dispatch(
           createMessage({
             conversation: id,
-            sender: user!._id,
+            sender: user?._id || "",
             recipient: csRecipient[0]!.recipients._id,
             text: values.text,
           })
@@ -58,7 +58,7 @@ const ChatBox: React.FC<ChatBoxProps> = ({ id }) => {
     csData!.forEach((item) => {
       if (item._id === id) {
         item.recipients.forEach((cv) => {
-          if (cv._id !== user!._id) {
+          if (cv._id !== user?._id) {
             CsRecipient.push({
               recipients: cv,
               _id: item._id,
@@ -161,7 +161,7 @@ const ChatBox: React.FC<ChatBoxProps> = ({ id }) => {
                 <img className="mx-auto" src={Load} alt={Load} width={20} height={20} />
               ) : (
                 messageConversation!.map((msg, idx) =>
-                  msg.sender._id === user!._id ? (
+                  msg.sender._id === user?._id ? (
                     <div className="relative flex flex-col items-end justify-end" key={msg._id}>
                       <div className="flex flex-col items-end justify-end">
                         <div className="flex w-screen items-center justify-center grow tablet:w-[calc(100vw-104px-72px)] desktop:w-[calc(100vw-397px-245px)] desktop-lg:w-[calc(100vw-397px-335px)]">

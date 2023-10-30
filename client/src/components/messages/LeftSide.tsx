@@ -17,7 +17,7 @@ const LeftSide = () => {
   const dispatch: AppDispatch = useDispatch();
 
   const handleIsRead = (csdata: IConversation) => {
-    if (csdata.recipients[0]._id === user!._id && !csdata.isRead) {
+    if (csdata.recipients[0]._id === user?._id && !csdata.isRead) {
       dispatch(isReadConversation(csdata._id));
     }
   };
@@ -54,7 +54,7 @@ const LeftSide = () => {
               className="flex w-full h-[72px] py-2 px-6"
             >
               {csdata.recipients.map((recip) =>
-                recip._id !== user!._id ? (
+                recip._id !== user?._id ? (
                   <div key={recip._id} className="flex">
                     <div className="max-w-[56px] max-h-[56px] rounded-full">
                       <img src={recip.avatar} alt={recip.avatar} height={56} width={56} />

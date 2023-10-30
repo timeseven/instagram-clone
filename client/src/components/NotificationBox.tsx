@@ -26,7 +26,7 @@ const NotificationBox: React.FC = () => {
           images: "",
           url: "",
           content: `has started to follow you.`,
-          user: user!._id,
+          user: user?._id || "",
         })
       );
     });

@@ -37,7 +37,7 @@ const Search: React.FC = () => {
   };
 
   useEffect(() => {
-    setSearchResult(users!.filter((item) => item._id !== user!._id));
+    setSearchResult(users!.filter((item) => item._id !== user?._id));
   }, [users, user]);
 
   useEffect(() => {

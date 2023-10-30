@@ -28,10 +28,10 @@ const SocketClient = () => {
       const newArr: any = [];
       csData!.forEach((item) => {
         item.recipients.forEach((cv) => {
-          if (cv._id !== user!._id) {
+          if (cv._id !== user?._id) {
             newArr.push({
               ...cv,
-              auth: user!._id,
+              auth: user?._id,
             });
           }
         });

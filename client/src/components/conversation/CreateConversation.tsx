@@ -33,7 +33,7 @@ const CreateConversation: React.FC = () => {
 
     const fetchAPI = async () => {
       const result = await userService.searchUser(debouncedValue);
-      setSearchResult(result.filter((filterUser: IUserInfo) => filterUser._id !== user!._id));
+      setSearchResult(result.filter((filterUser: IUserInfo) => filterUser._id !== user?._id));
     };
 
     fetchAPI();
@@ -49,7 +49,7 @@ const CreateConversation: React.FC = () => {
   };
   const handleCreateConversation = async () => {
     if (resultValue.length === 1) {
-      await dispatch(createConversation(resultValue[0]!._id)).then((response) => {
+      await dispatch(createConversation(resultValue[0]?._id)).then((response) => {
         navigate(`/direct/${response.payload._id}`);
       });
     }
