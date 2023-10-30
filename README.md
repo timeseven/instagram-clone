@@ -26,6 +26,7 @@ This is a mobile-first responsive social media application that allows users to 
 - JWT: JSON Web Tokens for user authentication
 - Socket.io: a library for real-time web applications
 - AWS S3: a cloud-based Amazon simple storage service
+- Tailwind CSS: a utility-first CSS framework
 - ...
 
 ## Usage
