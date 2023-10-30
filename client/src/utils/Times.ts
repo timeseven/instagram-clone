@@ -16,8 +16,10 @@ export function getTimesToWeekAgoString(date: string): string {
     return `${hours}${hours >= 1 ? "h" : ""} `;
   } else if (minutes >= 1) {
     return `${minutes}${minutes >= 1 ? "m" : ""} `;
-  } else {
+  } else if (seconds >= 1) {
     return `${seconds}${seconds >= 1 ? "s" : ""}`;
+  } else {
+    return "now";
   }
 }
 
@@ -118,28 +120,16 @@ export function getTimesMessagesString(date: string): string {
     const minutes = createdAt.getMinutes();
     const amPm = hours < 12 ? "AM" : "PM";
     const formattedHours = hours % 12 === 0 ? 12 : hours % 12;
-    return `Yesterday ${formattedHours}:${minutes
-      .toString()
-      .padStart(2, "0")} ${amPm}`;
+    return `Yesterday ${formattedHours}:${minutes.toString().padStart(2, "0")} ${amPm}`;
   } else if (now.getTime() - createdAt.getTime() < 7 * 24 * 60 * 60 * 1000) {
     // Within the last week
-    const dayOfWeekNames = [
-      "Sunday",
-      "Monday",
-      "Tuesday",
-      "Wednesday",
-      "Thursday",
-      "Friday",
-      "Saturday",
-    ];
+    const dayOfWeekNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
     const dayOfWeek = dayOfWeekNames[createdAt.getDay()];
     const hours = createdAt.getHours();
     const minutes = createdAt.getMinutes();
     const amPm = hours < 12 ? "AM" : "PM";
     const formattedHours = hours % 12 === 0 ? 12 : hours % 12;
-    return `${dayOfWeek} ${formattedHours}:${minutes
-      .toString()
-      .padStart(2, "0")} ${amPm}`;
+    return `${dayOfWeek} ${formattedHours}:${minutes.toString().padStart(2, "0")} ${amPm}`;
   } else {
     // More than a week ago
     const monthNames = [
@@ -163,8 +153,6 @@ export function getTimesMessagesString(date: string): string {
     const minutes = createdAt.getMinutes();
     const amPm = hours < 12 ? "AM" : "PM";
     const formattedHours = hours % 12 === 0 ? 12 : hours % 12;
-    return `${monthName} ${day}, ${year} ${formattedHours}:${minutes
-      .toString()
-      .padStart(2, "0")} ${amPm}`;
+    return `${monthName} ${day}, ${year} ${formattedHours}:${minutes.toString().padStart(2, "0")} ${amPm}`;
   }
 }
