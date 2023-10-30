@@ -2,10 +2,10 @@ import { S3Client, PutObjectCommand, GetObjectCommand, DeleteObjectCommand } fro
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import sharp from "sharp";
 import fs from "fs";
-import { AWS_ACCESS_KEY_ID, AWS_S3_BUCKET_NAME, AWS_SECRET_ACCESS_KEY, AWS_REGION } from "../variables";
+import { AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_DEFAULT_REGION } from "../variables";
 
 const client = new S3Client({
-  region: AWS_REGION,
+  region: AWS_DEFAULT_REGION,
   credentials: {
     accessKeyId: AWS_ACCESS_KEY_ID,
     secretAccessKey: AWS_SECRET_ACCESS_KEY,
@@ -17,7 +17,7 @@ export const awsUploadMediaPost = async (fileUpload: any) => {
   const fileContent = fs.readFileSync(fileUpload.path);
   console.log(fileContent);
   const command = new PutObjectCommand({
-    Bucket: AWS_S3_BUCKET_NAME,
+    Bucket: "node-instagram-upload-bucket",
     Key: fileUpload.filename,
     Body: fileContent,
   });
@@ -35,7 +35,7 @@ export const awsUploadMediaPost = async (fileUpload: any) => {
 
 export const awsGetMediaPost = async (filename: string) => {
   const command = new GetObjectCommand({
-    Bucket: AWS_S3_BUCKET_NAME,
+    Bucket: "node-instagram-upload-bucket",
     Key: filename,
   });
   try {
@@ -49,7 +49,7 @@ export const awsGetMediaPost = async (filename: string) => {
 export const awsDeleteMediaPost = async (filename: string) => {
   console.log(filename);
   const command = new DeleteObjectCommand({
-    Bucket: AWS_S3_BUCKET_NAME,
+    Bucket: "node-instagram-upload-bucket",
     Key: filename,
   });
   try {
