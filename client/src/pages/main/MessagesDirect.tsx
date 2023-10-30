@@ -1,12 +1,7 @@
 import React from "react";
 import Helmet from "../../components/Helmet";
-import { AiOutlineLeft } from "react-icons/ai";
-import { useNavigate } from "react-router-dom";
-import { RootState } from "../../redux/store";
-import { useSelector } from "react-redux";
 import LeftSide from "../../components/messages/LeftSide";
 import RightSide from "../../components/messages/RightSide";
-import { CreateMessagesIcon } from "../../components/Icons";
 
 const MessagesDirect: React.FC = () => {
   return (

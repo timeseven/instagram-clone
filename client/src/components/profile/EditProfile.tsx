@@ -27,7 +27,6 @@ const EditProfile: React.FC<EditProfileProps> = ({ setOnEdit }) => {
   const { user } = useSelector((state: RootState) => state.auth);
   const { isAvatarEditGlobal } = useSelector((state: RootState) => state.globalState);
   const [isActive, setIsActive] = useState<boolean>(false);
-  const [avatarPre, setAvatarPre] = useState<string>("");
   const dispatch: AppDispatch = useDispatch();
   const navigate = useNavigate();
   const handleBack = () => {

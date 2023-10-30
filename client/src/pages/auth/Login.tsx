@@ -45,7 +45,7 @@ const Login: React.FC = () => {
     } else {
       dispatch(resetUser());
     }
-  }, [user, navigate]);
+  }, [dispatch, user, navigate]);
 
   useEffect(() => {
     if (formik.values.password.length >= 6 && formik.values.email.length > 0 && !formik.errors.email) {

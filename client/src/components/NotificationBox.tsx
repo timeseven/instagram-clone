@@ -49,7 +49,7 @@ const NotificationBox: React.FC = () => {
     if (isNotificationGlobal) {
       dispatch(getNotification());
     }
-  }, [isNotificationGlobal]);
+  }, [dispatch, isNotificationGlobal]);
 
   return (
     <>

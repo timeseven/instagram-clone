@@ -8,7 +8,6 @@ import { getSavePost, getUserPost } from "../../redux/features/postSlice";
 const PostAndSave = () => {
   const { user } = useSelector((state: RootState) => state.auth);
   const { pData } = useSelector((state: RootState) => state.post);
-  const { userData } = useSelector((state: RootState) => state.user);
   const dispatch: AppDispatch = useDispatch();
   const navigate = useNavigate();
   const [isEditEnabled, setIsEditEnabled] = useState<boolean>(false);
@@ -49,7 +48,7 @@ const PostAndSave = () => {
 
   useEffect(() => {
     setIsEditEnabled(user?.username === username);
-  }, [username]);
+  }, [username, user?.username]);
 
   useEffect(() => {
     switch (isSelected) {
@@ -112,7 +111,14 @@ const PostAndSave = () => {
                     Your browser does not support the video tag.
                   </video>
                 ) : (
-                  <img className="aspect-square" width={468} height={468} src={item.medias[0]} key={item.medias[0]} />
+                  <img
+                    className="aspect-square"
+                    width={468}
+                    height={468}
+                    src={item.medias[0]}
+                    alt={item.medias[0]}
+                    key={item.medias[0]}
+                  />
                 )}
               </span>
             ))}

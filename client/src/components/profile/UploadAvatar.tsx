@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Avatar from "react-avatar-edit";
 import { AiOutlineClose } from "react-icons/ai";
 import { setIsAvatarEditGlobalFalse } from "../../redux/features/globalStateSlice";

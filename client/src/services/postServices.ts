@@ -1,6 +1,6 @@
 import fetch from "../utils/axiosConfig";
 import { config } from "../utils/axiosConfig";
-import { ICreatePost, postUpdate } from "../utils/interface";
+import { postUpdate } from "../utils/interface";
 
 const createPost = async (data: FormData) => {
   const response = await fetch.post("/post", data, config());

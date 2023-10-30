@@ -21,7 +21,7 @@ const Post: React.FC = () => {
     dispatch(getAPost(id)).then(() => {
       setIsLoading(false);
     });
-  }, [id]);
+  }, [dispatch, id]);
   return (
     <Helmet title="Comments">
       <div className="fixed w-full h-screen top-0 left-0 bg-white z-20 overflow-auto tablet:left-[72px] desktop:left-[245px] desktop-lg:left-[335px]">

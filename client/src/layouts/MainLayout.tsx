@@ -17,7 +17,6 @@ import { setSocket } from "../redux/features/socketSlice";
 import SocketClient from "../SocketClient";
 import { setIsNotificationGlobalFalse, setIsSearchGlobalFalse } from "../redux/features/globalStateSlice";
 const MainLayout: React.FC = () => {
-  const { sData } = useSelector((state: RootState) => state.socket);
   const { isSearchGlobal, isNotificationGlobal } = useSelector((state: RootState) => state.globalState);
   const { user } = useSelector((state: RootState) => state.auth);
   const dispatch: AppDispatch = useDispatch();

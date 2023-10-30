@@ -17,7 +17,6 @@ const CreateConversation: React.FC = () => {
   const [searchResult, setSearchResult] = useState<IUserInfo[]>([]);
   const [resultValue, setResultValue] = useState<IUserInfo[]>([]);
   const [resultId, setResultId] = useState<string[]>([]);
-  const [isSelectedUser, setIsSelectedUser] = useState<string>("");
 
   const dispatch: AppDispatch = useDispatch();
   const navigate = useNavigate();
@@ -38,7 +37,7 @@ const CreateConversation: React.FC = () => {
     };
 
     fetchAPI();
-  }, [debouncedValue]);
+  }, [debouncedValue, user]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const searchValue = e.target.value;

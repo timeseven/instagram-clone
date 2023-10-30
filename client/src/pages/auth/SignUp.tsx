@@ -56,7 +56,7 @@ const SignUp: React.FC = () => {
     convertImgToBase64(avatar, "jpeg", (base64: string) => {
       formik.setFieldValue("avatar", base64);
     });
-  }, [user, navigate]);
+  }, [dispatch, user, navigate, formik]);
 
   // jusdge button isActive
   useEffect(() => {

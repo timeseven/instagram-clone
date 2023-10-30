@@ -1,4 +1,4 @@
-import React, { useState, useEffect, createRef, useRef } from "react";
+import React, { useState, createRef } from "react";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import { useDispatch, useSelector } from "react-redux";
@@ -40,6 +40,7 @@ const CreatePost: React.FC = () => {
     },
     validationSchema: schema,
     onSubmit: (values) => {
+      setLoading(true);
       dispatch(createPost({ ...values, medias: contentUpload })).then((response) => {
         if (username) {
           dispatch(getUserPost(username));
@@ -60,6 +61,7 @@ const CreatePost: React.FC = () => {
         );
         setContent([]);
         formik.setFieldValue("content", "");
+        setLoading(false);
         dispatch(setIsCreatePostGlobal());
       });
     },

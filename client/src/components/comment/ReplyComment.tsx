@@ -26,7 +26,7 @@ const ReplyComment: React.FC<ReplyCommentProps> = ({ reply, setReplyComment, del
       setLikeCmt(true);
     }
     return () => setLikeCmt(false);
-  }, [reply]);
+  }, [reply, user?._id]);
 
   return (
     <div className="flex w-full h-fit mt-3">

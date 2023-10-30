@@ -1,15 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useFormik } from "formik";
 import * as yup from "yup";
-import {
-  CallActiveIcon,
-  CallIcon,
-  EmojiIcon,
-  SettingsMessagesIcon,
-  UpdateIcon,
-  VideoCallActiveIcon,
-  VideoCallIcon,
-} from "../Icons";
+import { CallIcon, EmojiIcon, SettingsMessagesIcon, VideoCallIcon } from "../Icons";
 import EmojiPicker, { EmojiClickData } from "emoji-picker-react";
 import { AiOutlineLeft } from "react-icons/ai";
 import { ChatBoxProps, IMessage } from "../../utils/interface";
@@ -76,11 +68,11 @@ const ChatBox: React.FC<ChatBoxProps> = ({ id }) => {
       }
     });
     setCsRecipient(CsRecipient);
-  }, [csData, id]);
+  }, [csData, id, user]);
 
   useEffect(() => {
     const MessageConversation: IMessage[] = [];
-    mData!.map((msg) => {
+    mData!.forEach((msg) => {
       if (msg.conversation === id) {
         MessageConversation.push(msg);
       }
@@ -89,7 +81,7 @@ const ChatBox: React.FC<ChatBoxProps> = ({ id }) => {
     setTimeout(() => {
       scrollBot();
     }, 100);
-  }, [mData]);
+  }, [mData, id]);
 
   const handleEmojiClick = (emojiData: EmojiClickData, event: MouseEvent) => {
     formik.values.text = formik.values.text + emojiData.emoji;

@@ -12,7 +12,6 @@ const Comment: React.FC<CommentProps> = ({ cmt, setReplyComment, deleteComment }
   const { user } = useSelector((state: RootState) => state.auth);
   const { cData } = useSelector((state: RootState) => state.comment);
   const [onReply, setOnReply] = useState<boolean>(false);
-  const [postId, setPostId] = useState<string>(cmt._id);
   const [likeCmt, setLikeCmt] = useState<boolean>(false);
 
   const commentReply = cData.filter((value) => value.reply === cmt._id);
@@ -33,7 +32,7 @@ const Comment: React.FC<CommentProps> = ({ cmt, setReplyComment, deleteComment }
       setLikeCmt(true);
     }
     return () => setLikeCmt(false);
-  }, [cmt]);
+  }, [cmt, user?._id]);
   return (
     <>
       {!cmt.reply && (

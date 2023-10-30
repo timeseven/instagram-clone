@@ -32,7 +32,7 @@ const InfoProfile: React.FC = () => {
 
   useEffect(() => {
     setIsEditEnabled(user?.username === username);
-  }, [username]);
+  }, [username, user?.username]);
   return (
     <div className="flex">
       {isLoading ? (

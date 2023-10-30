@@ -11,7 +11,6 @@ import {
   setIsNotificationGlobalTrue,
 } from "../../redux/features/globalStateSlice";
 import useDebounce from "../../hooks/useDebounce";
-import userService from "../../services/userServices";
 import { AiOutlineSearch } from "react-icons/ai";
 import logo from "../../images/logo.png";
 import insLogo from "../../images/Instagram-logo.png";
@@ -22,7 +21,6 @@ import {
   HomeIcon,
   SearchIcon,
   SettingsIcon,
-  LikeIcon,
   SearchActiveIcon,
   NotificationsActiveIcon,
   NotificationsIcon,
@@ -91,7 +89,7 @@ const NavBarTop: React.FC = () => {
       await dispatch(searchUser(debouncedValue));
     };
     fetchSearch();
-  }, [debouncedValue]);
+  }, [dispatch, debouncedValue]);
 
   useEffect(() => {
     if (isSearchGlobal || isNotificationGlobal) {
@@ -103,7 +101,7 @@ const NavBarTop: React.FC = () => {
       dispatch(resetUser());
       setSearchValue("");
     }
-  }, [isSearchGlobal, isNotificationGlobal]);
+  }, [dispatch, isSearchGlobal, isNotificationGlobal]);
 
   return (
     <div className="h-[60px] tablet:h-screen">

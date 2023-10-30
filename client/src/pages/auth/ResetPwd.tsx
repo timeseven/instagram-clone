@@ -28,7 +28,7 @@ const ResetPwd: React.FC = () => {
 
   const [isActive, setIsActive] = useState<boolean>(false);
   const dispatch: AppDispatch = useDispatch();
-  const { user, message } = useSelector((state: RootState) => state.auth);
+  const { user } = useSelector((state: RootState) => state.auth);
   const [typePass, setTypePass] = useState<boolean>(false);
 
   const formik = useFormik({

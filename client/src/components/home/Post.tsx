@@ -88,7 +88,7 @@ const Post: React.FC<PostProps> = ({ post }) => {
     let activeSlideVideo = activeSlide.getElementsByTagName("video");
     let prevSlideVideo = prevSlide.getElementsByTagName("video");
     if (activeSlideVideo.length > 0) {
-      let playActive = activeSlideVideo[0].play();
+      activeSlideVideo[0].play();
     }
     if (prevSlideVideo.length > 0) {
       prevSlideVideo[0].pause();
@@ -150,7 +150,7 @@ const Post: React.FC<PostProps> = ({ post }) => {
       setLike(true);
     }
     return () => setLike(false);
-  }, [post.likes]);
+  }, [post.likes, user?._id]);
 
   // show comment likes
   useEffect(() => {
@@ -158,7 +158,7 @@ const Post: React.FC<PostProps> = ({ post }) => {
       setLikeCmt(true);
     }
     return () => setLikeCmt(false);
-  }, [lastComment]);
+  }, [lastComment, user?._id]);
 
   useEffect(() => {
     if (userData?.saved.includes(post._id)) {

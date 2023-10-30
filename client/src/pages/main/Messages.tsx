@@ -1,12 +1,8 @@
 import React from "react";
 import Helmet from "../../components/Helmet";
-import { AiOutlineLeft } from "react-icons/ai";
-import { useNavigate, useParams } from "react-router-dom";
-import { RootState } from "../../redux/store";
-import { useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
 import LeftSide from "../../components/messages/LeftSide";
 import ChatBox from "../../components/messages/ChatBox";
-import { CreateMessagesIcon } from "../../components/Icons";
 
 const Messages: React.FC = () => {
   const { id } = useParams() as {

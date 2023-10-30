@@ -1,11 +1,7 @@
-import React, { useState } from "react";
+import React from "react";
 import StorySkeleton from "../skeleton/StorySkeleton";
-import { FaUserAlt } from "react-icons/fa";
 
-type Props = {};
-
-const StoryList = (props: Props) => {
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+const StoryList = () => {
   const allUsers = [
     {
       media: "",

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, NavLink } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../redux/store";
 import {
@@ -7,15 +7,7 @@ import {
   setIsNotificationGlobalFalse,
   setIsSearchGlobalFalse,
 } from "../../redux/features/globalStateSlice";
-import {
-  CreateIcon,
-  ExploreIcon,
-  MessagesIcon,
-  HomeIcon,
-  SearchIcon,
-  SettingsIcon,
-  LikeIcon,
-} from "../../components/Icons";
+import { CreateIcon, MessagesIcon, HomeIcon, SettingsIcon } from "../../components/Icons";
 import { ClassNameProps } from "../../utils/interface";
 import avatar from "../../images/avatar-default.jpg";
 import { logout } from "../../redux/features/authSlice";

@@ -5,7 +5,6 @@ import Helmet from "../../components/Helmet";
 import { AiOutlineClose, AiOutlineLeft } from "react-icons/ai";
 import { useNavigate, useParams } from "react-router-dom";
 import Comment from "../../components/comment/Comment";
-import { LikeCommentIcon, UnlikeCommentIcon } from "../../components/Icons";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../redux/store";
 import { getAPost } from "../../redux/features/postSlice";
@@ -18,7 +17,6 @@ let schema = yup.object().shape({
 });
 
 const Comments: React.FC = () => {
-  const { cData } = useSelector((state: RootState) => state.comment);
   const { user } = useSelector((state: RootState) => state.auth);
   const [postData, setPostData] = useState<IPost>();
   const [commentData, setCommentData] = useState<IComment[]>([]);
@@ -83,7 +81,7 @@ const Comments: React.FC = () => {
     dispatch(getCommentsByPost(id)).then((response: any) => {
       setCommentData(response.payload);
     });
-  }, []);
+  }, [dispatch, id]);
 
   useEffect(() => {
     if (formik.values.content !== "") {

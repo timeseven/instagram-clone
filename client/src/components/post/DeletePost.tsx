@@ -2,7 +2,7 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../redux/store";
 import { setIsDeletePostGlobal, setIsEditPostGlobal } from "../../redux/features/globalStateSlice";
-import { deletePost, getAPost } from "../../redux/features/postSlice";
+import { deletePost } from "../../redux/features/postSlice";
 import { useNavigate } from "react-router-dom";
 
 const DeletePost: React.FC = () => {

@@ -1,16 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import Helmet from "../../components/Helmet";
 import InfoProfile from "../../components/profile/InfoProfile";
 import PostAndSave from "../../components/profile/PostAndSave";
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "../../redux/store";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../../redux/store";
 import { useParams } from "react-router-dom";
 import { getUser } from "../../redux/features/userSlice";
 
 const Profile: React.FC = () => {
-  const { user } = useSelector((state: RootState) => state.auth);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const { userData } = useSelector((state: RootState) => state.user);
   const { username } = useParams() as {
     username: string;
   };
@@ -18,7 +15,7 @@ const Profile: React.FC = () => {
 
   useEffect(() => {
     dispatch(getUser(username));
-  }, [username]);
+  }, [dispatch, username]);
   return (
     <Helmet title={`Profile • Instagram photos and videos`}>
       <div

@@ -30,7 +30,7 @@ const SuggesstionUser: React.FC = () => {
     if (location.pathname === "/") {
       dispatch(getSuggestionUser());
     }
-  }, [location.pathname]);
+  }, [dispatch, location.pathname]);
 
   useEffect(() => {
     if (message === "user/get-suggestion-user success") {

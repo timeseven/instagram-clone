@@ -1,4 +1,4 @@
-import React, { useState, useEffect, createRef, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import { useDispatch, useSelector } from "react-redux";
@@ -52,11 +52,11 @@ const EditPost: React.FC = () => {
 
   useEffect(() => {
     if (isEditPostGlobal) {
-      setImages(filteredPost.medias);
-      setPostId(filteredPost._id);
-      formik.setFieldValue("content", filteredPost.content);
+      setImages(filteredPost!.medias);
+      setPostId(filteredPost!._id);
+      formik.setFieldValue("content", filteredPost!.content);
     }
-  }, [isEditPostGlobal]);
+  }, [isEditPostGlobal, filteredPost, formik]);
 
   return (
     <>

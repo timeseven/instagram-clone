@@ -39,7 +39,7 @@ const ForgotPwd: React.FC = () => {
       navigate("");
       dispatch(resetUser());
     }
-  }, [user, navigate]);
+  }, [dispatch, user, navigate]);
   useEffect(() => {
     if (formik.values.email.length > 0 && !formik.errors.email) {
       setIsActive(true);

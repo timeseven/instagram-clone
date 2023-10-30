@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../redux/store";
 import { User } from "../utils/interface";
 import { useNavigate } from "react-router-dom";
-import { setIsSearchGlobalFalse, setIsSearchGlobalTrue } from "../redux/features/globalStateSlice";
+import { setIsSearchGlobalFalse } from "../redux/features/globalStateSlice";
 import { AiOutlineSearch } from "react-icons/ai";
 import useDebounce from "../hooks/useDebounce";
 import { resetUser, searchUser } from "../redux/features/userSlice";
@@ -38,7 +38,7 @@ const Search: React.FC = () => {
 
   useEffect(() => {
     setSearchResult(users!.filter((item) => item._id !== user!._id));
-  }, [users]);
+  }, [users, user]);
 
   useEffect(() => {
     if (!isSearchGlobal) {
@@ -54,7 +54,7 @@ const Search: React.FC = () => {
       await dispatch(searchUser(debouncedValue));
     };
     fetchSearch();
-  }, [debouncedValue]);
+  }, [dispatch, debouncedValue]);
   return (
     <>
       <div
