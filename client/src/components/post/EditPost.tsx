@@ -56,7 +56,7 @@ const EditPost: React.FC = () => {
       setPostId(filteredPost?._id);
       formik.setFieldValue("content", filteredPost!.content);
     }
-  }, [isEditPostGlobal, filteredPost, formik]);
+  }, [isEditPostGlobal, filteredPost]);
 
   return (
     <>
@@ -83,7 +83,7 @@ const EditPost: React.FC = () => {
               </button>
             </div>
             <div className="w-full h-full max-w-[702px] max-h-[calc(70vh-42px)] flex flex-col justify-center tablet-lg:flex-row">
-              <div className="flex h-3/4 max-h-[468px] items-center justify-center tablet-lg:h-[468px] tablet-lg:w-[468px]">
+              <div className="flex h-4/6 max-h-[468px] items-center justify-center tablet-lg:h-[468px] tablet-lg:w-[468px]">
                 {images.length > 0 && (
                   <Swiper
                     navigation={true}
@@ -98,7 +98,7 @@ const EditPost: React.FC = () => {
                   </Swiper>
                 )}
               </div>
-              <div className="flex flex-col w-full h-1/4 justify-center px-3 py-3 bg-white tablet-lg:h-[468px] tablet-lg:max-w-[234px] tablet-lg:justify-start">
+              <div className="flex flex-col w-full h-2/6 justify-center px-3 py-3 bg-white tablet-lg:h-[468px] tablet-lg:max-w-[234px] tablet-lg:justify-start">
                 <div className="flex">
                   <div className="flex items-center justify-center cursor-pointer">
                     <img src={user?.avatar} alt={user?.username} width={20} height={20} />

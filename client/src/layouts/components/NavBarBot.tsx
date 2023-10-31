@@ -65,7 +65,7 @@ const NavBarBot: React.FC<ClassNameProps> = ({ className }) => {
           <div
             className={`${
               isMenuMore ? "flex" : "hidden"
-            } absolute left-0 w-full bottom-12 items-center shadow-md rounded-lg`}
+            } absolute left-0 w-full bottom-12 items-center shadow-md rounded-t-lg bg-white`}
           >
             <div className="border-t p-1 w-full">
               <button
