@@ -92,7 +92,14 @@ const EditPost: React.FC = () => {
                   >
                     {images.map((image, index) => (
                       <SwiperSlide key={index}>
-                        <img width={468} height={468} src={image} alt={image} className="mx-auto" />
+                        {image.includes(".mp4") ? (
+                          <video width={468} height={468} autoPlay muted>
+                            <source src={image} type="video/mp4" />
+                            Your browser does not support the video tag.
+                          </video>
+                        ) : (
+                          <img className="mx-auto" src={image} width={468} height={468} alt={image} />
+                        )}
                       </SwiperSlide>
                     ))}
                   </Swiper>
